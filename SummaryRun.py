@@ -49,7 +49,7 @@ if __name__=="__main__":
 	  minSeqIdentity=float(a[1])
 
 
-	search_type = float(raw_input("Please select an option:\n(1) Search by NP ID \n(2) Search by Uniprot ID \n(3) Search by sequence \n(4) Put PDB id list \n(5) Blast sequences to match PDBs using NP or Uniprot IDs\n(6) Check pdb for biological assembly \n"))
+	search_type = float(raw_input("Please select an option:\n(1) Search by NP ID\n(2) Search by Uniprot ID\n(3) Search by sequence \n(4) Put PDB id list \n(5) Blast sequences to match PDBs using NP or Uniprot IDs\no(6) Check pdb for biological assembly \n"))
 	while search_type != 1 and search_type != 2 and search_type != 3 and search_type != 4 and search_type != 5 and search_type != 6:
 		search_type = float(raw_input("Not a valid selection. Please select an option:\n(1) Search by NP ID \n(2) Search by Uniprot ID \n(3) Search by sequence \n(4) Put PDB id list \n"))
 		

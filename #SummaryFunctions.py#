@@ -1285,7 +1285,7 @@ def RunFortranFile(pdb_id, numResidues):
 	shutil.move(fort,pdb_id)
 	os.chdir(pdb_id)
 	#in the directory with the pdb file, the input parms, and the fortran file, now compile and run
-	os.system('f77 -o run '+fort)
+	os.system('g77 -o run '+fort)
 	os.system('./run')
 	#move back to parent directory
 	os.chdir('..')
