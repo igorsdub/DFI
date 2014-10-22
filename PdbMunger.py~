@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+"""
+USAGE: ./PdbMunger PDBID 
+
+Extracts the first chain of the PDB and Outputs to a file. 
+TODO: Ouput only the alpha carbons of the pdbfile 
+TODO: Ouput input parameters for the DFI Code. 
+
+PDBID PDBID of the pdb file
+
+"""
+
+import sys
+
+if len(sys.argv) < 2:
+    print __doc__
