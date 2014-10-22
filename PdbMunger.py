@@ -14,6 +14,7 @@ import sys
 
 if len(sys.argv) < 2:
     print __doc__
+    exit()
 
 import os
 from Bio import PDB
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     print "Outpath: %s"%outpath
     (pdb_dir, pdbfile) = os.path.split(outpath)
    
-    pdbid=pdbfile.strip('.pdb')
+    pdbid=pdbfile.strip('_A.pdb')
     if Verbose:
         print pdbid
         
