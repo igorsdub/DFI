@@ -38,14 +38,72 @@ def getcoords(ATOMS):
     
     return x,y,z 
 
-def calchessian(hess,x,y,z):
+def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
-    return 0 
+
+    gamma = 1
+    numresthree = 3*resnum 
+    
+    hess = np.zeros((numresthree,numresthree))
+  
+       
+    #compute the Hessian 
+    #compute the Hii terms 
+    for i in range(resnum):
+        for j in range(resnum):
+            if i==j:
+                continue
+            x_i = x[i]
+            y_i = y[i]
+            z_i = z[i]
+            x_j = x[j]
+            y_j = y[j]
+            z_j = z[j]
+            x_ij = x_i - x_j 
+            y_ij = y_i - y_j 
+            z_ij = z_i - z_j 
+            r = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij 
+            sprngcnst = (gamma*gamma*gamma)/(r*r*r)
+            if(Verbose):
+                print "i:%d j:%f"%(i,j)
+                print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
+                print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
+                print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
+                       
+
+            #creation of Hii 
+            hess[3*i-3,3*i-3] += sprngcnst*(x_ij*x_ij/r) #(1,1) (4,4)
+            hess[3*i-2,3*i-2] += sprngcnst*(y_ij*y_ij/r) #(2,2) (5,5)
+            hess[3*i-1,3*i-1] += sprngcnst*(z_ij*z_ij/r)     #(3,3) (6,6)
+
+            hess[3*i-3,3*i-2] += sprngcnst*(x_ij*y_ij/r) #(1,2) (4,5)
+            hess[3*i-3,3*i-1] += sprngcnst*(x_ij*z_ij/r)   #(1,3) (4,6)
+            hess[3*i-2,3*i-3] += sprngcnst*(y_ij*x_ij/r) #(2,1) (5,4)
+             
+            hess[3*i-2,3*i-1] += sprngcnst*(y_ij*z_ij/r)   #(2,3) (5,6)
+            hess[3*i-1,3*i-3] += sprngcnst*(x_ij*z_ij/r)   #(3,1) (6,4)
+            hess[3*i-1,3*i-2] += sprngcnst*(y_ij*z_ij/r)   #(3,2) (6,5)
+            
+            #creation of Hij 
+            hess[3*i-3,3*j-3] -= sprngcnst*(x_ij*x_ij/r) #(1,4) (4,1)
+            hess[3*i-2,3*j-2] -= sprngcnst*(y_ij*y_ij/r) #(2,5) (5,2)
+            hess[3*i-1,3*j-1] -= sprngcnst*(z_ij*z_ij/r)     #(3,6) (6,3)
+            
+            hess[3*i-3,3*j-2] -= sprngcnst*(x_ij*y_ij/r) #(1,5) (4,2)
+            hess[3*i-3,3*j-1] -= sprngcnst*(x_ij*z_ij/r)   #(1,6) (4,3)
+            hess[3*i-2,3*j-3] -= sprngcnst*(y_ij*x_ij/r) #(2,4) (5,1)
+             
+            hess[3*i-2,3*j-1] -= sprngcnst*(y_ij*z_ij/r)   #(2,6) (5,3)
+            hess[3*i-1,3*j-3] -= sprngcnst*(x_ij*z_ij/r)   #(3,4) (6,1)
+            hess[3*i-1,3*j-2] -= sprngcnst*(y_ij*z_ij/r)   #(3,5) (6,2)
+
+    
+    return hess  
 
 
 if __name__ == "__main__":
     Verbose = True 
-    gamma = 100
+    gamma = 1
     
 
     #parse the input 
@@ -63,11 +121,22 @@ if __name__ == "__main__":
     numresthree = 3 * numres
     
 
+    
+    
     hess = np.zeros((numresthree,numresthree))
+
+    x = np.array([0,0],dtype=float)
+    y = np.array([0,0],dtype=float)
+    z = np.array([1,0],dtype=float)
+    
+    numres = len(x)
+
+    hess = calchessian(numres,x,y,z,Verbose)
     
 
     print hess 
-    
+    exit()
+
     #compute the Hessian 
     #compute the Hii terms 
     for i in len(numres):
