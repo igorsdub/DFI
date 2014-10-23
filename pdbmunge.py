@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-USAGE: ./PdbMunger PDBID 
+USAGE: ./pdbmunge.py PDBID 
 
 Extracts the first chain of the PDB and Outputs to a file. 
 TODO: Ouput only the alpha carbons of the pdbfile 
@@ -95,7 +95,7 @@ def extractA_CA(pdbcode,Verbose=False):
         print pdbid
         
     os.system('grep "^ATOM.*CA" ' + pdbfile + ' > ' + pdbid+'_A_CA.pdb')
-    pathtofile = os.path.join(os.getchwd(),"%s_A_CA.pdb"%(pdbid))
+    pathtofile = os.path.join(os.getcwd(),"%s_A_CA.pdb"%(pdbid))
     return pathtofile  
 
 if __name__ == "__main__":
