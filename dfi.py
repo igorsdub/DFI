@@ -18,6 +18,8 @@ if len(sys.argv) < 2:
 
 if __name__ == "__main__":
     Verbose = True 
+    gamma = 100
+    
 
     #parse the input 
     pdbid = sys.argv[1] 
@@ -31,11 +33,10 @@ if __name__ == "__main__":
     y = []
     z = [] 
 
-    #print ATOMS[:].atom_index 
-
     for atom in ATOMS:
-        print atom.atom_name
-        print "%s %f %f %f"%(atom.atom_name,atom.x,atom.y,atom.z)
+        if(Verbose):
+            print atom.atom_name
+            print "%s %f %f %f"%(atom.atom_name,atom.x,atom.y,atom.z)
         if atom.atom_name == 'CA ':
             x.append(atom.x)
             y.append(atom.y)
@@ -45,7 +46,11 @@ if __name__ == "__main__":
     y = np.array(y,dtype=float)
     z = np.array(z,dtype=float)
 
-    print x
+    #start computing the Hessian 
+    numres = len(ATOMS)
+    numresthree = 3 * numres
     
-    #read in the pdbfile 
+    hess = np.zeros((numresthree,numresthree))
+
+    print hess 
     
