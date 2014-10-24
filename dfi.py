@@ -10,7 +10,7 @@ import sys
 import pdbmunge 
 import pdbio 
 import numpy as np 
-
+from scipy import linalg as LA
 
 if len(sys.argv) < 2:
     print __doc__ 
@@ -41,7 +41,7 @@ def getcoords(ATOMS):
 def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
 
-    gamma = 1
+    gamma = 100
     numresthree = 3*resnum 
     
     hess = np.zeros((numresthree,numresthree))
@@ -66,9 +66,9 @@ def calchessian(resnum,x,y,z,Verbose=False):
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
             if(Verbose):
                 print "i:%d j:%f"%(i,j)
-                print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
-                print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
-                print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
+                #print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
+                #print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
+                #print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
                        
 
             #creation of Hii 
@@ -110,7 +110,8 @@ if __name__ == "__main__":
     pdbid = sys.argv[1] 
     
     #get the pdb, then extract the chain and then the alpha carbons and return the name of the file 
-    fname = pdbmunge.extractA_CA(pdbid)
+    #fname = pdbmunge.extractA_CA(pdbid)
+    fname = '1dc2_A_CA.pdb' 
     ATOMS = [] 
     pdbio.pdb_reader(fname,ATOMS)
 
@@ -123,18 +124,23 @@ if __name__ == "__main__":
 
     
     
-    hess = np.zeros((numresthree,numresthree))
+    #hess = np.zeros((numresthree,numresthree))
 
-    x = np.array([0,0],dtype=float)
-    y = np.array([0,0],dtype=float)
-    z = np.array([1,0],dtype=float)
+    #x = np.array([0,0],dtype=float)
+    #y = np.array([0,0],dtype=float)
+    #z = np.array([1,0],dtype=float)
     
-    numres = len(x)
+    #numres = len(x)
 
     hess = calchessian(numres,x,y,z,Verbose)
-    
+    e_vals, e_vecs = LA.eig(hess)
 
-    print hess 
+    #print hess 
+    
+    i=0
+    for val in np.sort(e_vals):
+        print "%d\t%f"%(i,val) 
+        i += 1
     exit()
 
     
