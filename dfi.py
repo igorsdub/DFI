@@ -1,9 +1,13 @@
 #!/usr/bin/env python 
 """
-USAGE: dfi.py PDBID
+DFI Calculates the dynamics functional index. 
+Right now cacluates the hessian and iverts it 
+and write out to the file pinv_svd.debug. 
 
-PDBID:    Protein DataBank Code 
-INVERSION WORKS NOW
+USAGE: dfi.py PDB
+
+PDB:    PDB FILE     
+
 """
 
 import sys 
@@ -73,7 +77,7 @@ def calchessian(resnum,x,y,z,Verbose=False):
                        
 
             #creation of Hii 
-            hess[3*i,3*i] += sprngcnst*(x_ij*x_ij/r) #(1,1) (4,4)
+            hess[3*i,3*i] += sprngcnst*(x_ij*x_ij/r) 
             hess[3*i+1,3*i+1] += sprngcnst*(y_ij*y_ij/r) #(2,2) (5,5)
             hess[3*i+2,3*i+2] += sprngcnst*(z_ij*z_ij/r)     #(3,3) (6,6)
 
@@ -110,20 +114,14 @@ def flatandwrite(matrix,outfile):
 
 
 if __name__ == "__main__":
-    Verbose = True #Setting for Debugging  
+    Verbose = False #Setting for Debugging  
         
     #parse the input 
+    #Add a check to make sure it is a file if not then just download from the pdb. 
     pdbid = sys.argv[1] 
-    
-    #get the pdb, then extract the chain and then the alpha carbons and return the name of the file 
-    #fname = pdbmunge.extractA_CA(pdbid)
-            
-   
-
     ATOMS = [] 
     pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,chainA=True)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
-    exit()
     x,y,z = getcoords(ATOMS) 
     
     #start computing the Hessian 
@@ -131,7 +129,6 @@ if __name__ == "__main__":
     numresthree = 3 * numres
     hess = calchessian(numres,x,y,z,Verbose)
     e_vals, e_vecs = LA.eig(hess)
-
     if(Verbose):
         flatandwrite(hess,'hesspy.debug')
     
@@ -143,7 +140,6 @@ if __name__ == "__main__":
         i += 1
     outfile.close()
         
-
 
     U, w, Vt = LA.svd(hess,full_matrices=False)
     if(Verbose):
@@ -163,13 +159,14 @@ if __name__ == "__main__":
 
     #the near zero eigenvalues blowup the inversion so 
     #we will truncate them and add a small amount of bias 
+    print "Inverting the Hessian..."
     tol = 1e-6 
     singular = w < tol 
     invw = 1/w
     invw[singular] = 0.
     pinv_svd = np.dot(np.dot(U,np.diag(invw)),Vt)
     flatandwrite(pinv_svd,'pinv_svd.debug')
-
+    print "Hessian inverted and written out to pinv_svd.debug"
     
 
     exit()
