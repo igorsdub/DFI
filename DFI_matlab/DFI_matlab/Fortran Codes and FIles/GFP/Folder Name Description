@@ -1,0 +1,5 @@
+tetramer_struct*: only res 8-216
+struct2: 1/N (perturb residues in one monomer)
+struct3: 4/4N (perturb residues in tetramer)
+MD: covariance matrix from MD simulation, otherwise the covariance matrix is from the inverse of Hessian.
+

@@ -1,0 +1,323 @@
+ STEP  1
+ X direction
+ 1  4560.0939  0.
+ X direction
+ 2  1755.11832  0.
+ X direction
+ 3  1248.11233  0.
+ X direction
+ 4  2351.89548  0.
+ X direction
+ 5  3074.92521  0.
+ X direction
+ 6  11077.7765  0.
+ X direction
+ 7  15090.4614  0.
+ X direction
+ 8  12802.806  0.
+ X direction
+ 9  2400.70383  0.
+ X direction
+ 10  2335.1789  0.
+ X direction
+ 11  2783.6089  0.
+ X direction
+ 12  1371.14133  0.
+ X direction
+ 13  693.406166  0.
+ X direction
+ 14  2948.55004  0.
+ X direction
+ 15  1296.64344  0.
+ X direction
+ 16  7233.57129  0.
+ X direction
+ 17  3924.58931  0.
+ X direction
+ 18  5992.0919  0.
+ X direction
+ 19  12247.3636  0.
+ X direction
+ 20  6460.20896  0.
+ X direction
+ 21  6571.28028  0.
+ X direction
+ 22  3093.65376  0.
+ X direction
+ 23  2864.78668  0.
+ Y diRection
+ 1  4455.36659  0.
+ Y diRection
+ 2  9783.41652  0.
+ Y diRection
+ 3  11256.369  0.
+ Y diRection
+ 4  11003.171  0.
+ Y diRection
+ 5  5398.72787  0.
+ Y diRection
+ 6  2019.7064  0.
+ Y diRection
+ 7  9602.14332  0.
+ Y diRection
+ 8  13235.2699  0.
+ Y diRection
+ 9  11923.2683  0.
+ Y diRection
+ 10  5832.63042  0.
+ Y diRection
+ 11  4576.39526  0.
+ Y diRection
+ 12  10155.2465  0.
+ Y diRection
+ 13  9212.78554  0.
+ Y diRection
+ 14  6173.88957  0.
+ Y diRection
+ 15  2748.56759  0.
+ Y diRection
+ 16  6696.09431  0.
+ Y diRection
+ 17  15771.0244  0.
+ Y diRection
+ 18  16091.2995  0.
+ Y diRection
+ 19  7836.26215  0.
+ Y diRection
+ 20  5371.91823  0.
+ Y diRection
+ 21  7589.73777  0.
+ Y diRection
+ 22  10193.5242  0.
+ Y diRection
+ 23  9431.63288  0.
+ Z diRection
+ 1  3814.56356  0.
+ Z diRection
+ 2  1238.04063  0.
+ Z diRection
+ 3  2250.0172  0.
+ Z diRection
+ 4  4946.836  0.
+ Z diRection
+ 5  3167.53343  0.
+ Z diRection
+ 6  6097.74296  0.
+ Z diRection
+ 7  11340.3319  0.
+ Z diRection
+ 8  8554.63915  0.
+ Z diRection
+ 9  7486.69685  0.
+ Z diRection
+ 10  5945.19582  0.
+ Z diRection
+ 11  4779.53827  0.
+ Z diRection
+ 12  3791.37499  0.
+ Z diRection
+ 13  1927.23692  0.
+ Z diRection
+ 14  1844.02146  0.
+ Z diRection
+ 15  1687.37728  0.
+ Z diRection
+ 16  1594.33534  0.
+ Z diRection
+ 17  4347.17643  0.
+ Z diRection
+ 18  3274.35818  0.
+ Z diRection
+ 19  3943.14364  0.
+ Z diRection
+ 20  1721.52382  0.
+ Z diRection
+ 21  3359.32149  0.
+ Z diRection
+ 22  1866.75462  0.
+ Z diRection
+ 23  3056.15891  0.
+ XY diRection
+ 1  7041.57573  0.
+ XY diRection
+ 2  10824.1265  0.
+ XY diRection
+ 3  11784.1329  0.
+ XY diRection
+ 4  11864.412  0.
+ XY diRection
+ 5  5790.56583  0.
+ XY diRection
+ 6  10919.7065  0.
+ XY diRection
+ 7  5735.69822  0.
+ XY diRection
+ 8  5480.67861  0.
+ XY diRection
+ 9  10168.6485  0.
+ XY diRection
+ 10  4576.37182  0.
+ XY diRection
+ 11  2595.61155  0.
+ XY diRection
+ 12  9223.41817  0.
+ XY diRection
+ 13  9017.01279  0.
+ XY diRection
+ 14  4041.25915  0.
+ XY diRection
+ 15  3323.12302  0.
+ XY diRection
+ 16  13658.6602  0.
+ XY diRection
+ 17  19582.0184  0.
+ XY diRection
+ 18  21764.6898  0.
+ XY diRection
+ 19  19992.4692  0.
+ XY diRection
+ 20  10913.1787  0.
+ XY diRection
+ 21  6693.13299  0.
+ XY diRection
+ 22  10945.4881  0.
+ XY diRection
+ 23  9564.05476  0.
+ XZ diRection
+ 1  4373.80316  0.
+ XZ diRection
+ 2  2330.42149  0.
+ XZ diRection
+ 3  3396.06537  0.
+ XZ diRection
+ 4  5428.60902  0.
+ XZ diRection
+ 5  4102.05576  0.
+ XZ diRection
+ 6  12553.8164  0.
+ XZ diRection
+ 7  13068.926  0.
+ XZ diRection
+ 8  6863.7742  0.
+ XZ diRection
+ 9  7440.77634  0.
+ XZ diRection
+ 10  4499.38096  0.
+ XZ diRection
+ 11  4778.32379  0.
+ XZ diRection
+ 12  2895.06114  0.
+ XZ diRection
+ 13  2235.0801  0.
+ XZ diRection
+ 14  3171.06857  0.
+ XZ diRection
+ 15  2566.02163  0.
+ XZ diRection
+ 16  6573.20798  0.
+ XZ diRection
+ 17  5214.18511  0.
+ XZ diRection
+ 18  6989.22783  0.
+ XZ diRection
+ 19  10912.426  0.
+ XZ diRection
+ 20  5841.22171  0.
+ XZ diRection
+ 21  5711.75803  0.
+ XZ diRection
+ 22  2539.65233  0.
+ XZ diRection
+ 23  4584.38873  0.
+ YZ diRection
+ 1  1709.8442  0.
+ YZ diRection
+ 2  9345.00964  0.
+ YZ diRection
+ 3  12523.0843  0.
+ YZ diRection
+ 4  15345.8595  0.
+ YZ diRection
+ 5  8306.47612  0.
+ YZ diRection
+ 6  6142.62944  0.
+ YZ diRection
+ 7  18644.1705  0.
+ YZ diRection
+ 8  19636.8924  0.
+ YZ diRection
+ 9  17185.4184  0.
+ YZ diRection
+ 10  11108.6325  0.
+ YZ diRection
+ 11  8496.88416  0.
+ YZ diRection
+ 12  13193.2689  0.
+ YZ diRection
+ 13  10168.5662  0.
+ YZ diRection
+ 14  6143.16067  0.
+ YZ diRection
+ 15  3514.74327  0.
+ YZ diRection
+ 16  6583.93522  0.
+ YZ diRection
+ 17  14962.117  0.
+ YZ diRection
+ 18  15547.2635  0.
+ YZ diRection
+ 19  6305.24685  0.
+ YZ diRection
+ 20  3874.42928  0.
+ YZ diRection
+ 21  6919.34171  0.
+ YZ diRection
+ 22  10855.49  0.
+ YZ diRection
+ 23  11716.4848  0.
+ XYZ diRection
+ 1  4049.83486  0.
+ XYZ diRection
+ 2  10468.5454  0.
+ XYZ diRection
+ 3  13187.1186  0.
+ XYZ diRection
+ 4  15957.9656  0.
+ XYZ diRection
+ 5  8409.47979  0.
+ XYZ diRection
+ 6  12271.2603  0.
+ XYZ diRection
+ 7  10135.9569  0.
+ XYZ diRection
+ 8  7099.27218  0.
+ XYZ diRection
+ 9  15813.964  0.
+ XYZ diRection
+ 10  9473.8023  0.
+ XYZ diRection
+ 11  7085.15047  0.
+ XYZ diRection
+ 12  12170.2439  0.
+ XYZ diRection
+ 13  10031.3558  0.
+ XYZ diRection
+ 14  3728.92577  0.
+ XYZ diRection
+ 15  4230.47732  0.
+ XYZ diRection
+ 16  13167.9194  0.
+ XYZ diRection
+ 17  18747.71  0.
+ XYZ diRection
+ 18  21417.4261  0.
+ XYZ diRection
+ 19  18208.2429  0.
+ XYZ diRection
+ 20  9729.14912  0.
+ XYZ diRection
+ 21  3637.33112  0.
+ XYZ diRection
+ 22  11274.4381  0.
+ XYZ diRection
+ 23  11968.6246  0.

@@ -1,0 +1,13 @@
+cut -b 22-26 4DXMmod_atm.pdb | uniq > originID
+
+python renumberPDB.py 4DXMmod_atm.pdb loop.core > 4DXMmod_atmorder.pdb
+
+only count monomer N residues
+
+cut -b 22-26 4DXM_C1_struct.pdb | uniq > originID_struct
+python renumberPDB.py 4DXM_C1_struct.pdb loop.core > 4DXM_C1_structorder.pdb
+rename CR8 to be TYR for iANM server: 4DXM_C1_structorderTYR.pdb
+
+cut -b 22-26 4DXM_C1_struct_atm.pdb | uniq > originID_struct2
+python renumberPDB.py 4DXM_C1_struct_atm.pdb loop.core > 4DXM_C1_struct_atmorder.pdb
+

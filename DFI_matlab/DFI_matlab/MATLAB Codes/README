@@ -1,0 +1,7 @@
+calculateDFI.m: DFI calculation for 1YMZ
+
+calculateARR.m: calculate ARR for GFP. 1/N (perturb residues in one monomer and divide by monomer size)
+
+calculateARR_4over4N.m: calculate ARR for GFP. 1/N (perturb residues in full monomers and divide by tetramer size)
+
+calculateARR_4together.m: randomly select 10 residues from a monomer. Perturb all 40 residues in the tetramer from 10 different directions. The process is repeated for 100 times and the average/max ARR is calculated. This is used to test the significance of blue/red residues.

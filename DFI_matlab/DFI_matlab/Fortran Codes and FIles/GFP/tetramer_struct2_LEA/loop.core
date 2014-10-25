@@ -1,0 +1,3 @@
+	     DO I=START,STOP
+			delRperbDistMat_DIRECTION(i,j) = 0.0
+	  	 ENDDO

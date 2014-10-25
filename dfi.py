@@ -12,6 +12,7 @@ import pdbio
 import numpy as np 
 from scipy import linalg as LA
 
+
 if len(sys.argv) < 2:
     print __doc__ 
     exit()
@@ -41,7 +42,7 @@ def getcoords(ATOMS):
 def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
 
-    gamma = 100
+    gamma=100 
     numresthree = 3*resnum 
     
     hess = np.zeros((numresthree,numresthree))
@@ -72,38 +73,45 @@ def calchessian(resnum,x,y,z,Verbose=False):
                        
 
             #creation of Hii 
-            hess[3*i-3,3*i-3] += sprngcnst*(x_ij*x_ij/r) #(1,1) (4,4)
-            hess[3*i-2,3*i-2] += sprngcnst*(y_ij*y_ij/r) #(2,2) (5,5)
-            hess[3*i-1,3*i-1] += sprngcnst*(z_ij*z_ij/r)     #(3,3) (6,6)
+            hess[3*i,3*i] += sprngcnst*(x_ij*x_ij/r) #(1,1) (4,4)
+            hess[3*i+1,3*i+1] += sprngcnst*(y_ij*y_ij/r) #(2,2) (5,5)
+            hess[3*i+2,3*i+2] += sprngcnst*(z_ij*z_ij/r)     #(3,3) (6,6)
 
-            hess[3*i-3,3*i-2] += sprngcnst*(x_ij*y_ij/r) #(1,2) (4,5)
-            hess[3*i-3,3*i-1] += sprngcnst*(x_ij*z_ij/r)   #(1,3) (4,6)
-            hess[3*i-2,3*i-3] += sprngcnst*(y_ij*x_ij/r) #(2,1) (5,4)
+            hess[3*i,3*i+1] += sprngcnst*(x_ij*y_ij/r) #(1,2) (4,5)
+            hess[3*i,3*i+2] += sprngcnst*(x_ij*z_ij/r)   #(1,3) (4,6)
+            hess[3*i+1,3*i] += sprngcnst*(y_ij*x_ij/r) #(2,1) (5,4)
              
-            hess[3*i-2,3*i-1] += sprngcnst*(y_ij*z_ij/r)   #(2,3) (5,6)
-            hess[3*i-1,3*i-3] += sprngcnst*(x_ij*z_ij/r)   #(3,1) (6,4)
-            hess[3*i-1,3*i-2] += sprngcnst*(y_ij*z_ij/r)   #(3,2) (6,5)
+            hess[3*i+1,3*i+2] += sprngcnst*(y_ij*z_ij/r)   #(2,3) (5,6)
+            hess[3*i+2,3*i] += sprngcnst*(x_ij*z_ij/r)   #(3,1) (6,4)
+            hess[3*i+2,3*i+1] += sprngcnst*(y_ij*z_ij/r)   #(3,2) (6,5)
             
             #creation of Hij 
-            hess[3*i-3,3*j-3] -= sprngcnst*(x_ij*x_ij/r) #(1,4) (4,1)
-            hess[3*i-2,3*j-2] -= sprngcnst*(y_ij*y_ij/r) #(2,5) (5,2)
-            hess[3*i-1,3*j-1] -= sprngcnst*(z_ij*z_ij/r)     #(3,6) (6,3)
+            hess[3*i,3*j] -= sprngcnst*(x_ij*x_ij/r) #(1,4) (4,1)
+            hess[3*i+1,3*j+1] -= sprngcnst*(y_ij*y_ij/r) #(2,5) (5,2)
+            hess[3*i+2,3*j+2] -= sprngcnst*(z_ij*z_ij/r)     #(3,6) (6,3)
             
-            hess[3*i-3,3*j-2] -= sprngcnst*(x_ij*y_ij/r) #(1,5) (4,2)
-            hess[3*i-3,3*j-1] -= sprngcnst*(x_ij*z_ij/r)   #(1,6) (4,3)
-            hess[3*i-2,3*j-3] -= sprngcnst*(y_ij*x_ij/r) #(2,4) (5,1)
+            hess[3*i,3*j+1] -= sprngcnst*(x_ij*y_ij/r) #(1,5) (4,2)
+            hess[3*i,3*j+2] -= sprngcnst*(x_ij*z_ij/r)   #(1,6) (4,3)
+            hess[3*i+1,3*j] -= sprngcnst*(y_ij*x_ij/r) #(2,4) (5,1)
              
-            hess[3*i-2,3*j-1] -= sprngcnst*(y_ij*z_ij/r)   #(2,6) (5,3)
-            hess[3*i-1,3*j-3] -= sprngcnst*(x_ij*z_ij/r)   #(3,4) (6,1)
-            hess[3*i-1,3*j-2] -= sprngcnst*(y_ij*z_ij/r)   #(3,5) (6,2)
+            hess[3*i+1,3*j+2] -= sprngcnst*(y_ij*z_ij/r)   #(2,6) (5,3)
+            hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   #(3,4) (6,1)
+            hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r)   #(3,5) (6,2)
 
     
     return hess  
 
+def flatandwrite(matrix,outfile):
+    outfile=open(outfile,'w')
+    for f in matrix.flatten():
+        outfile.write('%f\n'%f)
+    outfile.close()
+    
+
 
 if __name__ == "__main__":
     Verbose = True 
-    gamma = 1
+    
     
 
     #parse the input 
@@ -121,26 +129,89 @@ if __name__ == "__main__":
     numres = len(ATOMS)
     numresthree = 3 * numres
     
-
     
     
-    #hess = np.zeros((numresthree,numresthree))
-
-    #x = np.array([0,0],dtype=float)
-    #y = np.array([0,0],dtype=float)
-    #z = np.array([1,0],dtype=float)
-    
-    #numres = len(x)
-
     hess = calchessian(numres,x,y,z,Verbose)
     e_vals, e_vecs = LA.eig(hess)
-
-    #print hess 
     
-    i=0
+    flatandwrite(hess,'hesspy.debug')
+    
+
+    
+    
+    
+ 
+    #print out eigenvalues 
+    
+    i=1
+    outfile=open('eigenvalues.txt','w')
     for val in np.sort(e_vals):
-        print "%d\t%f"%(i,val) 
+        outfile.write("%d\t%f\n"%(i,val)) 
         i += 1
+    outfile.close()
+        
+    #invert the hessian 
+    invhess = LA.inv(hess)
+    print invhess[:10] 
+
+    #flatten and then output 
+    flatinvhess = invhess.flatten()
+    outfile = open('1dc2_invhess.dat','w')
+    for f in flatinvhess: 
+        outfile.write('%f\n'%f)
+    outfile.close()
+
+    print hess.dot(LA.inv(hess))
+
+    U, w, Vt = LA.svd(hess)
+    flatandwrite(U,'Upy-test.debug')
+    flatandwrite(w,'wpy-test.debug')
+    flatandwrite(Vt,'Vtpy-test.debug')
+
+    #print U 
+    #print w 
+    #print Vt
+
+    w[w<1e-6] = 0 
+    
+    i=1
+    outfile=open('eigenvalues_test.txt','w')
+    for val in np.sort(w):
+        outfile.write("%d\t%f\n"%(i,val)) 
+        i += 1
+    outfile.close()
+    
+    
+#    Ainv = Vt.T.dot(U.T)*w 
+
+ #   print Ainv
+    
+  #  outfile = open('test_invhess.dat','w')
+  #  for f in Ainv.flatten(): 
+  #      outfile.write('%f\n'%f)
+  #  outfile.close()
+
+    print Vt.shape
+    print U.shape 
+    print w.shape 
+    sumw = np.sum(w)
+    invhess = np.zeros((numresthree,numresthree))
+
+    Vt=Vt.T
+    U=U.T 
+
+    for i in range(numresthree):
+        for j in range(numresthree):
+            print "i:%d j%d"%(i,j)
+            invhess[i,j] += Vt[i,j]*(U[i,j]/sumw)
+            #for k in range(numresthree):
+            #    if w[k] > 1e-6:
+            #        invhess[i,j] += Vt[i,j]*(U[i,j]/w[k])
+
+      
+    flatandwrite(invhess,'invpy.debug')
+
+
     exit()
 
     
