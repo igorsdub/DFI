@@ -137,10 +137,6 @@ if __name__ == "__main__":
     flatandwrite(hess,'hesspy.debug')
     
 
-    
-    
-    
- 
     #print out eigenvalues 
     
     i=1
@@ -150,33 +146,28 @@ if __name__ == "__main__":
         i += 1
     outfile.close()
         
-    #invert the hessian 
-#    invhess = LA.inv(hess)
- #   print invhess[:10] 
-
-    #flatten and then output 
-   # flatinvhess = invhess.flatten()
-   # outfile = open('1dc2_invhess.dat','w')
-   # for f in flatinvhess: 
-   #     outfile.write('%f\n'%f)
-   # outfile.close()
-
 
 
     U, w, Vt = LA.svd(hess,full_matrices=False)
-    print U.shape
-    print w.shape 
-    print Vt.shape 
+    if(Verbose):
+        print U.shape
+        print w.shape 
+        print Vt.shape 
 
     S = LA.diagsvd(w,468,468)
+    print "Checking If the SVD went well..."
     print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
     
  
-    flatandwrite(U,'Upy-test.debug')
-    flatandwrite(w,'wpy-test.debug')
-    flatandwrite(Vt,'Vtpy-test.debug')
+    if(Verbose):
+        flatandwrite(U,'Upy-test.debug')
+        flatandwrite(w,'wpy-test.debug')
+        flatandwrite(Vt,'Vtpy-test.debug')
 
-    singular = w < 1e-6
+    #the near zero eigenvalues blowup the inversion so 
+    #we will truncate them and add a small amount of bias 
+    tol = 1e-6 
+    singular = w < tol 
     invw = 1/w
     invw[singular] = 0.
     
@@ -186,51 +177,10 @@ if __name__ == "__main__":
     flatandwrite(pinv_svd,'pinv_svd.debug')
 
     exit()
-    #print U 
-    #print w 
-    #print Vt
-
-
-    
-    i=1
-    outfile=open('eigenvalues_test.txt','w')
-    for val in np.sort(w):
-        outfile.write("%d\t%f\n"%(i,val)) 
-        i += 1
-    outfile.close()
-    
-    
-#    Ainv = Vt.T.dot(U.T)*w 
-
- #   print Ainv
-    
-  #  outfile = open('test_invhess.dat','w')
-  #  for f in Ainv.flatten(): 
-  #      outfile.write('%f\n'%f)
-  #  outfile.close()
-
-    print Vt.shape
-    print U.shape 
-    print w.shape 
-    sumw = np.sum(w)
-    invhess = np.zeros((numresthree,numresthree))
-
     
 
-    for i in range(numresthree):
-        for j in range(numresthree):
-            print "i:%d j%d"%(i,j)
-            #invhess[i,j] += Vt[i,j]*(U[i,j]/sumw)
-            for k in range(numresthree):
-                if w[k] > 1e-6:
-                    invhess[i,j] += Vt[i,j]*(U[i,j]/w[k])
-
-      
-    flatandwrite(invhess,'invpy.debug')
     
-
-
-    exit()
+    
 
     
     
