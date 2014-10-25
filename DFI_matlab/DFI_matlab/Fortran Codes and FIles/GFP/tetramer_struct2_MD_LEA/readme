@@ -1,4 +1,0 @@
-grep 'ATOM' 4DXN_C1_struct.pdb > 4DXN_C1_struct_atm.pdb
-cut -b 22-26 4DXN_C1_struct_atm.pdb | uniq > originID_struct
-python renumberPDB.py 4DXN_C1_struct_atm.pdb loop.core > 4DXN_C1_struct_atmorder.pdb
-

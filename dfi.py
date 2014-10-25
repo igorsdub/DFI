@@ -151,28 +151,46 @@ if __name__ == "__main__":
     outfile.close()
         
     #invert the hessian 
-    invhess = LA.inv(hess)
-    print invhess[:10] 
+#    invhess = LA.inv(hess)
+ #   print invhess[:10] 
 
     #flatten and then output 
-    flatinvhess = invhess.flatten()
-    outfile = open('1dc2_invhess.dat','w')
-    for f in flatinvhess: 
-        outfile.write('%f\n'%f)
-    outfile.close()
+   # flatinvhess = invhess.flatten()
+   # outfile = open('1dc2_invhess.dat','w')
+   # for f in flatinvhess: 
+   #     outfile.write('%f\n'%f)
+   # outfile.close()
 
-    print hess.dot(LA.inv(hess))
 
-    U, w, Vt = LA.svd(hess)
+
+    U, w, Vt = LA.svd(hess,full_matrices=False)
+    print U.shape
+    print w.shape 
+    print Vt.shape 
+
+    S = LA.diagsvd(w,468,468)
+    print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
+    
+ 
     flatandwrite(U,'Upy-test.debug')
     flatandwrite(w,'wpy-test.debug')
     flatandwrite(Vt,'Vtpy-test.debug')
 
+    singular = w < 1e-6
+    invw = 1/w
+    invw[singular] = 0.
+    
+
+    #pinv_svd = np.dot(np.dot(Vt.T,LA.inv(np.diag(w))),U.T)
+    pinv_svd = np.dot(np.dot(U,np.diag(invw)),Vt)
+    flatandwrite(pinv_svd,'pinv_svd.debug')
+
+    exit()
     #print U 
     #print w 
     #print Vt
 
-    w[w<1e-6] = 0 
+
     
     i=1
     outfile=open('eigenvalues_test.txt','w')
@@ -197,19 +215,19 @@ if __name__ == "__main__":
     sumw = np.sum(w)
     invhess = np.zeros((numresthree,numresthree))
 
-    Vt=Vt.T
-    U=U.T 
+    
 
     for i in range(numresthree):
         for j in range(numresthree):
             print "i:%d j%d"%(i,j)
-            invhess[i,j] += Vt[i,j]*(U[i,j]/sumw)
-            #for k in range(numresthree):
-            #    if w[k] > 1e-6:
-            #        invhess[i,j] += Vt[i,j]*(U[i,j]/w[k])
+            #invhess[i,j] += Vt[i,j]*(U[i,j]/sumw)
+            for k in range(numresthree):
+                if w[k] > 1e-6:
+                    invhess[i,j] += Vt[i,j]*(U[i,j]/w[k])
 
       
     flatandwrite(invhess,'invpy.debug')
+    
 
 
     exit()
