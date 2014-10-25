@@ -3,7 +3,7 @@
 USAGE: dfi.py PDBID
 
 PDBID:    Protein DataBank Code 
-
+INVERSION WORKS NOW
 """
 
 import sys 
