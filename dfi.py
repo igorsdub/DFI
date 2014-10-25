@@ -42,9 +42,9 @@ def getcoords(ATOMS):
 def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
 
+    print "Calculating the Hessian..."
     gamma=100 
     numresthree = 3*resnum 
-    
     hess = np.zeros((numresthree,numresthree))
   
        
@@ -67,9 +67,9 @@ def calchessian(resnum,x,y,z,Verbose=False):
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
             if(Verbose):
                 print "i:%d j:%f"%(i,j)
-                #print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
-                #print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
-                #print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
+                print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
+                print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
+                print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
                        
 
             #creation of Hii 
@@ -98,7 +98,7 @@ def calchessian(resnum,x,y,z,Verbose=False):
             hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   #(3,4) (6,1)
             hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r)   #(3,5) (6,2)
 
-    
+    print "Finished Calculating the Hessian..."
     return hess  
 
 def flatandwrite(matrix,outfile):
@@ -110,35 +110,32 @@ def flatandwrite(matrix,outfile):
 
 
 if __name__ == "__main__":
-    Verbose = True 
-    
-    
-
+    Verbose = True #Setting for Debugging  
+        
     #parse the input 
     pdbid = sys.argv[1] 
     
     #get the pdb, then extract the chain and then the alpha carbons and return the name of the file 
     #fname = pdbmunge.extractA_CA(pdbid)
-    fname = '1dc2_A_CA.pdb' 
+            
+   
+
     ATOMS = [] 
-    pdbio.pdb_reader(fname,ATOMS)
-
+    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,chainA=True)
+    pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
+    exit()
     x,y,z = getcoords(ATOMS) 
-
+    
     #start computing the Hessian 
     numres = len(ATOMS)
     numresthree = 3 * numres
-    
-    
-    
     hess = calchessian(numres,x,y,z,Verbose)
     e_vals, e_vecs = LA.eig(hess)
-    
-    flatandwrite(hess,'hesspy.debug')
-    
 
-    #print out eigenvalues 
+    if(Verbose):
+        flatandwrite(hess,'hesspy.debug')
     
+    #print out eigenvalues 
     i=1
     outfile=open('eigenvalues.txt','w')
     for val in np.sort(e_vals):
@@ -170,11 +167,10 @@ if __name__ == "__main__":
     singular = w < tol 
     invw = 1/w
     invw[singular] = 0.
-    
-
-    #pinv_svd = np.dot(np.dot(Vt.T,LA.inv(np.diag(w))),U.T)
     pinv_svd = np.dot(np.dot(U,np.diag(invw)),Vt)
     flatandwrite(pinv_svd,'pinv_svd.debug')
+
+    
 
     exit()
     
