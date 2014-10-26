@@ -43,11 +43,11 @@ def getcoords(ATOMS):
     
     return x,y,z 
 
-def calchessian(resnum,x,y,z,gamma=10,Verbose=False):
+def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
 
     print "Calculating the Hessian..."
-    #gamma=10 
+    gamma=100 
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
   
