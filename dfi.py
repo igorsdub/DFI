@@ -43,11 +43,11 @@ def getcoords(ATOMS):
     
     return x,y,z 
 
-def calchessian(resnum,x,y,z,Verbose=False):
+def calchessian(resnum,x,y,z,gamma=10,Verbose=False):
     """ Calculates the hessian and retuns the result """
 
     print "Calculating the Hessian..."
-    gamma=100 
+    #gamma=10 
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
   
@@ -147,7 +147,7 @@ if __name__ == "__main__":
         print w.shape 
         print Vt.shape 
 
-    S = LA.diagsvd(w,468,468)
+    S = LA.diagsvd(w,len(w),len(w))
     print "Checking If the SVD went well..."
     print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
     

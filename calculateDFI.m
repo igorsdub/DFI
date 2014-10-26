@@ -14,7 +14,7 @@ ratio=zeros(resnum2,ndirect);
 bindcolumnsum=zeros(resnum2,ndirect);
 allcolumnsum=zeros(resnum2,ndirect);
 for k=1:ndirect       %k is the dimension of direction
-    direct=directions(k,:)/norm(directions(k,:))        
+    direct=directions(k,:)/norm(directions(k,:));        
     for j=1:resnum          % perturb j
         delforce=zeros(resnum*3,1);
         delforce(3*j-2:3*j)=direct;
@@ -33,7 +33,7 @@ for k=1:ndirect       %k is the dimension of direction
     bindcolumnsum(:,k)=sum(delRperbDistMat(1:resnum2,resperturb(1:npb),k),2);
     ratio(:,k)=(bindcolumnsum(:,k)/npb)./(allcolumnsum(:,k)/(resnum2-1));
 end
-delRperbDistMat
+delRperbDistMat;
 dRmat=zeros(resnum2, resnum2);
 for i=1:resnum
     for j=resnum
