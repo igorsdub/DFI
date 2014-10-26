@@ -15,7 +15,8 @@ import pdbmunge
 import pdbio 
 import numpy as np 
 from scipy import linalg as LA
-
+from scipy import stats 
+from oct2py import octave 
 
 if len(sys.argv) < 2:
     print __doc__ 
@@ -27,21 +28,24 @@ def getcoords(ATOMS):
     x = []
     y = []
     z = [] 
+    bfac = []
 
     for atom in ATOMS:
         if(Verbose):
             print atom.atom_name
-            print "%s %f %f %f"%(atom.atom_name,atom.x,atom.y,atom.z)
+            print "%s %f %f %f %f"%(atom.atom_name,atom.x,atom.y,atom.z,atom.temp_factor)
         if atom.atom_name == 'CA ':
             x.append(atom.x)
             y.append(atom.y)
             z.append(atom.z)
-    
+            bfac.append(atom.temp_factor)
+
     x = np.array(x,dtype=float)
     y = np.array(y,dtype=float)
     z = np.array(z,dtype=float)
-    
-    return x,y,z 
+    bfac = np.array(bfac,dtype=float)
+
+    return x,y,z,bfac  
 
 def calchessian(resnum,x,y,z,Verbose=False):
     """ Calculates the hessian and retuns the result """
@@ -106,11 +110,29 @@ def calchessian(resnum,x,y,z,Verbose=False):
     return hess  
 
 def flatandwrite(matrix,outfile):
+    """Flattens out a matrix to a Nx1 column and write out to a file. """
     outfile=open(outfile,'w')
     for f in matrix.flatten():
         outfile.write('%f\n'%f)
     outfile.close()
     
+def dfianal(fname,Array=False):
+    """Calculate various dfi quantities and then output"""
+    if not(Array):
+        with open(fname,'r') as infile:
+            dfi = np.array([x.strip('\n') for x in infile], dtype=float )
+    else:
+        dfi = fname 
+    dfirel = dfi/np.mean(dfi)
+    dfizscore = stats.zscore(dfi)
+    dfiperc = [] 
+    lendfi = float(len(dfi))
+    for m in dfi:
+        amt = sum(dfi <=m)
+        dfiperc.append(amt/lendfi)
+    dfiperc = np.array(dfiperc,dtype=float)
+    
+    return dfi, dfirel, dfiperc, dfizscore 
 
 
 if __name__ == "__main__":
@@ -122,7 +144,7 @@ if __name__ == "__main__":
     ATOMS = [] 
     pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,chainA=True)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
-    x,y,z = getcoords(ATOMS) 
+    x,y,z,bfac = getcoords(ATOMS) 
     
     #start computing the Hessian 
     numres = len(ATOMS)
@@ -168,6 +190,40 @@ if __name__ == "__main__":
     flatandwrite(pinv_svd,'pinv_svd.debug')
     print "Hessian inverted and written out to pinv_svd.debug"
     
+    #RUN DFI CODE HERE 
+
+    #Analyze the results. The output should be the following 
+    #ResName dfi reldfi %dfi z-score dfi dsi reldsi %dsi z-score dsi bfactor relbfactor %bfactor 
+    octave.dfiperturb()
+
+
+
+    dfifile='S1-Avg.dat'
+    mdfifile='S2-Avg.dat'
+
+    dfi, reldfi, pctdfi, zscoredfi = dfianal(dfifile)
+    mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfifile)
+#    bfac,relbfac,pctbfac,zscorebfac = dfianal(bfac,Array=True)
+
+
+    #output to file. 
+    with open('dfianalysis.csv','w') as outfile:
+        header='ResIndex,ResName,dfi,reldfi,pctdfi,z-scoredfi,m-dfi,relm-dfi,pctm-dfi,z-scorem-dfi'
+        outfile.write(header+'\n')
+        for i in range(len(dfi)):
+            outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],
+                                                                   mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i]))
+                                               
+
+    #Identify the residues that have a dfi score less than 25 percent 
+    hingedfipct = 0.25
+    hingedfi = pctdfi < hingedfipct  
+
+    j = 0 
+    for i in hingedfi:
+        if i:
+          print j 
+        j+=1
 
     exit()
     
