@@ -14,7 +14,7 @@ function [] = hingemdfiperturb(list)
     for k=1:numdirect 
     direct = directions(k,:)/norm(directions(k,:))
 
-    for j=hlist
+    for j=1:resnum
             j
             delforce=zeros(resnum*3,1); %Force column 
             delforce(3*j-2:3*j)=direct; %Foce in the force colmn 
@@ -30,13 +30,19 @@ function [] = hingemdfiperturb(list)
     end
     nrml=perbMat.*(1/numdirect); %average by the number of directions 
     nrml = nrml./(sum(nrml(:)));
-    dfi = sum(nrml,2);
-    mdfi = sum(nrml,1)
+    %dfi = sum(nrml,2);
+    mdfi = sum(nrml(hlist,:),1) %hlist pulls out the hinges and does the sum over those 
 
     
     outfile = fopen('hingemdfi-Avg.dat','w');
     for i=1:size(mdfi,2)
         fprintf(outfile,'%f\n',mdfi(i));
+    end
+    fclose(outfile)
+    
+    outfile = fopen('hingeindex.debug','w');
+    for i=hlist
+       fprintf(outfile,'%d\n',i) 
     end
     fclose(outfile)
 end
