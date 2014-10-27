@@ -15,7 +15,6 @@ function [] = hingemdfiperturb(list)
     direct = directions(k,:)/norm(directions(k,:))
 
     for j=1:resnum
-            j
             delforce=zeros(resnum*3,1); %Force column 
             delforce(3*j-2:3*j)=direct; %Foce in the force colmn 
             delXperbVec=INVBKBT*delforce; %displacement 
@@ -35,8 +34,8 @@ function [] = hingemdfiperturb(list)
 
     
     outfile = fopen('fdfi-Avg.dat','w');
-    for i=1:size(fmdfi,2);
-        fprintf(outfile,'%f\n',mdfi(i));
+    for i=1:size(fdfi,1);
+        fprintf(outfile,'%f\n',fdfi(i));
     end
     fclose(outfile);
     

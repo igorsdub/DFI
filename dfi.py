@@ -142,6 +142,12 @@ if __name__ == "__main__":
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
     pdbid = sys.argv[1] 
+    if (sys.argv > 2):
+        print "F-DFI residues added in the input" 
+    fdfires=np.array(sys.argv[2:],dtype=int)
+    print "f-dfires"
+    print fdfires 
+
     ATOMS = [] 
     pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,chainA=True)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
@@ -195,6 +201,7 @@ if __name__ == "__main__":
 
     #Analyze the results. The output should be the following 
     #ResName dfi reldfi %dfi z-score dfi dsi reldsi %dsi z-score dsi bfactor relbfactor %bfactor 
+    octave.addpath('/home/alfred/Project/Sudhir/DFI-Code-May2013')
     octave.dfiperturb()
 
 
@@ -223,9 +230,17 @@ if __name__ == "__main__":
     hingefile='hingemdfi-Avg.dat'
     hmdfi,relhmdfi,pcthmdfi,zscorehmdfi = dfianal(hingefile)
 
+    #f-dfi 
+    print "Amount of f-dfi res:"+str(len(fdfires))
+    fdfifile='fdfi-Avg.dat'
+    if len(fdfires) > 0:
+        octave.fdfiperturb(fdfires)
+        fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
     
     #output to file. 
     with open('dfianalysis.csv','w') as outfile:
+        outfile.write('#PBD:'+pdbid+'\n')
+        outfile.write('#Hinges: '+str(hingelist)+'\n')
         header='ResIndex,ResName,dfi,reldfi,pctdfi,z-scoredfi,m-dfi,relm-dfi,pctm-dfi,z-scorem-dfi,hmdfi,relhmdfi,pcthmdfi,zscorehmdfi'
         outfile.write(header+'\n')
         for i in range(len(dfi)):
