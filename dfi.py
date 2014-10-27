@@ -212,7 +212,7 @@ if __name__ == "__main__":
     hingedfi = pctdfi < hingedfipct  
     hingelist = [] 
 
-    j = 0 
+    j = 1 #must start from one beacuse giong to put as the input as an octave function  
     for i in hingedfi:
         if i:
             hingelist.append(j)
