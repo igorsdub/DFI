@@ -206,24 +206,34 @@ if __name__ == "__main__":
 #    bfac,relbfac,pctbfac,zscorebfac = dfianal(bfac,Array=True)
 
 
-    #output to file. 
-    with open('dfianalysis.csv','w') as outfile:
-        header='ResIndex,ResName,dfi,reldfi,pctdfi,z-scoredfi,m-dfi,relm-dfi,pctm-dfi,z-scorem-dfi'
-        outfile.write(header+'\n')
-        for i in range(len(dfi)):
-            outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],
-                                                                   mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i]))
-                                               
-
     #Identify the residues that have a dfi score less than 25 percent 
     hingedfipct = 0.25
     hingedfi = pctdfi < hingedfipct  
+    hingelist = [] 
 
     j = 0 
     for i in hingedfi:
         if i:
-          print j 
+            hingelist.append(j)
         j+=1
+
+    hingelist = np.array(hingelist,dtype=int)
+    octave.hingemdfiperturb(hingelist)
+    hingefile='hingemdfi-Avg.dat'
+    hmdfi,relhmdfi,pcthmdfi,zscorehmdfi = dfianal(hingefile)
+
+
+    #output to file. 
+    with open('dfianalysis.csv','w') as outfile:
+        header='ResIndex,ResName,dfi,reldfi,pctdfi,z-scoredfi,m-dfi,relm-dfi,pctm-dfi,z-scorem-dfi,hmdfi,relhmdfi,pcthmdfi,zscorehmdfi'
+        outfile.write(header+'\n')
+        for i in range(len(dfi)):
+            outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],
+                                                                             mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],
+                                                                             hmdfi[i],relhmdfi[i],pcthmdfi[i],zscorehmdfi[i])
+                                               
+
+
 
     exit()
     
