@@ -240,9 +240,11 @@ if __name__ == "__main__":
     #output to file. 
     with open('dfianalysis.csv','w') as outfile:
         outfile.write('#PBD:'+pdbid+'\n')
-        outfile.write('#Hinges: '+str(hingelist)+'\n')
-        header='ResIndex,ResName,dfi,reldfi,pctdfi,z-scoredfi,m-dfi,relm-dfi,pctm-dfi,z-scorem-dfi,hmdfi,relhmdfi,pcthmdfi,zscorehmdfi'
-        outfile.write(header+'\n')
-        for i in range(len(dfi)):
-            outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],relhmdfi[i],pcthmdfi[i],
-                                                                                                 zscorehmdfi[i]))
+        #outfile.write('#Hinges: '+str(hingelist)+'\n')
+        if len(fdfires) > 0:
+            outfile.write('#f-dfi: '+str(fdfires)+'\n')
+            header="ResI,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi\n"
+            outfile.write(header)
+            for i in range(len(dfi)):
+                outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i]))
