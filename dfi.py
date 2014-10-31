@@ -14,6 +14,7 @@ import sys
 import pdbmunge 
 import pdbio 
 import numpy as np 
+
 from scipy import linalg as LA
 from scipy import stats 
 from oct2py import octave 
@@ -135,6 +136,27 @@ def dfianal(fname,Array=False):
     
     return dfi, dfirel, dfiperc, dfizscore 
 
+def calcperturbMat(invHrs,direct,resnum,Normalize=True):
+    perturbMat = np.zeros((resnum,resnum))
+    for k in range(len(direct)):
+        peturbDir = direct[k,:]
+        for j in range(int(resnum)):
+            delforce = np.zeros(3*resnum)
+            delforce[3*j:3*j+3] = peturbDir 
+            delXperbVex = np.dot(invHrs,delforce)
+            delXperbMat = delXperbVex.reshape((resnum,3))
+            delRperbVec = np.sqrt(np.sum(delXperbMat*delXperbMat,axis=1))
+            perturbMat[:,j] += delRperbVec[:]
+    perturbMat /= 7
+
+    if(Normalize):
+        nrmlperturbMat = perturbMat/np.sum(perturbMat)
+    else:
+        nrmlperturbMat = perturbMat
+    
+    return nrmlperturbMat 
+
+
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
@@ -162,12 +184,18 @@ if __name__ == "__main__":
         flatandwrite(hess,'hesspy.debug')
     
     #print out eigenvalues 
+    #i=1
+    #outfile=open('eigenvalues.txt','w')
+    #for val in np.sort(e_vals):
+    #    outfile.write("%d\t%f\n"%(i,val)) 
+    #    i += 1
+    #outfile.close()
+    
     i=1
-    outfile=open('eigenvalues.txt','w')
-    for val in np.sort(e_vals):
-        outfile.write("%d\t%f\n"%(i,val)) 
-        i += 1
-    outfile.close()
+    with open('eigenvalues.txt','w') as outfile:
+        for val in np.sort(e_vals):
+            outfile.write("%d\t%f\n"%(i,val))
+            i += 1
         
 
     U, w, Vt = LA.svd(hess,full_matrices=False)
@@ -193,16 +221,44 @@ if __name__ == "__main__":
     singular = w < tol 
     invw = 1/w
     invw[singular] = 0.
-    pinv_svd = np.dot(np.dot(U,np.diag(invw)),Vt)
-    flatandwrite(pinv_svd,'pinv_svd.debug')
+    invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
+    flatandwrite(invHrs,'pinv_svd.debug')
     print "Hessian inverted and written out to pinv_svd.debug"
+
+
+    #import the inverse Hessian 
+    print "Reading the inverse Hessian"
+    with open('pinv_svd.debug','r') as infile:
+        invH = np.array([ x.strip('\n') for x in infile],dtype=float) 
+        
+    resnumsq = len(invH)
+    resnum = np.sqrt(resnumsq)/3
+    invHrs = invH.reshape((3*resnum,3*resnum),order='F')
+    #may have reshaped in the wrong order may need to be in Fortran order. 
+    print "invHrs"
+    print invHrs 
     
     #RUN DFI CODE HERE 
+    print "Creating the perturbation directions"
+    directions = np.vstack(([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]))
+    normL = np.linalg.norm(directions,axis=1)
+    direct=directions/normL[:,None]
+    print "direct"
+
+
+    print "Calculating the peturbation matrix"
+    nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
+    dfi = np.sum(nrmlperturbMat,axis=1)
+    mdfi = np.sum(nrmlperturbMat,axis=0)
+    flatandwrite(dfi,'S1-Avg.dat')
+    flatandwrite(mdfi,'S2-Avg.dat')
+    exit()
+
 
     #Analyze the results. The output should be the following 
     #ResName dfi reldfi %dfi z-score dfi dsi reldsi %dsi z-score dsi bfactor relbfactor %bfactor 
     octave.addpath('/home/alfred/Project/Sudhir/DFI-Code-May2013')
-    octave.dfiperturb()
+#    octave.dfiperturb()
 
 
 
