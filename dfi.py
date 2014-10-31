@@ -171,10 +171,10 @@ if __name__ == "__main__":
     print fdfires 
 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,noalc=True,chainA=False)
+    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,noalc=True,chainA=True)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
     x,y,z,bfac = getcoords(ATOMS) 
-    exit()
+
     
     #start computing the Hessian 
     numres = len(ATOMS)
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     print hingelist 
 #    nrmlperturbMat[]
 
-    exit()
+    
 
 
     octave.hingemdfiperturb(hingelist)
