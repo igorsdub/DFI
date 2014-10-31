@@ -28,7 +28,7 @@ def read_pdb(filename):
     return np.array(Pos,dtype=float), ResNames 
 
 
-def pdb_reader(filename,ATOMS,CAonly=False,chainA=False):
+def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False):
     readatoms=0
     with open(filename) as pdb:
         for line in pdb:
@@ -45,6 +45,9 @@ def pdb_reader(filename,ATOMS,CAonly=False,chainA=False):
                     continue 
                 
                 alc = line[16] #alternate location
+                if noalc and not(alc==' '):
+                    continue 
+
                 res_name = line[17:20]
                 
                 chainID=line[21]

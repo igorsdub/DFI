@@ -18,7 +18,7 @@ import numpy as np
 from scipy import linalg as LA
 from scipy import stats 
 from oct2py import octave 
-import csv 
+#import csv 
 
 if len(sys.argv) < 2:
     print __doc__ 
@@ -171,9 +171,10 @@ if __name__ == "__main__":
     print fdfires 
 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,chainA=True)
+    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,noalc=True,chainA=False)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
     x,y,z,bfac = getcoords(ATOMS) 
+    exit()
     
     #start computing the Hessian 
     numres = len(ATOMS)
@@ -183,14 +184,7 @@ if __name__ == "__main__":
     if(Verbose):
         flatandwrite(hess,'hesspy.debug')
     
-    #print out eigenvalues 
-    #i=1
-    #outfile=open('eigenvalues.txt','w')
-    #for val in np.sort(e_vals):
-    #    outfile.write("%d\t%f\n"%(i,val)) 
-    #    i += 1
-    #outfile.close()
-    
+      
     i=1
     with open('eigenvalues.txt','w') as outfile:
         for val in np.sort(e_vals):
@@ -252,8 +246,7 @@ if __name__ == "__main__":
     mdfi = np.sum(nrmlperturbMat,axis=0)
     flatandwrite(dfi,'S1-Avg.dat')
     flatandwrite(mdfi,'S2-Avg.dat')
-    exit()
-
+    
 
     #Analyze the results. The output should be the following 
     #ResName dfi reldfi %dfi z-score dfi dsi reldsi %dsi z-score dsi bfactor relbfactor %bfactor 
@@ -275,13 +268,21 @@ if __name__ == "__main__":
     hingedfi = pctdfi < hingedfipct  
     hingelist = [] 
 
-    j = 1 #must start from one beacuse giong to put as the input as an octave function  
+    j = 0 #must start from one beacuse giong to put as the input as an octave function  
     for i in hingedfi:
         if i:
             hingelist.append(j)
         j+=1
 
+
+
     hingelist = np.array(hingelist,dtype=int)
+    print hingelist 
+#    nrmlperturbMat[]
+
+    exit()
+
+
     octave.hingemdfiperturb(hingelist)
     hingefile='hingemdfi-Avg.dat'
     hmdfi,relhmdfi,pcthmdfi,zscorehmdfi = dfianal(hingefile)
