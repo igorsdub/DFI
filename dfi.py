@@ -17,8 +17,7 @@ import numpy as np
 
 from scipy import linalg as LA
 from scipy import stats 
-from oct2py import octave 
-#import csv 
+
 
 if len(sys.argv) < 2:
     print __doc__ 
@@ -84,29 +83,29 @@ def calchessian(resnum,x,y,z,Verbose=False):
 
             #creation of Hii 
             hess[3*i,3*i] += sprngcnst*(x_ij*x_ij/r) 
-            hess[3*i+1,3*i+1] += sprngcnst*(y_ij*y_ij/r) #(2,2) (5,5)
-            hess[3*i+2,3*i+2] += sprngcnst*(z_ij*z_ij/r)     #(3,3) (6,6)
+            hess[3*i+1,3*i+1] += sprngcnst*(y_ij*y_ij/r) 
+            hess[3*i+2,3*i+2] += sprngcnst*(z_ij*z_ij/r) 
 
-            hess[3*i,3*i+1] += sprngcnst*(x_ij*y_ij/r) #(1,2) (4,5)
-            hess[3*i,3*i+2] += sprngcnst*(x_ij*z_ij/r)   #(1,3) (4,6)
-            hess[3*i+1,3*i] += sprngcnst*(y_ij*x_ij/r) #(2,1) (5,4)
+            hess[3*i,3*i+1] += sprngcnst*(x_ij*y_ij/r) 
+            hess[3*i,3*i+2] += sprngcnst*(x_ij*z_ij/r) 
+            hess[3*i+1,3*i] += sprngcnst*(y_ij*x_ij/r) 
              
-            hess[3*i+1,3*i+2] += sprngcnst*(y_ij*z_ij/r)   #(2,3) (5,6)
-            hess[3*i+2,3*i] += sprngcnst*(x_ij*z_ij/r)   #(3,1) (6,4)
-            hess[3*i+2,3*i+1] += sprngcnst*(y_ij*z_ij/r)   #(3,2) (6,5)
+            hess[3*i+1,3*i+2] += sprngcnst*(y_ij*z_ij/r) 
+            hess[3*i+2,3*i] += sprngcnst*(x_ij*z_ij/r)   
+            hess[3*i+2,3*i+1] += sprngcnst*(y_ij*z_ij/r) 
             
             #creation of Hij 
-            hess[3*i,3*j] -= sprngcnst*(x_ij*x_ij/r) #(1,4) (4,1)
-            hess[3*i+1,3*j+1] -= sprngcnst*(y_ij*y_ij/r) #(2,5) (5,2)
-            hess[3*i+2,3*j+2] -= sprngcnst*(z_ij*z_ij/r)     #(3,6) (6,3)
+            hess[3*i,3*j] -= sprngcnst*(x_ij*x_ij/r) 
+            hess[3*i+1,3*j+1] -= sprngcnst*(y_ij*y_ij/r) 
+            hess[3*i+2,3*j+2] -= sprngcnst*(z_ij*z_ij/r) 
             
-            hess[3*i,3*j+1] -= sprngcnst*(x_ij*y_ij/r) #(1,5) (4,2)
-            hess[3*i,3*j+2] -= sprngcnst*(x_ij*z_ij/r)   #(1,6) (4,3)
-            hess[3*i+1,3*j] -= sprngcnst*(y_ij*x_ij/r) #(2,4) (5,1)
+            hess[3*i,3*j+1] -= sprngcnst*(x_ij*y_ij/r) 
+            hess[3*i,3*j+2] -= sprngcnst*(x_ij*z_ij/r) 
+            hess[3*i+1,3*j] -= sprngcnst*(y_ij*x_ij/r) 
              
-            hess[3*i+1,3*j+2] -= sprngcnst*(y_ij*z_ij/r)   #(2,6) (5,3)
-            hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   #(3,4) (6,1)
-            hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r)   #(3,5) (6,2)
+            hess[3*i+1,3*j+2] -= sprngcnst*(y_ij*z_ij/r) 
+            hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   
+            hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r) 
 
     print "Finished Calculating the Hessian..."
     return hess  
@@ -248,10 +247,8 @@ if __name__ == "__main__":
     flatandwrite(mdfi,'S2-Avg.dat')
     
 
-    #Analyze the results. The output should be the following 
-    #ResName dfi reldfi %dfi z-score dfi dsi reldsi %dsi z-score dsi bfactor relbfactor %bfactor 
-    octave.addpath('/home/alfred/Project/Sudhir/DFI-Code-May2013')
-#    octave.dfiperturb()
+
+    
 
 
 
@@ -260,7 +257,7 @@ if __name__ == "__main__":
 
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfifile)
     mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfifile)
-#    bfac,relbfac,pctbfac,zscorebfac = dfianal(bfac,Array=True)
+
 
 
     #Identify the residues that have a dfi score less than 25 percent 
@@ -268,40 +265,49 @@ if __name__ == "__main__":
     hingedfi = pctdfi < hingedfipct  
     hingelist = [] 
 
+    #create this in an inline 
     j = 0 #must start from one beacuse giong to put as the input as an octave function  
     for i in hingedfi:
         if i:
             hingelist.append(j)
         j+=1
 
-
-
     hingelist = np.array(hingelist,dtype=int)
     print hingelist 
-#    nrmlperturbMat[]
-
     
 
-
-    octave.hingemdfiperturb(hingelist)
     hingefile='hingemdfi-Avg.dat'
+    hmdfitop=np.sum(nrmlperturbMat[hingelist,:],axis=0)/len(hingelist)
+    hmdfibot=np.sum(nrmlperturbMat,axis=0)/len(nrmlperturbMat)
+    hmdfi=hmdfitop/hmdfibot
+    flatandwrite(hmdfi,hingefile)
     hmdfi,relhmdfi,pcthmdfi,zscorehmdfi = dfianal(hingefile)
 
     #f-dfi 
     print "Amount of f-dfi res:"+str(len(fdfires))
+    fdfires = fdfires - 1 #arrays are indexed starting at zero so subtract one. 
+    print fdfires 
     fdfifile='fdfi-Avg.dat'
     if len(fdfires) > 0:
-        octave.fdfiperturb(fdfires)
+        fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
+        fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
+        #octave.fdfiperturb(fdfires)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
     
     #output to file. 
     with open('dfianalysis.csv','w') as outfile:
-        outfile.write('#PBD:'+pdbid+'\n')
+        #outfile.write('# PBD:'+pdbid+'\n')
         #outfile.write('#Hinges: '+str(hingelist)+'\n')
         if len(fdfires) > 0:
-            outfile.write('#f-dfi: '+str(fdfires)+'\n')
+            #outfile.write('#f-dfi: '+str(fdfires)+'\n')
             header="ResI,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
                 outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i]))
+        else:
+            header=" ResI,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
+            outfile.write(header)
+            for i in range(len(dfi)):
+                outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
