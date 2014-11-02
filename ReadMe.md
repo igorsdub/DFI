@@ -1,6 +1,6 @@
 # Dynamics Flexibility Index #
 
-The DFI Code is writen in python and currently uses the oct2py module for python to call legacy .m functions. 
+The DFI Code is writen in python.  
 
 ### What is this repository for? ###
 
@@ -24,4 +24,4 @@ The DFI Code is writen in python and currently uses the oct2py module for python
 
 ### References ###
 
-| 1 | Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J., 80:505-15, 2001.| 
+1. Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J., 80:505-15, 2001  
