@@ -129,7 +129,7 @@ def dfianal(fname,Array=False):
     dfiperc = [] 
     lendfi = float(len(dfi))
     for m in dfi:
-        amt = sum(dfi <=m)
+        amt = np.sum(dfi <=m)
         dfiperc.append(amt/lendfi)
     dfiperc = np.array(dfiperc,dtype=float)
     
@@ -179,6 +179,8 @@ if __name__ == "__main__":
     numres = len(ATOMS)
     numresthree = 3 * numres
     hess = calchessian(numres,x,y,z,Verbose)
+    print "Hessian"
+    print hess 
     e_vals, e_vecs = LA.eig(hess)
     if(Verbose):
         flatandwrite(hess,'hesspy.debug')
@@ -247,11 +249,6 @@ if __name__ == "__main__":
     flatandwrite(mdfi,'S2-Avg.dat')
     
 
-
-    
-
-
-
     dfifile='S1-Avg.dat'
     mdfifile='S2-Avg.dat'
 
@@ -261,7 +258,7 @@ if __name__ == "__main__":
 
 
     #Identify the residues that have a dfi score less than 25 percent 
-    hingedfipct = 0.25
+    hingedfipct = 0.10
     hingedfi = pctdfi < hingedfipct  
     hingelist = [] 
 
@@ -291,7 +288,7 @@ if __name__ == "__main__":
     if len(fdfires) > 0:
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
-        #octave.fdfiperturb(fdfires)
+        flatandwrite(fdfitop/fdfibot,fdfifile)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
     
     #output to file. 

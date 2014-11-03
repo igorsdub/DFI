@@ -18,6 +18,12 @@ The DFI Code is writen in python.
 
 * "Don't do dumb stuff" --President Barack Obama
 
+### TODO ###
+
+* Create and xml file for all inputs to make parameters more flexible 
+* Change name of output files to reflect pdbname and quantities and log files. 
+
+
 ### Who do I talk to? ###
 
 * Avishek Kumar avishek.kumar@asu.edu
