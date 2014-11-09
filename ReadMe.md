@@ -1,4 +1,4 @@
-# Dynamics Flexibility Index #
+# Dynamic Flexibility Index #
 
 The DFI Code is writen in python.  
 
@@ -30,4 +30,6 @@ The DFI Code is writen in python.
 
 ### References ###
 
-1. Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J., 80:505-15, 2001  
+1. Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J., 80:505-15, 2001 
+2. Glembo T.J, M.F Thorpe, D.W. Farrell, Z. N. Gerek, and S.B. Ozkan. Collective Dynamics Differentiates Functional Divergence in Protein Evolution. 
+PLos Computational Biology, 2012  
