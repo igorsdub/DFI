@@ -161,13 +161,15 @@ if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
 
     #parameters 
-    strucfile = 'dfiout.pdb'
-    dfifile='dfi-Avg.dat'
-    mdfifile='mdfi-Avg.dat'
-    eigenfile = 'eigenvalues.txt'
-    invhessfile = 'pinv_svd.debug'
-    dfianalfile = 'dfianalysis.csv'
-    hingefile='hingemdfi-Avg.dat'
+    pdbfile = sys.argv[1] 
+    pdbid = pdbfile.strip('.pdb')
+    strucfile = pdbid+'-dfiout.pdb'
+    dfifile= pdbid+'-dfi-Avg.dat'
+    mdfifile= pdbid+'-mdfi-Avg.dat'
+    eigenfile = pdbid+'-eigenvalues.txt'
+    invhessfile = pdbid+'-pinv_svd.debug'
+    dfianalfile = pdbid+'-dfianalysis.csv'
+    hingefile= pdbid+'-hingemdfi-Avg.dat'
 
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
@@ -179,7 +181,7 @@ if __name__ == "__main__":
     print fdfires 
 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,noalc=True,chainA=True)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=True)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
