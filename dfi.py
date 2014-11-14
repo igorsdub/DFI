@@ -159,7 +159,16 @@ def calcperturbMat(invHrs,direct,resnum,Normalize=True):
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
-        
+
+    #parameters 
+    strucfile = 'dfiout.pdb'
+    dfifile='dfi-Avg.dat'
+    mdfifile='mdfi-Avg.dat'
+    eigenfile = 'eigenvalues.txt'
+    invhessfile = 'pinv_svd.debug'
+    dfianalfile = 'dfianalysis.csv'
+    hingefile='hingemdfi-Avg.dat'
+
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
     pdbid = sys.argv[1] 
@@ -171,7 +180,7 @@ if __name__ == "__main__":
 
     ATOMS = [] 
     pdbio.pdb_reader(pdbid,ATOMS,CAonly=True,noalc=True,chainA=True)
-    pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename='dfi-out.pdb')
+    pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
     
@@ -179,15 +188,15 @@ if __name__ == "__main__":
     numres = len(ATOMS)
     numresthree = 3 * numres
     hess = calchessian(numres,x,y,z,Verbose)
-    print "Hessian"
-    print hess 
     e_vals, e_vecs = LA.eig(hess)
     if(Verbose):
+        print "Hessian"
+        print hess
         flatandwrite(hess,'hesspy.debug')
     
       
     i=1
-    with open('eigenvalues.txt','w') as outfile:
+    with open(eigenfile,'w') as outfile:
         for val in np.sort(e_vals):
             outfile.write("%d\t%f\n"%(i,val))
             i += 1
@@ -217,21 +226,22 @@ if __name__ == "__main__":
     invw = 1/w
     invw[singular] = 0.
     invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
-    flatandwrite(invHrs,'pinv_svd.debug')
+    flatandwrite(invHrs,invhessfile)
     print "Hessian inverted and written out to pinv_svd.debug"
 
 
     #import the inverse Hessian 
     print "Reading the inverse Hessian"
-    with open('pinv_svd.debug','r') as infile:
+    with open(invhessfile,'r') as infile:
         invH = np.array([ x.strip('\n') for x in infile],dtype=float) 
         
     resnumsq = len(invH)
     resnum = np.sqrt(resnumsq)/3
     invHrs = invH.reshape((3*resnum,3*resnum),order='F')
     #may have reshaped in the wrong order may need to be in Fortran order. 
-    print "invHrs"
-    print invHrs 
+    if(Verbose):
+        print "invHrs"
+        print invHrs 
     
     #RUN DFI CODE HERE 
     print "Creating the perturbation directions"
@@ -245,13 +255,10 @@ if __name__ == "__main__":
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
     dfi = np.sum(nrmlperturbMat,axis=1)
     mdfi = np.sum(nrmlperturbMat,axis=0)
-    flatandwrite(dfi,'S1-Avg.dat')
-    flatandwrite(mdfi,'S2-Avg.dat')
+    flatandwrite(dfi,dfifile)
+    flatandwrite(mdfi,mdfifile)
     
-
-    dfifile='S1-Avg.dat'
-    mdfifile='S2-Avg.dat'
-
+    
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfifile)
     mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfifile)
 
@@ -292,7 +299,7 @@ if __name__ == "__main__":
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
     
     #output to file. 
-    with open('dfianalysis.csv','w') as outfile:
+    with open(dfianalfile,'w') as outfile:
         #outfile.write('# PBD:'+pdbid+'\n')
         #outfile.write('#Hinges: '+str(hingelist)+'\n')
         if len(fdfires) > 0:

@@ -14,6 +14,15 @@ The DFI Code is writen in python.
 * SciPy
 * Test Cases Coming Soon
 
+### Output Files ###
+
+* Structure used for DFI: dfi-out.pdb 
+* Eigenvalues: eigenvalues.txt 
+* Invert the Hessian: pinv_svd.debug
+* DFI: S1-Avg.dat 
+* MDFI: S2-Avg.dat 
+* Master DFI: dfianalysis.csv 
+
 ### Contribution guidelines ###
 
 * "Don't do dumb stuff" --President Barack Obama
@@ -27,6 +36,7 @@ The DFI Code is writen in python.
 ### Who do I talk to? ###
 
 * Avishek Kumar avishek.kumar@asu.edu
+
 
 ### References ###
 
