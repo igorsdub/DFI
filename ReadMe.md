@@ -30,11 +30,12 @@ The DFI Code is writen in python.
 ### TODO ###
 
 * Create and xml file for all inputs to make parameters more flexible 
-* Fix bugs with the alc 
+* ~~Fix bugs with the alc~~ 
 * ~~Change name of output files to reflect pdbname and quantities and log files.~~ 
 * ~~Fixed Residus Numbers~~ 
 * ~~Create a feature to make dfiplots~~
     * Try making publication quality plots instead of bare matplotlib  
+* Create a feature to just take in the Hessian from MD
 
 ### Who do I talk to? ###
 
