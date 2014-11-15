@@ -1,17 +1,26 @@
 #!/usr/bin/env python 
 """
+===============================
+DFI (Dynamic Flexibility Index)
+===============================
+
+Description
+------------
 DFI Calculates the dynamics functional index. 
 Right now cacluates the hessian and iverts it 
 and write out to the file pinv_svd.debug. 
 
-USAGE: dfi.py PDB
+Usage
+-----
+dfi.py PDB
 
+Input
+-----
 PDB:    PDB FILE     
 
 """
 
 import sys 
-import pdbmunge 
 import pdbio 
 import numpy as np 
 
@@ -162,7 +171,7 @@ if __name__ == "__main__":
 
     #parameters 
     pdbfile = sys.argv[1] 
-    pdbid = pdbfile.strip('.pdb')
+    pdbid = pdbfile.split('.')[0]
     strucfile = pdbid+'-dfiout.pdb'
     dfifile= pdbid+'-dfi-Avg.dat'
     mdfifile= pdbid+'-mdfi-Avg.dat'
@@ -171,9 +180,12 @@ if __name__ == "__main__":
     dfianalfile = pdbid+'-dfianalysis.csv'
     hingefile= pdbid+'-hingemdfi-Avg.dat'
 
+    CAonly = True
+    noalc = True 
+    chainA = True
+
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
-    pdbid = sys.argv[1] 
     if (sys.argv > 2):
         print "F-DFI residues added in the input" 
     fdfires=np.array(sys.argv[2:],dtype=int)
@@ -181,7 +193,7 @@ if __name__ == "__main__":
     print fdfires 
 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=True)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 

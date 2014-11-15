@@ -45,7 +45,7 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False):
                     continue 
                 
                 alc = line[16] #alternate location
-                if noalc and not(alc==' '):
+                if noalc and not((alc==' ' or alc=='A')):
                     continue 
 
                 res_name = line[17:20]
@@ -86,7 +86,7 @@ def pdb_writer(ATOMS,msg="HEADER  frodaN unfolding target\n",filename="out.pdb",
             z = atom.z
             occupancy = 1.00
             temp_factor = atom.temp_factor
-            pdb.write("ATOM  %(atom_index)5d %(atom_name)4s%(alc)1s%(res_name)-3s %(chainID)1s%(res_index)4d%(iCode)1s xb  %(x)8.3f%(y)8.3f%(z)8.3f%(occupancy)6.2f%(temp_factor)6.2f\n" % vars())
+            pdb.write("ATOM  %(atom_index)5d %(atom_name)4s%(alc)1s%(res_name)-3s %(chainID)1s%(res_index)4d%(iCode)1s   %(x)8.3f%(y)8.3f%(z)8.3f%(occupancy)6.2f%(temp_factor)6.2f\n" % vars())
         pdb.write("TER\n")
         pdb.write("END\n")
     print "Wrote out to file, %s"%filename
