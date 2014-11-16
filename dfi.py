@@ -16,7 +16,17 @@ dfi.py PDB
 
 Input
 -----
-PDB:    PDB FILE     
+PDB:    PDBFILE
+
+Output 
+------
+
+* Structure used for DFI: dfi-out.pdb 
+* Eigenvalues: eigenvalues.txt 
+* Inverted Hessian: pinv_svd.debug 
+* DFI: dfi-Avg.dat 
+* MDFI: mdfi-Avg.dat 
+* Master DFI: dfianalysis.csv      
 
 """
 
