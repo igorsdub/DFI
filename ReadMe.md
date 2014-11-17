@@ -37,6 +37,7 @@ The DFI Code is writen in python.
     * Try making publication quality plots instead of bare matplotlib  
 * Create a feature to just take in the Hessian from MD
 * ~~Check to see how many near singular eigenvalues there are.~~ 
+* Do a check to see if the residue numbers are unique, otherwise renumber them. 
 
 ### Who do I talk to? ###
 
@@ -48,3 +49,4 @@ The DFI Code is writen in python.
 1. Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J., 80:505-15, 2001 
 2. Glembo T.J, M.F Thorpe, D.W. Farrell, Z. N. Gerek, and S.B. Ozkan. Collective Dynamics Differentiates Functional Divergence in Protein Evolution. 
 PLos Computational Biology, 2012  
+3. Hayward, S. and B.L. de Groot, Normal modes and essential dynamics. Methods in Molecular Biology 443:89-106,2008
