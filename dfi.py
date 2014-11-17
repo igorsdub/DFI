@@ -7,20 +7,21 @@ DFI (Dynamic Flexibility Index)
 Description
 ------------
 DFI Calculates the dynamics functional index. 
-Right now cacluates the hessian and iverts it 
+Right now cacluates the hessian and inverts it 
 and write out to the file pinv_svd.debug. 
 
 Usage
 -----
-dfi.py PDB
+dfi.py --pdb PBDFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 
 Input
 -----
-PDB:    PDBFILE
+PDBFILE:     PDBFILE
+RESNUMS:     e.g., "1,5,6,8"
+HESSFILE:    Flat array file of Hessian Matrix  
 
 Output 
 ------
-
 * Structure used for DFI: dfi-out.pdb 
 * Eigenvalues: eigenvalues.txt 
 * Inverted Hessian: pinv_svd.debug 
@@ -32,6 +33,7 @@ Output
 
 import sys 
 import pdbio 
+import os 
 import numpy as np 
 
 from scipy import linalg as LA
@@ -175,12 +177,52 @@ def calcperturbMat(invHrs,direct,resnum,Normalize=True):
     return nrmlperturbMat 
 
 
+def parseCommandLine(argv):
+    """Parse command line string from sys.arv"""
+    comline_arg={}
+    for s in argv:
+        if s ==  "--pdb":
+            ind = argv.index(s)
+            comline_arg[s] = argv[ind+1]
+            if (os.path.isfile(argv[ind+1]) != True):
+                print "File "+ argv[ind+1] +" not found."
+                print __doc__
+                exit()
+
+        if s ==  "--hess":
+            ind = argv.index(s)
+            comline_arg[s] = argv[ind+1]
+            if (os.path.isfile(argv[ind+1]) != True):
+                print "File " + argv[ind+1] + " not found."
+                print __doc__ 
+                exit() 
+               
+        if s ==  "--fdfi":
+            ind = argv.index(s)
+            comline_arg[s] = np.array(argv[ind+1:],dtype=int)
+
+        if s == "--help":
+            print __doc__
+            exit()
+            
+    if ("--pdb" not in argv):
+        print argv
+        print "No --pdb"
+        print __doc__
+        exit()
+            
+    return comline_arg
+
+
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
 
+    comlinargs=parseCommandLine(sys.argv)
+    print comlinargs 
     #parameters 
-    pdbfile = sys.argv[1] 
+    #pdbfile = sys.argv[1] 
+    pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
     strucfile = pdbid+'-dfiout.pdb'
     dfifile= pdbid+'-dfi-Avg.dat'
@@ -190,17 +232,22 @@ if __name__ == "__main__":
     dfianalfile = pdbid+'-dfianalysis.csv'
     hingefile= pdbid+'-hingemdfi-Avg.dat'
 
+    mdhess=bool( comlinargs.get('--hess',"") )
+    print "mdhess: "
+    print mdhess 
     CAonly = True
     noalc = True 
     chainA = True
+   
 
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
-    if (sys.argv > 2):
-        print "F-DFI residues added in the input" 
-    fdfires=np.array(sys.argv[2:],dtype=int)
+    print "F-DFI residues added in the input" 
+    #fdfires=np.array(sys.argv[2:],dtype=int)
+    fdfires=comlinargs.get('--fdfi',[])
     print "f-dfires"
     print fdfires 
+    
 
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA)
@@ -313,10 +360,10 @@ if __name__ == "__main__":
 
     #f-dfi 
     print "Amount of f-dfi res:"+str(len(fdfires))
-    fdfires = fdfires - 1 #arrays are indexed starting at zero so subtract one. 
     print fdfires 
     fdfifile='fdfi-Avg.dat'
     if len(fdfires) > 0:
+        fdfires = fdfires - 1 #arrays are indexed starting at zero so subtract one. 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         flatandwrite(fdfitop/fdfibot,fdfifile)
