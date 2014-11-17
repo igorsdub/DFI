@@ -36,6 +36,7 @@ The DFI Code is writen in python.
 * ~~Create a feature to make dfiplots~~
     * Try making publication quality plots instead of bare matplotlib  
 * Create a feature to just take in the Hessian from MD
+* ~~Check to see how many near singular eigenvalues there are.~~ 
 
 ### Who do I talk to? ###
 

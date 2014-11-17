@@ -298,6 +298,7 @@ if __name__ == "__main__":
     invw[singular] = 0.
     invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
     flatandwrite(invHrs,invhessfile)
+    print "Number of near-singular eigenvalues: %f"%np.sum(singular)
     print "Hessian inverted and written out to pinv_svd.debug"
 
 
