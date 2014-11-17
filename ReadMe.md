@@ -29,7 +29,7 @@ The DFI Code is writen in python.
 
 ### TODO ###
 
-* Create and xml file for all inputs to make parameters more flexible 
+* ~~Create and xml file for all inputs to make parameters more flexible~~ 
 * ~~Fix bugs with the alc~~ 
 * ~~Change name of output files to reflect pdbname and quantities and log files.~~ 
 * ~~Fixed Residus Numbers~~ 
