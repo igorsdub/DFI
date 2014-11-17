@@ -237,7 +237,7 @@ if __name__ == "__main__":
     print mdhess 
     CAonly = True
     noalc = True 
-    chainA = True
+    chainA = False
    
 
     #parse the input 
