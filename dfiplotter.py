@@ -52,7 +52,7 @@ else:
         d[c].plot( ax=axes[i], figsize=(14, 14), title=c, grid=False,fontsize='xx-small')
     plt.setp([a.get_xticklabels() for a in axes], visible=False)
     plt.savefig(pdbid+'-DFIfig.png', bbox_inches='tight')
-    print "Printed: %s"%(pdbid+'DFIfig.png')
+    print "Printed: %s"%(pdbid+'-DFIfig.png')
     plt.close()
 
     for f in d.columns:

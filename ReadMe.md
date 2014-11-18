@@ -35,7 +35,7 @@ The DFI Code is writen in python.
 * ~~Fixed Residus Numbers~~ 
 * ~~Create a feature to make dfiplots~~
     * Try making publication quality plots instead of bare matplotlib  
-* Create a feature to just take in the Hessian from MD
+* ~~Create a feature to just take in the Hessian from MD~~
 * ~~Check to see how many near singular eigenvalues there are.~~ 
 * Do a check to see if the residue numbers are unique, otherwise renumber them. 
 
@@ -50,3 +50,4 @@ The DFI Code is writen in python.
 2. Glembo T.J, M.F Thorpe, D.W. Farrell, Z. N. Gerek, and S.B. Ozkan. Collective Dynamics Differentiates Functional Divergence in Protein Evolution. 
 PLos Computational Biology, 2012  
 3. Hayward, S. and B.L. de Groot, Normal modes and essential dynamics. Methods in Molecular Biology 443:89-106,2008
+4. Bahar I, Atilgan AR, Erman B, Fold. & Des., 2:173-81, 1997 

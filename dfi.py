@@ -220,8 +220,6 @@ if __name__ == "__main__":
 
     comlinargs=parseCommandLine(sys.argv)
     print comlinargs 
-    #parameters 
-    #pdbfile = sys.argv[1] 
     pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
     strucfile = pdbid+'-dfiout.pdb'
@@ -243,7 +241,6 @@ if __name__ == "__main__":
     #parse the input 
     #Add a check to make sure it is a file if not then just download from the pdb. 
     print "F-DFI residues added in the input" 
-    #fdfires=np.array(sys.argv[2:],dtype=int)
     fdfires=comlinargs.get('--fdfi',[])
     print "f-dfires"
     print fdfires 
@@ -302,15 +299,22 @@ if __name__ == "__main__":
     print "Hessian inverted and written out to pinv_svd.debug"
 
 
-    #import the inverse Hessian 
-    print "Reading the inverse Hessian"
-    with open(invhessfile,'r') as infile:
-        invH = np.array([ x.strip('\n') for x in infile],dtype=float) 
-        
-    resnumsq = len(invH)
-    resnum = np.sqrt(resnumsq)/3
-    invHrs = invH.reshape((3*resnum,3*resnum),order='F')
-    #may have reshaped in the wrong order may need to be in Fortran order. 
+    #import the inverse Hessian and turn into a function  
+    if not(mdhess):
+        print "Reading theinverse Hessian from %s"%(invhessfile)
+        with open(invhessfile,'r') as infile:
+            invH = np.array([ x.strip('\n') for x in infile],dtype=float) 
+       
+        resnumsq = len(invH)
+        resnum = np.sqrt(resnumsq)/3
+        invHrs = invH.reshape((3*resnum,3*resnum),order='F')
+        print "invHrs"
+        print invHrs
+    else:
+        invHrs=np.loadtxt( comlinargs['--hess'] )
+        print "From MD invhess"
+        print invHrs
+        print invHrs.shape 
     if(Verbose):
         print "invHrs"
         print invHrs 

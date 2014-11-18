@@ -105,7 +105,8 @@ class ATOM:
         self.x = float(x)
         self.y = float(y)
         self.z = float(z)
-        self.occupancy = float(occupancy) 
+        #self.occupancy = float(occupancy)
+        self.occupancy = 1. 
         self.temp_factor = float(temp_factor)
 
 
