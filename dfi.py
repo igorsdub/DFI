@@ -12,13 +12,13 @@ and write out to the file pinv_svd.debug.
 
 Usage
 -----
-dfi.py --pdb PBDFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
+dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 
 Input
 -----
 PDBFILE:     PDBFILE
 RESNUMS:     e.g., "1,5,6,8"
-HESSFILE:    Flat array file of Hessian Matrix  
+HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
 
 Output 
 ------
@@ -324,7 +324,8 @@ if __name__ == "__main__":
     directions = np.vstack(([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]))
     normL = np.linalg.norm(directions,axis=1)
     direct=directions/normL[:,None]
-    print "direct"
+    print "Perturbation Directions"
+    print direct 
 
 
     print "Calculating the peturbation matrix"
@@ -353,6 +354,7 @@ if __name__ == "__main__":
         j+=1
 
     hingelist = np.array(hingelist,dtype=int)
+    print "Hinges with %.2f tolerance"%hingedfipct 
     print hingelist 
     
 
@@ -386,8 +388,8 @@ if __name__ == "__main__":
                 outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i]))
         else:
-            header=" ResI,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
+            header=" ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
-                outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(ATOMS[i].res_index,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                outfile.write("%d,%s,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(ATOMS[i].res_index,ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
