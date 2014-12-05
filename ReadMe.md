@@ -26,10 +26,10 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 
 ### Input ###
 
-PDBFILE:     PDBFILE
-RESNUMS:     e.g., "1,5,6,8"
-HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
-RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
+* PDBFILE:     PDBFILE
+* RESNUMS:     e.g., "1,5,6,8"
+* HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format 
+* RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 
 ### Output Files ###
 
