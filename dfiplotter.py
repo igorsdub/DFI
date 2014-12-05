@@ -68,6 +68,3 @@ else:
     for f in d.columns:
         plotdfi(d,f,pdbid)
     
-
-
-
