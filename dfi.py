@@ -199,8 +199,8 @@ def parseCommandLine(argv):
                
         if s ==  "--fdfi":
             ind = argv.index(s)
-            comline_arg[s] = np.array(argv[ind+1:],dtype=int)
-
+            comline_arg[s] = np.array(argv[ind+1:])
+                  
         if s == "--help":
             print __doc__
             exit()
@@ -213,6 +213,26 @@ def parseCommandLine(argv):
             
     return comline_arg
 
+def chainresmap(ATOMS):
+    """
+    Returns a dict object with the chainResNum as the key and the index
+    of the atom 
+    """
+    table = {}
+    for i in range(len(ATOMS)):
+        if ATOMS[i].res_index==' ':
+            entry = ATOMS[i].chainID
+        else:
+            entry = ATOMS[i].chainID + str(ATOMS[i].res_index)
+        table[entry] = i
+    return table 
+
+def fdfires(ls_chain,table):
+    """Returns numpy array of f-dfi res"""
+    ls_ind = []
+    for res in ls_chain:
+        ls_ind.append( table[res] )
+    return np.array(ls_ind,dtype=int)
 
 
 if __name__ == "__main__":
@@ -238,18 +258,22 @@ if __name__ == "__main__":
     chainA = False
    
 
-    #parse the input 
-    #Add a check to make sure it is a file if not then just download from the pdb. 
-    print "F-DFI residues added in the input" 
-    fdfires=comlinargs.get('--fdfi',[])
-    print "f-dfires"
-    print fdfires 
-    
-
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
+
+
+    #parse the input 
+    #Add a check to make sure it is a file if not then just download from the pdb. 
+    ls_reschain=comlinargs.get('--fdfi',[])
+    if len(ls_reschain) > 0:
+        print "f-dfires"
+        print ls_reschain   
+        table = chainresmap(ATOMS)
+        print table 
+        fdfires = fdfires(ls_reschain,chainresmap(ATOMS))
+        
 
     
     #start computing the Hessian 
@@ -308,8 +332,8 @@ if __name__ == "__main__":
         resnumsq = len(invH)
         resnum = np.sqrt(resnumsq)/3
         invHrs = invH.reshape((3*resnum,3*resnum),order='F')
-        print "invHrs"
-        print invHrs
+        #print "invHrs"
+        #print invHrs
     else:
         invHrs=np.loadtxt( comlinargs['--hess'] )
         print "From MD invhess"
@@ -370,7 +394,6 @@ if __name__ == "__main__":
     print fdfires 
     fdfifile='fdfi-Avg.dat'
     if len(fdfires) > 0:
-        fdfires = fdfires - 1 #arrays are indexed starting at zero so subtract one. 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         flatandwrite(fdfitop/fdfibot,fdfifile)
@@ -382,13 +405,13 @@ if __name__ == "__main__":
         #outfile.write('#Hinges: '+str(hingelist)+'\n')
         if len(fdfires) > 0:
             #outfile.write('#f-dfi: '+str(fdfires)+'\n')
-            header="ResI,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi\n"
+            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
-                outfile.write("%d,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                outfile.write("%d,%s,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(i,ATOMS[i].res_name,ATOMS[i].chainID,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i]))
         else:
-            header=" ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
+            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
                 outfile.write("%d,%s,%s,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n"%(ATOMS[i].res_index,ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
