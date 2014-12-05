@@ -34,7 +34,7 @@ The DFI Code is writen in python.
 * ~~Change name of output files to reflect pdbname and quantities and log files.~~ 
 * ~~Fixed Residus Numbers~~ 
 * ~~Create a feature to make dfiplots~~
-    * Try making publication quality plots instead of bare matplotlib  
+    ~~* Try making publication quality plots instead of bare matplotlib~~  
 * ~~Create a feature to just take in the Hessian from MD~~
     * Improve on the implementation of the MD Hessian 
 * ~~Check to see how many near singular eigenvalues there are.~~ 
@@ -43,6 +43,7 @@ The DFI Code is writen in python.
 * Better documentation of the functions
 * Add test cases 
 * ~~Allow for ChainID~~
+* ~~Allowed for identifying chains in the f-dfi~~
 
 ### Who do I talk to? ###
 

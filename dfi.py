@@ -29,6 +29,10 @@ Output
 * MDFI: mdfi-Avg.dat 
 * Master DFI: dfianalysis.csv      
 
+Example
+-------
+./dfi.py --pdb 1a2x_BA_1.pdb --fdfi A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
+
 """
 
 import sys 
@@ -270,8 +274,6 @@ if __name__ == "__main__":
     if len(ls_reschain) > 0:
         print "f-dfires"
         print ls_reschain   
-        table = chainresmap(ATOMS)
-        print table 
         fdfires = fdfires(ls_reschain,chainresmap(ATOMS))
         
 

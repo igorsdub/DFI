@@ -45,11 +45,21 @@ else:
     pdbid = dfifile.split('-')[0]
 
     data = pd.read_csv(dfifile,index_col=0)
-    d=data.loc[:,['pctdfi','pctmdfi','pcthmdfi']]
+    if 'pctfdfi' in data.columns:
+        d=data.loc[:,['pctdfi','pctmdfi','pcthmdfi','pctfdfi']]
+        colors = ['red','cyan','green','blue']
+        nrows=4
+    else:
+        d=data.loc[:,['pctdfi','pctmdfi','pcthmdfi']]
+        colors = ['red','cyan','green']
+        nrows=3
+
+    plt.style.use('bmh')
+    fig, axes = plt.subplots(nrows=nrows, ncols=1,sharex=True)
     
-    fig, axes = plt.subplots(nrows=3, ncols=1,sharex=True)
     for i, c in enumerate(d.columns):
-        d[c].plot( ax=axes[i], figsize=(14, 14), title=c, grid=False,fontsize='xx-small')
+        d[c].plot( ax=axes[i], figsize=(14, 14), marker='o', color=colors[i], 
+                   title=c.replace('pct','%'), grid=False,fontsize='xx-small')
     plt.setp([a.get_xticklabels() for a in axes], visible=False)
     plt.savefig(pdbid+'-DFIfig.png', bbox_inches='tight')
     print "Printed: %s"%(pdbid+'-DFIfig.png')
