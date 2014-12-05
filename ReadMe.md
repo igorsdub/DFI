@@ -14,18 +14,18 @@ The DFI Code is writen in python.
 * SciPy
 * Test Cases Coming Soon
 
-Description
-------------
+### Description ###
+
 DFI Calculates the dynamics functional index. 
 Right now cacluates the hessian and inverts it 
 and write out to the file pinv_svd.debug. 
 
-Usage
------
+### Usage ###
+
 dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 
-Input
------
+### Input ###
+
 PDBFILE:     PDBFILE
 RESNUMS:     e.g., "1,5,6,8"
 HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
