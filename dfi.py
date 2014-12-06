@@ -276,7 +276,8 @@ if __name__ == "__main__":
         print "f-dfires"
         print ls_reschain   
         fdfires = fdfires(ls_reschain,chainresmap(ATOMS))
-        
+    else:
+        fdfires = [] 
 
     
     #start computing the Hessian 
