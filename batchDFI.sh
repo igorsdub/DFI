@@ -16,7 +16,7 @@ ${PROG} batchlist.txt
 Description
 -----------
 Runs multiple dfi files. 
-Coming soon: Make individual directories for info.  
+And dumps the results into a directory with the name of the pdb file.   
 
 Example
 -------
@@ -33,6 +33,15 @@ echo "${usage}"
 exit ${errcode}
 }
 
+function check_dir() {
+"check if the directory exits and create it if it does not"
+if [ ! -d $1 ];
+then
+    echo "${1} directory does not exist..creating it now"
+    mkdir -vp ${1}
+fi
+}
+
 FILE=${1}
 if [ -z ${FILE} ];
 then
@@ -43,6 +52,13 @@ cat ${FILE} | while read f;
 do
     echo $f; 
     pdbfil=$(echo $f | awk -F: '{print $1}')
+    pdbid=${pdbfil%".pdb"}
+    echo $pdbid
     chain=$(echo $f | awk -F: '{print $2}')
     ./dfi.py --pdb $pdbfil --fdfi $chain 
+    if [ "$?" -eq "0" ]
+    then
+	check_dir $pdbid
+	mv -v ${pdbid}-* $pdbid
+    fi
 done

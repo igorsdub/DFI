@@ -47,7 +47,7 @@ from scipy import stats
 
 if len(sys.argv) < 2:
     print __doc__ 
-    exit()
+    sys.exit(1)
 
 
 def getcoords(ATOMS):
@@ -192,7 +192,7 @@ def parseCommandLine(argv):
             if (os.path.isfile(argv[ind+1]) != True):
                 print "File "+ argv[ind+1] +" not found."
                 print __doc__
-                exit()
+                sys.exit(1)
 
         if s ==  "--hess":
             ind = argv.index(s)
@@ -200,7 +200,7 @@ def parseCommandLine(argv):
             if (os.path.isfile(argv[ind+1]) != True):
                 print "File " + argv[ind+1] + " not found."
                 print __doc__ 
-                exit() 
+                sys.exit(1) 
                
         if s ==  "--fdfi":
             ind = argv.index(s)
@@ -208,13 +208,13 @@ def parseCommandLine(argv):
                   
         if s == "--help":
             print __doc__
-            exit()
+            sys.exit(1)
             
     if ("--pdb" not in argv):
         print argv
         print "No --pdb"
         print __doc__
-        exit()
+        sys.exit(1)
             
     return comline_arg
 
