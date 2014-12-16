@@ -100,7 +100,7 @@ class ATOM:
         self.alc = alc
         self.res_name = str(res_name)
         self.chainID = str(chainID)
-        self.res_index = str(res_index)
+        self.res_index = str(res_index).strip(' ')
         self.insert_code = str(insert_code)
         self.x = float(x)
         self.y = float(y)

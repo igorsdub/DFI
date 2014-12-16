@@ -224,7 +224,7 @@ def parseCommandLine(argv):
             
     return comline_arg
 
-def chainresmap(ATOMS):
+def chainresmap(ATOMS,Verbose=False):
     """
     Returns a dict object with the chainResNum as the key and the index
     of the atom 
@@ -234,8 +234,10 @@ def chainresmap(ATOMS):
         if ATOMS[i].res_index==' ':
             entry = ATOMS[i].chainID
         else:
-            entry = ATOMS[i].chainID + str(ATOMS[i].res_index)
+            entry = ATOMS[i].chainID + ATOMS[i].res_index #str(ATOMS[i].res_index)
         table[entry] = i
+    if(Verbose):
+        print table 
     return table 
 
 def fdfires(ls_chain,table):
