@@ -10,6 +10,12 @@ DFI Calculates the dynamics functional index.
 Right now cacluates the hessian and inverts it 
 and write out to the file pinv_svd.debug. 
 
+Requirements
+------------
+Python 2.7.5
+NumPy 1.4
+SciPy 1.4 
+
 Usage
 -----
 dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
@@ -191,7 +197,7 @@ def parseCommandLine(argv):
             comline_arg[s] = argv[ind+1]
             if (os.path.isfile(argv[ind+1]) != True):
                 print "File "+ argv[ind+1] +" not found."
-                print __doc__
+                #print __doc__
                 sys.exit(1)
 
         if s ==  "--hess":
