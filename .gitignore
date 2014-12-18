@@ -1,2 +1,5 @@
 *.pyc
 *.debug
+*.pdb
+*.csv 
+*.png
