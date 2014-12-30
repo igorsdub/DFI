@@ -183,6 +183,7 @@ def calcperturbMat(invHrs,direct,resnum,Normalize=True):
     if(Normalize):
         nrmlperturbMat = perturbMat/np.sum(perturbMat)
     else:
+        print "WARNING: The perturbation matrix is not NORMALIZED"
         nrmlperturbMat = perturbMat
     
     return nrmlperturbMat 
