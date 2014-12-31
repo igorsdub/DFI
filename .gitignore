@@ -3,3 +3,5 @@
 *.pdb
 *.csv
 *.png
+*.out
+*~
