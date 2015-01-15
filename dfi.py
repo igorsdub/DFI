@@ -43,17 +43,19 @@ Example
 """
 
 import sys 
+
+if len(sys.argv) < 2:
+    print __doc__ 
+    sys.exit(1)
+
+
+
 import pdbio 
 import os 
 import numpy as np 
 
 from scipy import linalg as LA
 from scipy import stats 
-
-
-if len(sys.argv) < 2:
-    print __doc__ 
-    sys.exit(1)
 
 
 def getcoords(ATOMS):
