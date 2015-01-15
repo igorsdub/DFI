@@ -49,7 +49,6 @@ if len(sys.argv) < 2:
     sys.exit(1)
 
 
-
 import pdbio 
 import os 
 import numpy as np 
@@ -285,11 +284,15 @@ if __name__ == "__main__":
     ls_reschain=comlinargs.get('--fdfi',[])
     if len(ls_reschain) > 0:
         print "f-dfires"
+        fdfiset = set(ls_reschain)
+        ls_reschain = list(fdfiset)
         print ls_reschain   
+        print "Number of f-dfi: %d" %len(ls_reschain)
         fdfires = fdfires(ls_reschain,chainresmap(ATOMS))
     else:
         fdfires = [] 
 
+    exit()
     
     #start computing the Hessian 
     numres = len(ATOMS)
