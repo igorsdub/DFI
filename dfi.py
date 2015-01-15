@@ -286,12 +286,15 @@ if __name__ == "__main__":
         print "f-dfires"
         fdfiset = set(ls_reschain)
         ls_reschain = list(fdfiset)
-        print ls_reschain   
+        ls_reschain.sort()   
+        print ls_reschain
         print "Number of f-dfi: %d" %len(ls_reschain)
-        fdfires = fdfires(ls_reschain,chainresmap(ATOMS))
+        fdfires = np.sort( fdfires(ls_reschain,chainresmap(ATOMS)) )
     else:
-        fdfires = [] 
+        fdfires = np.array([],dtype=int) 
 
+    print "fdfires numpy"
+    print fdfires
     exit()
     
     #start computing the Hessian 
