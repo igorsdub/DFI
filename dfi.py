@@ -250,6 +250,7 @@ def fdfires(ls_chain,table):
         if res in table:
             ls_ind.append( table[res] )
         else:
+            print "WARNING: Can't find %s"%res 
             continue 
     return np.array(ls_ind,dtype=int)
 
