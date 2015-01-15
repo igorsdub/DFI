@@ -245,8 +245,12 @@ def chainresmap(ATOMS,Verbose=False):
 def fdfires(ls_chain,table):
     """Returns numpy array of f-dfi res"""
     ls_ind = []
+    
     for res in ls_chain:
-        ls_ind.append( table[res] )
+        if res in table:
+            ls_ind.append( table[res] )
+        else:
+            continue 
     return np.array(ls_ind,dtype=int)
 
 
@@ -295,7 +299,7 @@ if __name__ == "__main__":
 
     print "fdfires numpy"
     print fdfires
-    exit()
+
     
     #start computing the Hessian 
     numres = len(ATOMS)
