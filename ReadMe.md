@@ -61,6 +61,9 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * Add test cases 
 * ~~Allow for ChainID~~
 * ~~Allowed for identifying chains in the f-dfi~~
+* Fix problems with change ids
+     * Make sure chain id does not have to be a letter 
+     * Allow for chain ids not to be found, eliminate from dictionary 
 
 ### Who do I talk to? ###
 

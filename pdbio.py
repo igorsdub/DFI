@@ -54,7 +54,7 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False):
                 if chainA and not(chainID=='A'):
                     continue 
                    
-                res_index = line[23:27]
+                res_index = line[23:28]
                 insert_code = line[26]
                 x = line[31:38]
                 y = line[39:46]
