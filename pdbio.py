@@ -28,7 +28,7 @@ def read_pdb(filename):
     return np.array(Pos,dtype=float), ResNames 
 
 
-def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False):
+def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,Verbose=False):
     readatoms=0
     with open(filename) as pdb:
         for line in pdb:
@@ -49,19 +49,23 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False):
                     continue 
 
                 res_name = line[17:20]
+                if(Verbose):
+                    print res_name
                 
                 chainID=line[21]
                 if chainA and not(chainID=='A'):
                     continue 
                    
-                res_index = line[23:28]
+                res_index = line[22:27]
+                if(Verbose):
+                    print res_index 
                 insert_code = line[26]
                 x = line[31:38]
                 y = line[39:46]
                 z = line[47:54]
                 occupancy = line[55:60]
                 temp_factor = line[61:66]
-                ATOMS.append( ATOM(line[:6], line[7:11], line[13:16], line[16], line[17:20], line[21], line[23:27],
+                ATOMS.append( ATOM(line[:6], line[7:11], line[13:16], line[16], line[17:20], line[21], line[22:27],
                                    line[26], line[31:38], line[39:46], line[47:54], line[55:60], line[61:66]) )
                 readatoms+=1
     print "Read %d atoms from the %s"%(readatoms,filename)
