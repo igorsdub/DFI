@@ -6,8 +6,8 @@ DFI (Dynamic Flexibility Index)
 
 Description
 ------------
-DFI Calculates the dynamics functional index. 
-Right now cacluates the hessian and inverts it 
+DFI Calculates the dynamics flexibility index. 
+Program calculates the hessian and inverts it 
 and write out to the file pinv_svd.debug. 
 
 Requirements
@@ -258,6 +258,7 @@ def fdfires(ls_chain,table):
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
 
+    #Parse the input 
     comlinargs=parseCommandLine(sys.argv)
     print comlinargs 
     pdbfile = comlinargs['--pdb']
@@ -277,15 +278,13 @@ if __name__ == "__main__":
     noalc = True 
     chainA = False
    
-
+    #read in the pdb file 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,Verbose=True)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,Verbose=False)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
-
-    #parse the input 
-    #Add a check to make sure it is a file if not then just download from the pdb. 
+    #parse the f-dfi inputs 
     ls_reschain=comlinargs.get('--fdfi',[])
     if len(ls_reschain) > 0:
         print "f-dfires"
@@ -303,50 +302,48 @@ if __name__ == "__main__":
 
     
     #start computing the Hessian 
-    numres = len(ATOMS)
-    numresthree = 3 * numres
-    hess = calchessian(numres,x,y,z,Verbose)
-    e_vals, e_vecs = LA.eig(hess)
-    if(Verbose):
-        print "Hessian"
-        print hess
-        flatandwrite(hess,'hesspy.debug')
+    if not(mdhess):
+        numres = len(ATOMS)
+        numresthree = 3 * numres
+        hess = calchessian(numres,x,y,z,Verbose)
+        e_vals, e_vecs = LA.eig(hess)
+        if(Verbose):
+            print "Hessian"
+            print hess
+            flatandwrite(hess,'hesspy.debug')
     
-      
-    i=1
-    with open(eigenfile,'w') as outfile:
-        for val in np.sort(e_vals):
-            outfile.write("%d\t%f\n"%(i,val))
-            i += 1
+        i=1
+        with open(eigenfile,'w') as outfile:
+            for val in np.sort(e_vals):
+                outfile.write("%d\t%f\n"%(i,val))
+                i += 1
         
+        U, w, Vt = LA.svd(hess,full_matrices=False)
+        if(Verbose):
+            print U.shape
+            print w.shape 
+            print Vt.shape 
 
-    U, w, Vt = LA.svd(hess,full_matrices=False)
-    if(Verbose):
-        print U.shape
-        print w.shape 
-        print Vt.shape 
+        S = LA.diagsvd(w,len(w),len(w))
+        print "Checking If the SVD went well..."
+        print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
+     
+        if(Verbose):
+            flatandwrite(U,'Upy-test.debug')
+            flatandwrite(w,'wpy-test.debug')
+            flatandwrite(Vt,'Vtpy-test.debug')
 
-    S = LA.diagsvd(w,len(w),len(w))
-    print "Checking If the SVD went well..."
-    print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
-    
- 
-    if(Verbose):
-        flatandwrite(U,'Upy-test.debug')
-        flatandwrite(w,'wpy-test.debug')
-        flatandwrite(Vt,'Vtpy-test.debug')
-
-    #the near zero eigenvalues blowup the inversion so 
-    #we will truncate them and add a small amount of bias 
-    print "Inverting the Hessian..."
-    tol = 1e-6 
-    singular = w < tol 
-    invw = 1/w
-    invw[singular] = 0.
-    invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
-    flatandwrite(invHrs,invhessfile)
-    print "Number of near-singular eigenvalues: %f"%np.sum(singular)
-    print "Hessian inverted and written out to pinv_svd.debug"
+        #the near zero eigenvalues blowup the inversion so 
+        #we will truncate them and add a small amount of bias 
+        print "Inverting the Hessian..."
+        tol = 1e-6 
+        singular = w < tol 
+        invw = 1/w
+        invw[singular] = 0.
+        invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
+        flatandwrite(invHrs,invhessfile)
+        print "Number of near-singular eigenvalues: %f"%np.sum(singular)
+        print "Hessian inverted and written out to pinv_svd.debug"
 
 
     #import the inverse Hessian and turn into a function  
@@ -358,8 +355,6 @@ if __name__ == "__main__":
         resnumsq = len(invH)
         resnum = np.sqrt(resnumsq)/3
         invHrs = invH.reshape((3*resnum,3*resnum),order='F')
-        #print "invHrs"
-        #print invHrs
     else:
         invHrs=np.loadtxt( comlinargs['--hess'] )
         print "From MD invhess"
