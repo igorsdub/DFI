@@ -21,9 +21,9 @@ Right now cacluates the hessian and inverts it
 and write out to the file pinv_svd.debug. 
 
 ### Usage ###
-
+```
 dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
-
+```
 ### Input ###
 
 * PDBFILE:     PDBFILE
