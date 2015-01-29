@@ -52,8 +52,14 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
     import pandas as pd
     import pdbio as io
     pdbid = CSVFIL.split('-')[0]
+    if(Verbose):
+        print "CSVFIL: %s"%(CSVFIL)
+        print "PDBFIL: %s"%(PDBFIL)
+        print "pdbid: %s"%(pdbid)
+
 
     data = pd.read_csv(CSVFIL)
+    print data[:10]
     print "Reading in: %s"%(CSVFIL)
 
     ATOMS = []
@@ -65,15 +71,14 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
         if ATOMS[i].atom_name.strip(' ') == 'CA':
             resind = ATOMS[i].res_index 
             chainind = ATOMS[i].chainID
-            val= data[(data.ResI == int(resind)) & (data.ChainID == chainind.strip(' '))].pctdfi.values[0]
+            val= data[ ( data.ResI == int(resind) ) & ( data.ChainID == chainind ) ].pctdfi.values[0]
             if Verbose:
                 print ATOMS[i].res_index, ATOMS[i].temp_factor,val
             ATOMS[i].temp_factor = val
+        else:
+            ATOMS[i].temp_factor = 0. 
 
     io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
 
-
-
-
-
-
+if __name__ == "__main__":
+    colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
