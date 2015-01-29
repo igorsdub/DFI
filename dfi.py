@@ -1,6 +1,5 @@
 #!/usr/bin/env python 
 """
-===============================
 DFI (Dynamic Flexibility Index)
 ===============================
 
@@ -38,8 +37,9 @@ Output
 
 Example
 -------
+```
 ./dfi.py --pdb 1a2x_BA_1.pdb --fdfi A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
-
+```
 """
 
 import sys 
