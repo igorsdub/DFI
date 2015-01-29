@@ -302,9 +302,12 @@ if __name__ == "__main__":
 
     
     #start computing the Hessian 
+    numres = len(ATOMS)
+    numresthree = 3 * numres 
+
     if not(mdhess):
-        numres = len(ATOMS)
-        numresthree = 3 * numres
+        #numres = len(ATOMS)
+        #numresthree = 3 * numres
         hess = calchessian(numres,x,y,z,Verbose)
         e_vals, e_vecs = LA.eig(hess)
         if(Verbose):
