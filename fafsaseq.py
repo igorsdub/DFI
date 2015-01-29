@@ -14,9 +14,14 @@ Usage
 fafsaseq.py DFICSVFILE
 """
 
+import sys
+
+if len(sys.argv) < 2:
+    print __doc__
+    print sys.exit()
+
 import pandas as pd
 import numpy as np 
-import sys 
 
 mapres={}
 with open('RESdict.txt','r') as infile:
