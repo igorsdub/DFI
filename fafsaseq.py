@@ -54,7 +54,7 @@ print mapres
 
 #fname='1iau-dfianalysis.csv'
 fname=sys.argv[1]
-data = pd.read_csv(fname)
+data = pd.read_csv(fname,index_col='ResI')
 
 bigseq=np.array(data['Res'].values,dtype=str)
 smallseq=''
