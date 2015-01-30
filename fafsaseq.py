@@ -23,11 +23,34 @@ if len(sys.argv) < 2:
 import pandas as pd
 import numpy as np 
 
-mapres={}
-with open('RESdict.txt','r') as infile:
-    for line in infile:
-        ls_line=line.strip('\n').split(':')
-        mapres[ls_line[0]] = ls_line[1]
+#mapres={}
+#with open('RESdict.txt','r') as infile:
+#    for line in infile:
+#        ls_line=line.strip('\n').split(':')
+#        mapres[ls_line[0]] = ls_line[1]
+
+mapres={'ALA':'A',
+'CYS':'C',
+'ASP':'D',
+'GLU':'E',
+'PHE':'F',
+'GLY':'G',
+'HIS':'H',
+'ILE':'I',
+'LYS':'K',
+'LEU':'L',
+'MET':'M',
+'PRO':'P',
+'ARG':'R',
+'GLN':'Q',
+'ASN':'N',
+'SER':'S',
+'THR':'T',
+'TRP':'W',
+'TYR':'Y',
+'VAL':'V'}
+
+print mapres
 
 #fname='1iau-dfianalysis.csv'
 fname=sys.argv[1]
