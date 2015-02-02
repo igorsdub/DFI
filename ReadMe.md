@@ -50,7 +50,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * ~~Create a feature to make dfiplots~~
     ~~* Try making publication quality plots instead of bare matplotlib~~  
 * ~~Create a feature to just take in the Hessian from MD~~
-    * Improve on the implementation of the MD Hessian 
+    ~~* Improve on the implementation of the MD Hessian~~ 
 * ~~Check to see how many near singular eigenvalues there are.~~ 
 * ~~Do a check to see if the residue numbers are unique, otherwise renumber them.~~
     * ~~Going to trust the PDB file numbers for now.~~  
@@ -61,6 +61,9 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * ~~Fix problems with change ids~~
      * ~~Make sure chain id does not have to be a letter~~ 
      * ~~Allow for chain ids not to be found, eliminate from dictionary~~ 
+* Add the DFI Color Routine
+* Add Plotting Routine 
+* Look into bokeh routines. 
 
 ### Who do I talk to? ###
 

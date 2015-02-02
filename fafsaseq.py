@@ -56,7 +56,6 @@ for threeseq in bigseq:
 
 import urllib2
 URL="http://www.pdb.org/pdb/files/fasta.txt?structureIdList="
-#pdbname="1IAU"
 pdbname=fname.split('-')[0]
 response = urllib2.urlopen(URL+pdbname)
 html = response.read()    
@@ -76,5 +75,4 @@ for i in range(len(fseq)):
         break
 
 data['fafsa']=pd.Series( range(match,len(smallseq)+match), index=data.index)
-
 data.to_csv(fname)
