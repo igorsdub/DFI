@@ -36,7 +36,7 @@ from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
 from Bio import SeqIO
 from Bio import Entrez 
-Entrez.email = "brandon.mac.bulter@gmail.com"
+Entrez.email = "avishek.kumar@asu.edu"
 from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Seq import Seq 
 
@@ -64,8 +64,10 @@ def UniBLAST(code):
     with open(code + ".fasta", "w") as out_file:
         net_handle = Entrez.efetch(db="nucleotide", id=code, rettype="fasta")
         out_file.write(net_handle.read())
-        
+    
+    print "Running blastp"
     result_handle = NCBIWWW.qblast("blastp", "pdb", code)
+    print "Done running blastp"
     with open(code + "_blast.xml", "w") as save_file:
         save_file.write(result_handle.read())
     result_handle.close()
