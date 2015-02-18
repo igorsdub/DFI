@@ -1,0 +1,138 @@
+#!/usr/bin/env python 
+# coding: utf-8
+"""
+UniproBlastToPDB
+=================
+
+Description 
+------------
+Given a Uniprot code will run blastp to retreive fasta sequence and blast xml output 
+and parse the output in the following way:
+
+Uniprot | PDBid | chain | query_to | query_from | Iter Query Len | e-value | Query Coverage | Sequence Identity 
+
+Usage
+-----
+
+```
+UniproBlastToPdb.py UNIPROid 
+```
+
+Output 
+-------
+- UniproID.fasta
+- Unipro_blast.xml 
+- Unipro.csv 
+"""
+
+import sys
+if len(sys.argv) < 2:
+    print __doc__
+    sys.exit(1)
+
+
+import Bio
+from Bio.Blast import NCBIXML
+from Bio.Blast import NCBIWWW
+from Bio import SeqIO
+from Bio import Entrez 
+Entrez.email = "brandon.mac.bulter@gmail.com"
+from Bio.Blast.Applications import NcbiblastpCommandline
+from Bio.Seq import Seq 
+
+
+code='O00238'
+
+def UniBLAST(code):
+    """
+    Input
+    ------
+    Uniprot Code 
+    UniBLAST(code)
+    e.g. UniBLAST('O00238')
+    
+    Description
+    -----------
+    Outputs a Fasta sequence and
+    Runs blasp looking through pdb database with the Uniprot code 
+    
+    Output
+    ------
+    - UniproID.fasta     FASTA Sequence 
+    - UniproID_blast.xml Blast output in XML Format 
+    """
+    with open(code + ".fasta", "w") as out_file:
+        net_handle = Entrez.efetch(db="nucleotide", id=code, rettype="fasta")
+        out_file.write(net_handle.read())
+        
+    result_handle = NCBIWWW.qblast("blastp", "pdb", code)
+    with open(code + "_blast.xml", "w") as save_file:
+        save_file.write(result_handle.read())
+    result_handle.close()
+
+
+def parseBlastFile(xmlfil):
+    """
+    Input 
+    -----
+    Uniprot XML Output  
+    parseBlastFile(xmlfil)
+    e.g. parsebBlastFile('O00238_blast.xml')
+    
+    Description
+    -----------
+    Parses the following information out of the bast output xml file. 
+    
+    Uniprot | PDBid | chain | query_to | query_from | Iter Query Len | e-value | Query Coverage | Sequence Identity 
+    
+    Output 
+    -------
+    Uniprot.csv 
+    """
+    NP_id = xmlfil.split('_')[0]
+    
+    result_handle = open(xmlfil)
+    blast_record = NCBIXML.read(result_handle)
+    result_handle.close()
+    
+    E_VALUE_THRESH = 1E-25
+    
+    outfilname = NP_id+'.csv'
+    
+    out_file= open(outfilname,"w")
+    print "Writing output to %s"%(outfilname) 
+    out_file.write('Uniprot,PDBid,chain,query_to,query_from,IterQueryLen,e-value,QueryCov,SeqId\n')
+    sequencequeryLength = blast_record.query_length
+    for alignment in blast_record.alignments:
+        for hsp in alignment.hsps:
+            if hsp.expect < E_VALUE_THRESH:
+                first = float(hsp.identities)
+                second = len(hsp.query)
+                identity = 100*float(first/second)
+                identity = int(round(identity,0))
+                coverage =  round(100*float(hsp.query_end - hsp.query_start)/sequencequeryLength,0) 
+                             
+                line1=alignment.title
+                b=line1.split('|')
+                pdbid = str(b[3])
+                
+                out_file.write(NP_id+",")
+                out_file.write(pdbid+",")
+                line2=b[4]
+                chain=line2.split()
+                               
+                out_file.write(str(chain[0]) +",")
+                out_file.write(str(hsp.query_end)+",")
+                out_file.write(str(hsp.query_start)+",")
+                out_file.write(str(sequencequeryLength)+",")
+                out_file.write(str(hsp.expect) +",")
+                out_file.write("%f"%coverage +",")
+                out_file.write(str(identity) +"\n")
+    out_file.close()
+
+
+if __name__ == "__main__":
+    code = sys.argv[1]
+    UniBLAST(code)  
+    parseBlastFile(code+"_blast.xml")
+
