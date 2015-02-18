@@ -30,20 +30,20 @@ if len(sys.argv) < 2:
     print __doc__
     sys.exit(1)
 
-
+import random 
 import Bio
 from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
 from Bio import SeqIO
 from Bio import Entrez 
-Entrez.email = "avishek.kumar@asu.edu"
 from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Seq import Seq 
 
 
-code='O00238'
+emails = ['avishek.kumar@asu.edu','akumar67@asu.edu','avishek.kumar@outlook.com','avishekkumar87@gmail.com','brandon.mac.butler@gmail.com']
 
-def UniBLAST(code):
+
+def UniBLAST(code,Verbose=True):
     """
     Input
     ------
@@ -61,6 +61,10 @@ def UniBLAST(code):
     - UniproID.fasta     FASTA Sequence 
     - UniproID_blast.xml Blast output in XML Format 
     """
+
+    Entrez.email = random.choice(emails)
+    if(Verbose):
+        print "Using email: %s"%(Entrez.email)
     with open(code + ".fasta", "w") as out_file:
         net_handle = Entrez.efetch(db="nucleotide", id=code, rettype="fasta")
         out_file.write(net_handle.read())
@@ -130,6 +134,8 @@ def parseBlastFile(xmlfil):
                 out_file.write(str(hsp.expect) +",")
                 out_file.write("%f"%coverage +",")
                 out_file.write(str(identity) +"\n")
+            else:
+                out_file.write("evalue to low: %f\n"%(hsp.expect))
     out_file.close()
 
 

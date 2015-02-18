@@ -31,5 +31,6 @@ fi
 
 while read f; 
 do 
-    ./UniproBlastToPdb.py $f; 
+    ./UniproBlastToPdb.py $f;
+    sleep 30  
 done < $listfile 
