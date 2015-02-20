@@ -35,7 +35,7 @@ import Bio
 from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
 from Bio import SeqIO
-from Bio import Entrez 
+
 from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Seq import Seq 
 
@@ -61,7 +61,7 @@ def UniBLAST(code,Verbose=True):
     - UniproID.fasta     FASTA Sequence 
     - UniproID_blast.xml Blast output in XML Format 
     """
-
+    
     Entrez.email = random.choice(emails)
     if(Verbose):
         print "Using email: %s"%(Entrez.email)
@@ -76,6 +76,29 @@ def UniBLAST(code,Verbose=True):
         save_file.write(result_handle.read())
     result_handle.close()
 
+def getfasta(code,Verbose=True):
+    """
+    Input
+    -----
+    Uniprot code 
+
+    Description
+    ------------
+    getfasta(code,Verbose=True)
+    Query Webserver for FASTA sequence 
+    
+    Output
+    ------
+    code.fasta FASTA sequence 
+    """
+    from Bio import Entrez 
+    Entrez.email = random.choice(emails)
+    if(Verbose):
+        print "Using email: %s"%(Entrez.email)
+    with open(code + ".fasta", "w") as out_file:
+        net_handle = Entrez.efetch(db="nucleotide", id=code, rettype="fasta")
+        out_file.write(net_handle.read())
+    
 
 def parseBlastFile(xmlfil):
     """
@@ -101,17 +124,16 @@ def parseBlastFile(xmlfil):
     blast_record = NCBIXML.read(result_handle)
     result_handle.close()
     
-    E_VALUE_THRESH = 1E-25
+    #E_VALUE_THRESH = 1E-25
     
     outfilname = NP_id+'.csv'
     
-    out_file= open(outfilname,"w")
-    print "Writing output to %s"%(outfilname) 
-    out_file.write('Uniprot,PDBid,chain,query_to,query_from,IterQueryLen,e-value,QueryCov,SeqId\n')
-    sequencequeryLength = blast_record.query_length
-    for alignment in blast_record.alignments:
-        for hsp in alignment.hsps:
-            if hsp.expect < E_VALUE_THRESH:
+    with open(outfilname,"w") as out_file:
+        print "Writing output to %s"%(outfilname) 
+        out_file.write('Uniprot,PDBid,chain,query_to,query_from,IterQueryLen,e-value,QueryCov,SeqId\n')
+        sequencequeryLength = blast_record.query_length
+        for alignment in blast_record.alignments:
+            for hsp in alignment.hsps:
                 first = float(hsp.identities)
                 second = len(hsp.query)
                 identity = 100*float(first/second)
@@ -134,11 +156,8 @@ def parseBlastFile(xmlfil):
                 out_file.write(str(hsp.expect) +",")
                 out_file.write("%f"%coverage +",")
                 out_file.write(str(identity) +"\n")
-            else:
-                out_file.write("evalue to low: %f\n"%(hsp.expect))
-    out_file.close()
 
-
+    
 if __name__ == "__main__":
     code = sys.argv[1]
     UniBLAST(code)  
