@@ -55,7 +55,7 @@ do
     pdbid=${pdbfil%".pdb"}
     echo $pdbid
     chain=$(echo $f | awk -F: '{print $2}')
-    ./dfi.py --pdb $pdbfil --fdfi $chain 
+    dfi.py --pdb $pdbfil --fdfi $chain 
     if [ "$?" -eq "0" ]
     then
 	check_dir $pdbid
