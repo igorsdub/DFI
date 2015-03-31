@@ -111,7 +111,10 @@ class ATOM:
         self.z = float(z)
         #self.occupancy = float(occupancy)
         self.occupancy = 1. 
-        self.temp_factor = float(temp_factor)
+        if temp_factor == '':
+            self.temp_factor = 0.
+        else:
+            self.temp_factor = float(temp_factor)
 
 
                 
