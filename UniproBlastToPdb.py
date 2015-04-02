@@ -159,7 +159,7 @@ def parseBlastFile(xmlfil):
 
     
 if __name__ == "__main__":
-    code = sys.argv[1]
-    UniBLAST(code)  
-    parseBlastFile(code+"_blast.xml")
+    blastfile = sys.argv[1]
+    #UniBLAST(code)  
+    parseBlastFile(blastfile)
 
