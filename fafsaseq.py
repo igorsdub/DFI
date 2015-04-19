@@ -14,14 +14,9 @@ Usage
 fafsaseq.py DFICSVFILE
 """
 
-import sys
-
-if len(sys.argv) < 2:
-    print __doc__
-    print sys.exit()
-
 import pandas as pd
 import numpy as np 
+
 
 
 mapres={'ALA':'A',
@@ -46,33 +41,63 @@ mapres={'ALA':'A',
 'VAL':'V'}
 
 
-fname=sys.argv[1]
-data = pd.read_csv(fname,index_col='ResI')
 
-bigseq=np.array(data['Res'].values,dtype=str)
-smallseq=''
-for threeseq in bigseq:
-    smallseq = smallseq + str(mapres[threeseq])
 
-import urllib2
-URL="http://www.pdb.org/pdb/files/fasta.txt?structureIdList="
-pdbname=fname.split('-')[0]
-response = urllib2.urlopen(URL+pdbname)
-html = response.read()    
-html = html.split('\n')
-fseq=''
-for line in html:
-    print line
-    if line.startswith('>'):
-        continue
-    fseq = fseq + line
+def parsefafsaseq(fname,uniprols=None):
+    """
+    Parse the fafas seq using the csv filename and uniprotids
+    """
+    
+    data = pd.read_csv(fname,index_col='ResI')
+    
+    #convert three letter code to one letter code sequence 
+    bigseq=np.array(data['Res'].values,dtype=str)
+    smallseq=''
+    for threeseq in bigseq:
+        smallseq = smallseq + str(mapres[threeseq])
 
-for i in range(len(fseq)):
-    print fseq[i:i+10], smallseq[:10]
-    if smallseq[:10] == fseq[i:i+10]:
-        match = i+1
-        print "Found a match at %d"%(i+1)
-        break
+    import urllib2
+    pdbURL="http://www.pdb.org/pdb/files/fasta.txt?structureIdList="
+    uniproURL="http://www.uniprot.org/uniprot/"
+   
+    pdbname=fname.split('-')[0]
+    uniproid=''
+   
+    if uniprotls:
+        print uniproURL+uniproid+'.fasta'
+        response = urllib2.urlopen(uniproURL+uniproid+'.fasta')
+    else:
+        print "Taking from the PDB"
+        response = urllib2.urlopen(pdbURL+pdbname)
+  
+    html = response.read()    
+    html = html.split('\n')
+    fseq=''
+    for line in html:
+        print line
+        if line.startswith('>'):
+            continue
+        fseq = fseq + line
 
-data['fafsa']=pd.Series( range(match,len(smallseq)+match), index=data.index)
-data.to_csv(fname)
+    numseq=4
+    for i in range(len(fseq)):
+        print fseq[i:i+numseq], smallseq[:numseq]
+        if smallseq[:numseq] == fseq[i:i+numseq]:
+            match = i+1
+            print "Found a match at %d"%(i+1)
+            break
+
+    data['fafsa']=pd.Series( range(match,len(smallseq)+match), index=data.index)
+    if uniprotls:
+        outfile=pdbname+'-dfianalysis.csv'
+    else:
+        outfile=pdbname+'-'+uniproid+'-dfianalysis.csv'
+    data.to_csv(outfile)
+    print "Writing out to: " + outfile 
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) < 2:
+        print __doc__
+        print sys.exit()
+    parsefafsaseq(sys.argv[1],uniprot=False)
