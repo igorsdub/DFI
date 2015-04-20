@@ -1,6 +1,5 @@
 #!/usr/bin/env python 
 """
-=========
 FAFSA SEQ
 =========
 
@@ -11,13 +10,13 @@ the fafsa sequence and adds it to the csv file.
 
 Usage
 -----
+```
 fafsaseq.py DFICSVFILE
+```
 """
 
 import pandas as pd
 import numpy as np 
-
-
 
 mapres={'ALA':'A',
 'CYS':'C',
@@ -41,6 +40,27 @@ mapres={'ALA':'A',
 'VAL':'V'}
 
 
+def parsefafsaurl(html):
+    "Parses html fafasa sequence and returns a string of the sequence"
+    html = html.split('\n')
+    fseq=''
+    for line in html:
+        print line
+        if line.startswith('>'):
+            continue
+        fseq = fseq + line
+    return fseq 
+
+def compareseq(smallseq,fseq,numseq=4):
+    "Compare sequence to find contiguous sequence"
+    for i in range(len(fseq)):
+        print fseq[i:i+numseq], smallseq[:numseq]
+        if smallseq[:numseq] == fseq[i:i+numseq]:
+            match = i+1
+            print "Found a match at %d"%(i+1)
+            return match 
+    print "No match"
+    return False 
 
 
 def parsefafsaseq(fname,uniprols=None):
@@ -61,43 +81,48 @@ def parsefafsaseq(fname,uniprols=None):
     uniproURL="http://www.uniprot.org/uniprot/"
    
     pdbname=fname.split('-')[0]
-    uniproid=''
-   
-    if uniprotls:
-        print uniproURL+uniproid+'.fasta'
-        response = urllib2.urlopen(uniproURL+uniproid+'.fasta')
+       
+    if uniprols:
+        for uniproid in uniprols:
+            print uniproid
+            print uniproURL+uniproid+'.fasta'
+            response = urllib2.urlopen(uniproURL+uniproid+'.fasta')
+            fseq = parsefafsaurl(response.read())
+            match = compareseq(smallseq,fseq,numseq=4)
+            if match:
+                ind_match=match - 1 
+                matchseq = [f for f in fseq[ind_match:ind_match+len(smallseq)+ind_match] ]
+                print fseq 
+                print "---"
+                print smallseq 
+                print len(matchseq)
+                print len(smallseq)
+                if len(matchseq) < len(smallseq):
+                    ntimes = len(smallseq) - len(matchseq) 
+                    for i in range(ntimes):
+                        matchseq.append('NA')
+                
+                print "fafalen:" + str(len(fseq))
+                data['fafsa_seq']=pd.Series( matchseq, index=data.index)
+                data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
+                data['unipro'] = pd.Series( [ uniproid for i in range(match, len(smallseq)+match) ], index=data.index)
+                outfile=pdbname+'-'+uniproid+'-dfianalysis.csv'
+                print "Writing out to: " + outfile
+                data.to_csv(outfile)
     else:
         print "Taking from the PDB"
         response = urllib2.urlopen(pdbURL+pdbname)
-  
-    html = response.read()    
-    html = html.split('\n')
-    fseq=''
-    for line in html:
-        print line
-        if line.startswith('>'):
-            continue
-        fseq = fseq + line
-
-    numseq=4
-    for i in range(len(fseq)):
-        print fseq[i:i+numseq], smallseq[:numseq]
-        if smallseq[:numseq] == fseq[i:i+numseq]:
-            match = i+1
-            print "Found a match at %d"%(i+1)
-            break
-
-    data['fafsa']=pd.Series( range(match,len(smallseq)+match), index=data.index)
-    if uniprotls:
-        outfile=pdbname+'-dfianalysis.csv'
-    else:
-        outfile=pdbname+'-'+uniproid+'-dfianalysis.csv'
-    data.to_csv(outfile)
-    print "Writing out to: " + outfile 
+        fseq = parsefafsaurl(response.read())
+        match = compareseq(smallseq,fseq,numseq=4)
+        if match: 
+            data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
+            outfile=pdbname+'-dfianalysis.csv'
+            data.to_csv(outfile)
+            
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 2:
         print __doc__
         print sys.exit()
-    parsefafsaseq(sys.argv[1],uniprot=False)
+    parsefafsaseq(sys.argv[1],uniprols=None)
