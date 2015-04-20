@@ -40,6 +40,16 @@ mapres={'ALA':'A',
 'VAL':'V'}
 
 
+def getuniprols(pdbid):
+    """Insert PDB and get UNIPROTID from table"""
+    import pandas as pd
+    mapdata = pd.read_csv('unipropdb.csv',index_col='pdbID')
+    nids=len(mapdata.ix[pdbid].values)
+    if nids > 1:
+        return [unipro[0] for unipro in mapdata.ix[pdbid].values]
+    else:
+        return [unipro for unipro in mapdata.ix[pdbid].values]
+
 def parsefafsaurl(html):
     "Parses html fafasa sequence and returns a string of the sequence"
     html = html.split('\n')
