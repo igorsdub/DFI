@@ -54,7 +54,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * ~~Check to see how many near singular eigenvalues there are.~~ 
 * ~~Do a check to see if the residue numbers are unique, otherwise renumber them.~~
     * ~~Going to trust the PDB file numbers for now.~~  
-* Better documentation of the functions
+* ~~Better documentation of the functions~~
 * Add test cases 
 * ~~Allow for ChainID~~
 * ~~Allowed for identifying chains in the f-dfi~~
