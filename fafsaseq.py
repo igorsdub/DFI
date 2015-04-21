@@ -43,6 +43,7 @@ mapres={'ALA':'A',
 def getuniprols(pdbid):
     """Insert PDB and get UNIPROTID from table"""
     import pandas as pd
+    pdbid = pdbid.upper()
     mapdata = pd.read_csv('unipropdb.csv',index_col='pdbID')
     nids=len(mapdata.ix[pdbid].values)
     if nids > 1:
@@ -75,9 +76,10 @@ def compareseq(smallseq,fseq,numseq=4):
 
 def parsefafsaseq(fname,uniprols=None):
     """
-    Parse the fafas seq using the csv filename and uniprotids
+    Parse the fafas seq using the csv filename and uniprotids.
+    Returns a list of the outfile names 
     """
-    
+    outfilels=[]
     data = pd.read_csv(fname,index_col='ResI')
     
     #convert three letter code to one letter code sequence 
@@ -119,6 +121,7 @@ def parsefafsaseq(fname,uniprols=None):
                 outfile=pdbname+'-'+uniproid+'-dfianalysis.csv'
                 print "Writing out to: " + outfile
                 data.to_csv(outfile)
+                outfilels.append(outfile)
     else:
         print "Taking from the PDB"
         response = urllib2.urlopen(pdbURL+pdbname)
@@ -128,6 +131,9 @@ def parsefafsaseq(fname,uniprols=None):
             data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
             outfile=pdbname+'-dfianalysis.csv'
             data.to_csv(outfile)
+            outfilels.append(outfile)
+    
+    return outfilels
             
 
 if __name__ == "__main__":
