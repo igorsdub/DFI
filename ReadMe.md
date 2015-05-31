@@ -64,6 +64,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * Add the DFI Color Routine
 * Add Plotting Routine 
 * Look into bokeh routines. 
+* Create a DFI API
 
 ### Who do I talk to? ###
 
