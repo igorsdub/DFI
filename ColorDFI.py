@@ -23,9 +23,10 @@ colorbydfi(CSVFIL,PDBFIL,Verbose)
 """
 
 import sys 
-if len(sys.argv) < 2: 
-    print __doc__
-    sys.exit()
+
+#if len(sys.argv) < 2: 
+#    print __doc__
+#    sys.exit()
 
 def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
     """
@@ -79,6 +80,9 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
             ATOMS[i].temp_factor = 0. 
 
     io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
+    print "Wrote out to %s-dficolor.pdb"%pdbid 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and len(sys.argv) > 2:
     colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
+else:
+    print __doc__
