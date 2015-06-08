@@ -65,6 +65,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * Add Plotting Routine 
 * Look into bokeh routines. 
 * Create a DFI API
+* Put output into a DataFrame object and have a separate subroutine to write to csv
 
 ### Who do I talk to? ###
 

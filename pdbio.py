@@ -116,7 +116,16 @@ class ATOM:
         else:
             self.temp_factor = float(temp_factor)
 
+    def get_res_index(self):
+        return self.res_index 
 
+    def set_res_index(self,res_index):
+        self.res_index = res_index 
+
+    def del_res_index(self):
+        del self.res_index 
+
+    property(get_res_index, set_res_index, del_res_index, "I'm the res_index propery")
                 
 
         
