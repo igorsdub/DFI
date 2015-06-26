@@ -114,6 +114,9 @@ def parsefafsaseq(fname,uniprols=None):
                     for i in range(ntimes):
                         matchseq.append('NA')
                 
+                while len(matchseq) > len(smallseq):
+                    matchseq = matchseq[:-1]
+
                 print "fafalen:" + str(len(fseq))
                 data['fafsa_seq']=pd.Series( matchseq, index=data.index)
                 data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
