@@ -20,7 +20,8 @@ replica
 #input check 
 if [ "$#" -ne 3 ]; then
     echo "Number of arguements: $#"
-    echo "$usage" 
+    echo "$usage"
+    exit 1 
 fi
 
 title=$1
