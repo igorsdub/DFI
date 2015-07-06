@@ -28,7 +28,7 @@ import sys
 #    print __doc__
 #    sys.exit()
 
-def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
+def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None,):
     """
     Color by DFI
     =============
@@ -72,15 +72,16 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False):
         if ATOMS[i].atom_name.strip(' ') == 'CA':
             resind = ATOMS[i].res_index 
             chainind = ATOMS[i].chainID
-            val= data[ ( data.ResI == int(resind) ) & ( data.ChainID == chainind ) ].pctdfi.values[0]
+            val= data[ ( data.ResI == int(resind) ) & ( data.ChainID == chainind ) ][colorbyparam].values[0]
             if Verbose:
                 print ATOMS[i].res_index, ATOMS[i].temp_factor,val
             ATOMS[i].temp_factor = val
         else:
             ATOMS[i].temp_factor = 0. 
-
-    io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
-    print "Wrote out to %s-dficolor.pdb"%pdbid 
+    if(outfile):
+        io.pdb_writer(ATOMS,filename=outfile)
+    else:
+        io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
 
 if __name__ == "__main__" and len(sys.argv) > 2:
     colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
