@@ -63,7 +63,10 @@ def get_residues(pdbid,CAonly=True,noalc=True,chainA=False,chain_name='A',Verbos
                 temp_factor = line[61:66]
 
                 
-                pdbnum = [pdbid, atom_name.strip(), res_name, chainID.strip(), int(res_index)]
+                try:
+                    pdbnum = [pdbid, atom_name.strip(), res_name, chainID.strip(), int(res_index)]
+                except ValueError:
+                    continue 
                 residues.append(pdbnum)
     if(Verbose):
         print residues[:10] 
@@ -115,6 +118,8 @@ def test_check_gaps_withgaps():
 
 def test_check_gaps_input():
     assert check_gaps('1a4l') == '1a4l,FALSE,NA', check_gaps('1a4l')
+
+
 
 if __name__ == "__main__":
     #input check 
