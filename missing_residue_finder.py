@@ -28,9 +28,11 @@ def get_residues(pdbid,CAonly=True,noalc=True,chainA=False,chain_name='A',Verbos
     pdb = urllib.urlopen(url).readlines()
     residues = []
     for line in pdb:
+        
             if line.startswith('ENDMDL'):
-                print "MULTIPLE MODELS...USING MODEL1"
-                return 
+                if(Verbose):
+                    print "MULTIPLE MODELS...USING MODEL1"
+                return residues  
             
             if line.startswith('ATOM'):
                 record = line[:6]
