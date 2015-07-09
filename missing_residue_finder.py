@@ -21,23 +21,53 @@ import sys
 
 
 
-def get_residues(pdbid):
+def get_residues(pdbid,CAonly=True,noalc=True,chainA=False,chain_name='A',Verbose=False):
     "Returns the list of residues input is PDBCODE"
     
     url = 'http://www.rcsb.org/pdb/files/%s.pdb' %pdbid
     pdb = urllib.urlopen(url).readlines()
     residues = []
     for line in pdb:
-        list = line.split()
-        id = list[0]
-        if id == 'ATOM':
-            type = list[2]
-            if type == 'CA':
-                pdbnum = [pdbid, type, list[3], list[4], list[5]]
+            if line.startswith('ENDMDL'):
+                print "MULTIPLE MODELS...USING MODEL1"
+                return 
+            
+            if line.startswith('ATOM'):
+                record = line[:6]
+                atom_index = line[7:11]
+              
+                atom_name = line[13:16]
+                if CAonly and not(atom_name=='CA '):
+                    continue 
+                
+                alc = line[16] #alternate location
+                if noalc and not((alc==' ' or alc=='A')):
+                    continue 
+
+                res_name = line[17:20]
+                if(Verbose):
+                    print res_name
+                
+                chainID=line[21]
+                if chainA and not(chainID==chain_name):
+                    continue 
+                   
+                res_index = line[22:27]
+                if(Verbose):
+                    print res_index 
+                insert_code = line[26]
+                x = line[31:38]
+                y = line[39:46]
+                z = line[47:54]
+                occupancy = line[55:60]
+                temp_factor = line[61:66]
+
+                
+                pdbnum = [pdbid, atom_name.strip(), res_name, chainID.strip(), int(res_index)]
                 residues.append(pdbnum)
+    if(Verbose):
+        print residues[:10] 
     return residues
-
-
 
 
 def get_chains(residues):
@@ -47,8 +77,6 @@ def get_chains(residues):
         chains.append(res[3])
     chains = np.unique(chains)
     return chains
-
-
 
 
 def get_resnums_chain(residues,chainID,Verbose=False):
@@ -82,9 +110,11 @@ def proc_list(listfil):
         for pdbid in infile:
             print check_gaps(pdbid.strip())
 
-def test_check_gaps():
-    assert check_gaps('1hcf') == '1hcf,TRUE,A'
+def test_check_gaps_withgaps():
+    assert check_gaps('1hcf') == '1hcf,TRUE,A', check_gaps('1hcf')
 
+def test_check_gaps_input():
+    assert check_gaps('1a4l') == '1a4l,FALSE,NA', check_gaps('1a4l')
 
 if __name__ == "__main__":
     #input check 
