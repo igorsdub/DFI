@@ -282,7 +282,7 @@ if __name__ == "__main__":
     chain_name = comlinargs.get('--chain','A')
     CAonly = True
     noalc = True 
-    chainA = False
+    chainA = True
    
     #read in the pdb file 
     ATOMS = [] 
