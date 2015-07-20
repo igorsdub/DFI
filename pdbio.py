@@ -39,7 +39,7 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,chain_name='A
             if line.startswith('ATOM'):
                 record = line[:6]
                 atom_index = line[7:11]
-              
+xo              
                 atom_name = line[13:16]
                 if CAonly and not(atom_name=='CA '):
                     continue 

@@ -286,7 +286,7 @@ if __name__ == "__main__":
    
     #read in the pdb file 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name,Verbose=False)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name=chain_name,Verbose=False)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
