@@ -17,7 +17,7 @@ SciPy 1.4
 
 Usage
 -----
-dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
+dfi.py --pdb PDBFILE [--hess HESSFILE] [--chain CHAINID] [--fdfi RESNUMS] --help   
 
 Input
 -----
@@ -38,7 +38,7 @@ Output
 Example
 -------
 ```
-./dfi.py --pdb 1a2x_BA_1.pdb --fdfi A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
+./dfi.py --pdb 1a2x_BA_1.pdb --hess covariance.dat --chain A --fdfi A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
 ```
 """
 
@@ -209,6 +209,11 @@ def parseCommandLine(argv):
                 print "File " + argv[ind+1] + " not found."
                 print __doc__ 
                 sys.exit(1) 
+        
+        if s == "--chain":
+            ind = argv.index(s)
+            comline_arg[s] = argv[ind+1]
+            
                
         if s ==  "--fdfi":
             ind = argv.index(s)
@@ -274,13 +279,14 @@ if __name__ == "__main__":
     mdhess=bool( comlinargs.get('--hess',"") )
     print "mdhess: "
     print mdhess 
+    chain_name = comlinargs.get('--chain','A')
     CAonly = True
     noalc = True 
     chainA = False
    
     #read in the pdb file 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,Verbose=False)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name,Verbose=False)
     pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
