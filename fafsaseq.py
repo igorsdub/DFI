@@ -64,12 +64,13 @@ def parsefafsaurl(html):
 
 def compareseq(smallseq,fseq,numseq=4):
     "Compare sequence to find contiguous sequence"
-    for i in range(len(fseq)):
-        print fseq[i:i+numseq], smallseq[:numseq]
-        if smallseq[:numseq] == fseq[i:i+numseq]:
-            match = i+1
-            print "Found a match at %d"%(i+1)
-            return match 
+    for j in range(len(smallseq)):
+        for i in range(len(fseq)):
+            print fseq[i:i+numseq], smallseq[:numseq]
+            if smallseq[j:numseq] == fseq[i:i+numseq]:
+                match = i+1
+                print "Found a match at %d"%(i+1)
+                return match 
     print "No match"
     return False 
 
