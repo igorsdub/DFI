@@ -154,9 +154,11 @@ if __name__ == "__main__":
         print __doc__
         print sys.exit()
     
-    uniprols=fafsaseq.getuniprols(pdbid)
+    pdbid = sys.argv[1].split('-')[0]
+
+    uniprols=getuniprols(pdbid)
     if uniprols:
-        parsefafsaseq(sys.argv[1],uniprols=None)
+        parsefafsaseq(sys.argv[1],uniprols=uniprols)
     else:
         print "No UNIPRO IDs"
         sys.exit()
