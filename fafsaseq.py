@@ -139,7 +139,7 @@ def parsefafsaseq(fname,uniprols=None):
         response = urllib2.urlopen(pdbURL+pdbname)
         fseq = parsefafsaurl(response.read())
         struc_match,seq_match = compareseq(smallseq,fseq,numseq=4)
-        if match: 
+        if seq_match: 
             data['fafsa_ind']=pd.Series( range(seq_match,len(smallseq)+seq_match), index=data.index)
             outfile=pdbname+'-dfianalysis.csv'
             data.to_csv(outfile)
@@ -153,4 +153,10 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print __doc__
         print sys.exit()
-    parsefafsaseq(sys.argv[1],uniprols=None)
+    
+    uniprols=fafsaseq.getuniprols(pdbid)
+    if uniprols:
+        parsefafsaseq(sys.argv[1],uniprols=None)
+    else:
+        print "No UNIPRO IDs"
+        sys.exit()
