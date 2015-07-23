@@ -66,11 +66,11 @@ def compareseq(smallseq,fseq,numseq=4):
     "Compare sequence to find contiguous sequence"
     for j in range(len(smallseq)):
         for i in range(len(fseq)):
-            print fseq[i:i+numseq], smallseq[:numseq]
+            print fseq[i:i+numseq], smallseq[j:j+numseq]
             if smallseq[j:j+numseq] == fseq[i:i+numseq]:
                 match = i+1
                 print "Found a match at %d"%(i+1)
-                return match 
+                return j,match 
     print "No match"
     return False 
 
@@ -101,15 +101,20 @@ def parsefafsaseq(fname,uniprols=None):
             print uniproURL+uniproid+'.fasta'
             response = urllib2.urlopen(uniproURL+uniproid+'.fasta')
             fseq = parsefafsaurl(response.read())
-            match = compareseq(smallseq,fseq,numseq=4)
-            if match:
-                ind_match=match - 1 
-                matchseq = [f for f in fseq[ind_match:ind_match+len(smallseq)+ind_match] ]
-                print fseq 
+            struc_match, seq_match = compareseq(smallseq,fseq,numseq=4)
+            if seq_match:
+                print "seq_match", seq_match 
+                print "struc_match", struc_match 
+                ind_match=seq_match - 1 
+                matchseq = [f for f in fseq[ind_match-struc_match:]]
+                #matchseq = [f for f in fseq[ind_match:ind_match+len(smallseq)+ind_match] ]
+                na_ls = [ 'NA' for i in range(struc_match) ]
+                #matchseq = na_ls + matchseq 
+                print 'fseq',fseq 
                 print "---"
-                print smallseq 
-                print len(matchseq)
-                print len(smallseq)
+                print 'smallseq',smallseq 
+                print 'nmatchseq',len(matchseq)
+                print 'nsmallseq',len(smallseq)
                 if len(matchseq) < len(smallseq):
                     ntimes = len(smallseq) - len(matchseq) 
                     for i in range(ntimes):
@@ -120,8 +125,11 @@ def parsefafsaseq(fname,uniprols=None):
 
                 print "fafalen:" + str(len(fseq))
                 data['fafsa_seq']=pd.Series( matchseq, index=data.index)
-                data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
-                data['unipro'] = pd.Series( [ uniproid for i in range(match, len(smallseq)+match) ], index=data.index)
+                fafsa_ls = range(seq_match-struc_match,len(smallseq)+seq_match-struc_match)
+                print "fafsa_ls",fafsa_ls
+                #data['fafsa_ind'] = np.array(fafsa_ls) 
+                data['fafsa_ind']=pd.Series( fafsa_ls, index=data.index)
+                data['unipro'] = pd.Series( [ uniproid for i in range(seq_match, len(smallseq)+seq_match) ], index=data.index)
                 outfile=pdbname+'-'+uniproid+'-dfianalysis.csv'
                 print "Writing out to: " + outfile
                 data.to_csv(outfile)
@@ -130,9 +138,9 @@ def parsefafsaseq(fname,uniprols=None):
         print "Taking from the PDB"
         response = urllib2.urlopen(pdbURL+pdbname)
         fseq = parsefafsaurl(response.read())
-        match = compareseq(smallseq,fseq,numseq=4)
+        struc_match,seq_match = compareseq(smallseq,fseq,numseq=4)
         if match: 
-            data['fafsa_ind']=pd.Series( range(match,len(smallseq)+match), index=data.index)
+            data['fafsa_ind']=pd.Series( range(seq_match,len(smallseq)+seq_match), index=data.index)
             outfile=pdbname+'-dfianalysis.csv'
             data.to_csv(outfile)
             outfilels.append(outfile)
