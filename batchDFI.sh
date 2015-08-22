@@ -59,7 +59,7 @@ do
     dfi.py --pdb $pdbfil --chain $chain --fdfi $chains 
     if [ "$?" -eq "0" ]
     then
-	check_dir $pdbid
-	mv -v ${pdbid}-* $pdbid
+	check_dir ${pdbid}_${chain}
+	mv -v ${pdbid}-* ${pdbid}_${chain}
     fi
 done
