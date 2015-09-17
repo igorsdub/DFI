@@ -384,7 +384,7 @@ if __name__ == "__main__":
 
     print "Calculating the peturbation matrix"
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
-    print "Shape of matrix:", calcperturbMat.shape
+    print "Shape of matrix:", nrmlperturbMat.shape
 
     #rows, column = calcperturbMat.shape 
 
@@ -433,14 +433,23 @@ if __name__ == "__main__":
     print fdfires 
     fdfifile='fdfi-Avg.dat'
     if len(fdfires) > 0:
-        rows, column = nrmlperturbMat.shape 
+        row, column = nrmlperturbMat.shape 
         nrmlperturbMat = nrmlperturbMat[:row/2,:column/2]
 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         flatandwrite(fdfitop/fdfibot,fdfifile)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
+  
+  
+    print "Before", fdfi.shape, relfdfi.shape, pctfdfi.shape, pctdfi.shape  
+    diff = pctdfi.shape[0] - fdfi.shape[0]
+    fdfi = np.concatenate((fdfi,np.zeros(diff)))
+    relfdfi = np.concatenate((relfdfi,np.zeros(diff)))
+    pctfdfi = np.concatenate((pctfdfi,np.zeros(diff)))
+    zscorefdfi = np.concatenate((zscorefdfi, np.zeros(diff)))
     
+     
     #output to file. 
     with open(dfianalfile,'w') as outfile:
         #outfile.write('# PBD:'+pdbid+'\n')
