@@ -53,3 +53,17 @@ def fafsa_format(fname,outfileobj=None):
     else:
         print fafsafmt 
 
+def separate_fasta(fname):
+    outfile = None 
+    with open(fname,'r') as infile:
+        for line in infile:
+            if line.startswith(">"):
+                print "Begin"
+                if outfile:
+                    outfile.close()
+                title = line[1:]
+                title = str(title.strip(' '))
+                print title
+                outfile = open(title+'.fasta','w')
+            outfile.write(line)
+            
