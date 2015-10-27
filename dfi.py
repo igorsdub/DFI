@@ -81,11 +81,30 @@ def getcoords(ATOMS):
 
     return x,y,z,bfac  
 
-def calchessian(resnum,x,y,z,Verbose=False):
-    """ Calculates the hessian and retuns the result """
+def calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False):
+    """ 
+    Calculates the hessian and retuns the result 
+    ============================================
+    
+    calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False)
+
+    Inputs 
+    ------
+    resnum: array of residue index (renumbered from 1 to N)
+    x: array of x coordinates
+    y: array of y coordinates
+    z: array of z coordinates
+    gamma: value of spring constant(default set to 100)
+    cutoff: value of cutoff when using a distance based Hessian (default None)
+    Verbose: Verbose Output for debug mode (default False).
+    
+    Output 
+    ------
+    hess: numpy array of the Hessian 
+    """
 
     print "Calculating the Hessian..."
-    gamma=100 
+    
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
   
@@ -107,6 +126,9 @@ def calchessian(resnum,x,y,z,Verbose=False):
             z_ij = z_i - z_j 
             r = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij 
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
+            if(cutoff):
+                if sqrt(r) > cutoff:
+                    spngcnst = 0. 
             if(Verbose):
                 print "i:%d j:%f"%(i,j)
                 print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
