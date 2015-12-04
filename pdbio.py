@@ -83,7 +83,7 @@ def pdb_writer(ATOMS,msg="HEADER  frodaN unfolding target\n",filename="out.pdb",
             alc = atom.alc 
             res_name = atom.res_name
             chainID=atom.chainID
-            res_index = atom.res_index #+ residueoffset 
+            res_index = int(atom.res_index) + residueoffset 
             iCode = atom.insert_code
             x = atom.x
             y = atom.y
