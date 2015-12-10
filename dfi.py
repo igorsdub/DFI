@@ -81,7 +81,7 @@ def getcoords(ATOMS):
 
     return x,y,z,bfac  
 
-def calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False):
+def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=True):
     """ 
     Calculates the hessian and retuns the result 
     ============================================
@@ -107,7 +107,7 @@ def calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False):
     
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
-  
+    gamma=100 
        
     #compute the Hessian 
     #compute the Hii terms 
@@ -126,9 +126,13 @@ def calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False):
             z_ij = z_i - z_j 
             r = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij 
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
+            
+            print "sprngcnst:",sprngcnst,"gamma",gamma
             if(cutoff):
                 if sqrt(r) > cutoff:
-                    spngcnst = 0. 
+                    if(Verbose):
+                        print cutoff
+                    #sprngcnst = 0. 
             if(Verbose):
                 print "i:%d j:%f"%(i,j)
                 print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
