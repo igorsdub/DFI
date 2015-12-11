@@ -81,7 +81,7 @@ def getcoords(ATOMS):
 
     return x,y,z,bfac  
 
-def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=True):
+def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
     """ 
     Calculates the hessian and retuns the result 
     ============================================
@@ -126,8 +126,8 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=True):
             z_ij = z_i - z_j 
             r = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij 
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
-            
-            print "sprngcnst:",sprngcnst,"gamma",gamma
+            if(Verbose):
+                print "sprngcnst:",sprngcnst,"gamma",gamma
             if(cutoff):
                 if sqrt(r) > cutoff:
                     if(Verbose):
@@ -193,6 +193,14 @@ def dfianal(fname,Array=False):
     dfiperc = np.array(dfiperc,dtype=float)
     
     return dfi, dfirel, dfiperc, dfizscore 
+
+def pctrank(dfi):
+    dfiperc = [] 
+    lendfi = float(len(dfi))
+    for m in dfi:
+        amt = np.sum(dfi >=m)
+        dfiperc.append(amt/lendfi)
+    return np.array(dfiperc,dtype=float)
 
 def calcperturbMat(invHrs,direct,resnum,Normalize=True):
     perturbMat = np.zeros((resnum,resnum))
@@ -284,6 +292,30 @@ def fdfires(ls_chain,table):
             print "WARNING: Can't find %s"%res 
             continue 
     return np.array(ls_ind,dtype=int)
+
+
+def fdfires_cords(fdfires,x,y,z):
+    """
+    fdfires_cords(fdfires,x,y,z)
+    fdfires: indices of fdfires 
+    x: array of x-coordinates 
+    y: array of y-coordinates 
+    z: array of z-coordinates
+    return: nx3 matrix of f-DFI coordinates 
+    """
+    print x[:10],y[:10],z[:10]
+    return np.column_stack((x[fdfires],y[fdfires],z[fdfires]))
+
+def rdist(r,fr):
+    """
+    rdist
+    r = array of coordinates 
+    fr = nx3 matrix of f-DFI coordinates 
+    return rdist: array of distances from f-DFI sites 
+    """
+    r_ij = fr - r
+    rr = r_ij*r_ij
+    return np.sqrt(rr.sum(axis=1))
 
 
 if __name__ == "__main__":
@@ -454,21 +486,39 @@ if __name__ == "__main__":
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         flatandwrite(fdfitop/fdfibot,fdfifile)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
-    
+        x,y,z,bfac = getcoords(ATOMS)
+        rlist = np.column_stack((x,y,z))
+        fr = fdfires_cords(fdfires,x,y,z)
+        r = rdist(rlist[0],fr)
+        ravg = r.mean()
+        ravg_ls = np.array([ rdist(r,fr).mean() for r in rlist ])
+        print "fr",fr
+        print "r",r
+        print "ravg",ravg
+        
+        print "rlist[:10]",rlist[:10]
+        print "rlist[0]",rlist[0]
+        print "ravg_ls",ravg_ls 
+        ravg_rank = pctrank(ravg_ls)
+        print "ravg_rank",ravg_rank 
+        print "pctfdfi", pctfdfi 
+        adfi = pctfdfi - ravg_rank 
+        print "a-dfi",pctfdfi - ravg_rank 
+        
     #output to file. 
     with open(dfianalfile,'w') as outfile:
         #outfile.write('# PBD:'+pdbid+'\n')
         #outfile.write('#Hinges: '+str(hingelist)+'\n')
         if len(fdfires) > 0:
             #outfile.write('#f-dfi: '+str(fdfires)+'\n')
-            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi\n"
+            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi,apctdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
-                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
-                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i]))
+                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i],adfi[i]))
         else:
             header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
-                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
