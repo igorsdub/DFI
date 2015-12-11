@@ -492,18 +492,18 @@ if __name__ == "__main__":
         r = rdist(rlist[0],fr)
         ravg = r.mean()
         ravg_ls = np.array([ rdist(r,fr).mean() for r in rlist ])
-        print "fr",fr
-        print "r",r
-        print "ravg",ravg
+        #print "fr",fr
+        #print "r",r
+        #print "ravg",ravg
         
-        print "rlist[:10]",rlist[:10]
-        print "rlist[0]",rlist[0]
-        print "ravg_ls",ravg_ls 
+        #print "rlist[:10]",rlist[:10]
+        #print "rlist[0]",rlist[0]
+        #print "ravg_ls",ravg_ls 
         ravg_rank = pctrank(ravg_ls)
-        print "ravg_rank",ravg_rank 
-        print "pctfdfi", pctfdfi 
+        #print "ravg_rank",ravg_rank 
+        #print "pctfdfi", pctfdfi 
         adfi = pctfdfi - ravg_rank 
-        print "a-dfi",pctfdfi - ravg_rank 
+        #print "a-dfi",pctfdfi - ravg_rank 
         
     #output to file. 
     with open(dfianalfile,'w') as outfile:
