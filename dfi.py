@@ -52,6 +52,7 @@ if len(sys.argv) < 2:
 import pdbio 
 import os 
 import numpy as np 
+import pandas as pd 
 
 from scipy import linalg as LA
 from scipy import stats 
@@ -317,6 +318,17 @@ def rdist(r,fr):
     rr = r_ij*r_ij
     return np.sqrt(rr.sum(axis=1))
 
+def outputToDF(ATOMS,dfi,pctdfi,outtocsv=True):
+    dfx = pd.DataFrame()
+    dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))] 
+    dfx = dfx.set_index(['ResI'])
+    dfx['chainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
+    dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
+    dfx['dfi'] = dfi 
+    dfx['pctdfi'] = pctdfi 
+    
+    if(outtocsv):
+        dfx.to_csv('test.csv')
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
@@ -492,18 +504,9 @@ if __name__ == "__main__":
         r = rdist(rlist[0],fr)
         ravg = r.mean()
         ravg_ls = np.array([ rdist(r,fr).mean() for r in rlist ])
-        #print "fr",fr
-        #print "r",r
-        #print "ravg",ravg
         
-        #print "rlist[:10]",rlist[:10]
-        #print "rlist[0]",rlist[0]
-        #print "ravg_ls",ravg_ls 
         ravg_rank = pctrank(ravg_ls)
-        #print "ravg_rank",ravg_rank 
-        #print "pctfdfi", pctfdfi 
         adfi = pctfdfi - ravg_rank 
-        #print "a-dfi",pctfdfi - ravg_rank 
         
     #output to file. 
     with open(dfianalfile,'w') as outfile:
@@ -520,5 +523,7 @@ if __name__ == "__main__":
             header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
             outfile.write(header)
             for i in range(len(dfi)):
-                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
+                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
+    
+    outputToDF(ATOMS,dfi,pctdfi,fdfi,pctfdfi)
