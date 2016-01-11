@@ -536,23 +536,6 @@ if __name__ == "__main__":
         ravg_rank = pctrank(ravg_ls)
         adfi = pctfdfi - ravg_rank 
         
-    #output to file. 
-    with open(dfianalfile,'w') as outfile:
-        #outfile.write('# PBD:'+pdbid+'\n')
-        #outfile.write('#Hinges: '+str(hingelist)+'\n')
-        if len(fdfires) > 0:
-            #outfile.write('#f-dfi: '+str(fdfires)+'\n')
-            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi,fdfi,rfdfi,pctfdfi,zfdfi,apctdfi\n"
-            outfile.write(header)
-            for i in range(len(dfi)):
-                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
-                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i],fdfi[i],relfdfi[i],pctfdfi[i],zscorefdfi[i],adfi[i]))
-        else:
-            header="ResI,ChainID,Res,dfi,rdfi,pctdfi,zdfi,mdfi,rmdfi,pctmdfi,zmdfi,hmdfi,rhmdfi,pcthmdfi,zhmdfi\n"
-            outfile.write(header)
-            for i in range(len(dfi)):
-                outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
-                                                                                                                     relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
     
     if len(fdfires) > 0:
         outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,outfile=dfianalfile)
