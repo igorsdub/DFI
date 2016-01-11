@@ -318,7 +318,7 @@ def rdist(r,fr):
     rr = r_ij*r_ij
     return np.sqrt(rr.sum(axis=1))
 
-def outputToDF(ATOMS,dfi,pctdfi,outtocsv=True):
+def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,outtocsv=True):
     dfx = pd.DataFrame()
     dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))] 
     dfx = dfx.set_index(['ResI'])
@@ -326,9 +326,15 @@ def outputToDF(ATOMS,dfi,pctdfi,outtocsv=True):
     dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
     dfx['dfi'] = dfi 
     dfx['pctdfi'] = pctdfi 
-    
+    if len(fdfi) > 0:
+        dfx['fdfi'] = fdfi 
+        dfx['pctdfi'] = pctfdfi 
+        dfx['adfi'] = adfi 
+
     if(outtocsv):
         dfx.to_csv('test.csv')
+    else:
+        return dfx 
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
@@ -526,4 +532,4 @@ if __name__ == "__main__":
                 outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
     
-    outputToDF(ATOMS,dfi,pctdfi,fdfi,pctfdfi)
+    outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi)
