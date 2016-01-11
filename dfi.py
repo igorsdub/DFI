@@ -318,21 +318,43 @@ def rdist(r,fr):
     rr = r_ij*r_ij
     return np.sqrt(rr.sum(axis=1))
 
-def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,outtocsv=True):
+def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,outfile=None):
+   
+    mapres={'ALA':'A',
+            'CYS':'C',
+            'ASP':'D',
+            'GLU':'E',
+            'PHE':'F',
+            'GLY':'G',
+            'HIS':'H',
+            'ILE':'I',
+            'LYS':'K',
+            'LEU':'L',
+            'MET':'M',
+            'PRO':'P',
+            'ARG':'R',
+            'GLN':'Q',
+            'ASN':'N',
+            'SER':'S',
+            'THR':'T',
+            'TRP':'W',
+            'TYR':'Y',
+            'VAL':'V'}
     dfx = pd.DataFrame()
-    dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))] 
+    dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]    
     dfx = dfx.set_index(['ResI'])
     dfx['chainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
     dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
+    dfx['R'] = dfx['Res'].map(mapres)
     dfx['dfi'] = dfi 
     dfx['pctdfi'] = pctdfi 
-    if len(fdfi) > 0:
+    if fdfi != None:
         dfx['fdfi'] = fdfi 
         dfx['pctdfi'] = pctfdfi 
         dfx['adfi'] = adfi 
 
-    if(outtocsv):
-        dfx.to_csv('test.csv')
+    if(outfile):
+        dfx.to_csv(outfile)
     else:
         return dfx 
 
@@ -532,4 +554,7 @@ if __name__ == "__main__":
                 outfile.write("%s,%s,%s,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f\n"%(ATOMS[i].res_index.strip(' '),ATOMS[i].chainID,ATOMS[i].res_name,dfi[i],reldfi[i],pctdfi[i],zscoredfi[i],mdfi[i],relmdfi[i],pctmdfi[i],zscoremdfi[i],hmdfi[i],
                                                                                                                      relhmdfi[i],pcthmdfi[i],zscorehmdfi[i]))
     
-    outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi)
+    if len(fdfires) > 0:
+        outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,outfile=dfianalfile)
+    else:
+        outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
