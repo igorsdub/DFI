@@ -195,12 +195,19 @@ def dfianal(fname,Array=False):
     
     return dfi, dfirel, dfiperc, dfizscore 
 
-def pctrank(dfi):
+def pctrank(dfi,inverse=False):
+    
     dfiperc = [] 
     lendfi = float(len(dfi))
+    
     for m in dfi:
-        amt = np.sum(dfi >=m)
+        
+        if inverse:
+            amt = np.sum(dfi >=m)
+        else:
+            amt = np.sum(dfi <=m)
         dfiperc.append(amt/lendfi)
+
     return np.array(dfiperc,dtype=float)
 
 def calcperturbMat(invHrs,direct,resnum,Normalize=True):
@@ -357,6 +364,14 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,outfile=None):
         dfx.to_csv(outfile)
     else:
         return dfx 
+
+def top_quartile_pos(pctfdfi,rlist):
+    """
+    returns a list of indices of positions in the top quartile of pctdfi 
+
+    """
+    return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
+        
 
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
@@ -529,14 +544,22 @@ if __name__ == "__main__":
         x,y,z,bfac = getcoords(ATOMS)
         rlist = np.column_stack((x,y,z))
         fr = fdfires_cords(fdfires,x,y,z)
-        r = rdist(rlist[0],fr)
-        ravg = r.mean()
         ravg_ls = np.array([ rdist(r,fr).mean() for r in rlist ])
-        
-        ravg_rank = pctrank(ravg_ls)
+        ravg_rank = pctrank(ravg_ls,inverse=True)
         adfi = pctfdfi - ravg_rank 
-        
-    
+        ls_topquart=top_quartile_pos(pctfdfi,rlist)
+        print "top quartile:",ls_topquart
+        ls_topquart_crds = rlist[ls_topquart]
+        ls_ravg_topquart = np.array([ rdist(r,fr).mean() for r in ls_topquart_crds ])
+        print "ls_ravg_topquart",ls_ravg_topquart
+        ls_ravg_rank_topquart = pctrank(ls_ravg_topquart,inverse=True)
+        #print "fdfi[ls_topquart]", fdfi[ls_topquart]
+        trash = pctrank(fdfi[ls_topquart])
+        print "trash:", trash 
+        print ls_ravg_rank_topquart 
+        adfi_topquart = pctrank(fdfi[ls_topquart]) - ls_ravg_rank_topquart 
+        print "adfi_topquart",adfi_topquart 
+
     if len(fdfires) > 0:
         outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,outfile=dfianalfile)
     else:
