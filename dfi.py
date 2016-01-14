@@ -368,7 +368,6 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,outfile=None):
 def top_quartile_pos(pctfdfi,rlist):
     """
     returns a list of indices of positions in the top quartile of pctdfi 
-
     """
     return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
         
