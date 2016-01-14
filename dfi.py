@@ -553,8 +553,8 @@ if __name__ == "__main__":
         print "ls_ravg_topquart",ls_ravg_topquart
         ls_ravg_rank_topquart = pctrank(ls_ravg_topquart,inverse=True)
         #print "fdfi[ls_topquart]", fdfi[ls_topquart]
-        trash = pctrank(fdfi[ls_topquart])
-        print "trash:", trash 
+        pctrank_fdfi = pctrank(fdfi[ls_topquart])
+        print "pctrank_fdfi:", pctrank_fdfi 
         print ls_ravg_rank_topquart 
         adfi_topquart = pctrank(fdfi[ls_topquart]) - ls_ravg_rank_topquart 
         print "adfi_topquart",adfi_topquart 
