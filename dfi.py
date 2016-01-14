@@ -357,9 +357,11 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ou
     dfx['pctdfi'] = pctdfi 
     if fdfi != None:
         dfx['fdfi'] = fdfi 
-        dfx['pctdfi'] = pctfdfi 
+        dfx['pctfdfi'] = pctfdfi 
         dfx['adfi'] = adfi 
         dfx['ravg'] = ls_ravg 
+        mask = (dfx['ravg'] > 8.0) & (dfx['pctfdfi'] > 0.75)
+        dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
     if(outfile):
         dfx.to_csv(outfile)
     else:
