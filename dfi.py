@@ -500,9 +500,7 @@ if __name__ == "__main__":
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
     dfi = np.sum(nrmlperturbMat,axis=1)
     mdfi = np.sum(nrmlperturbMat,axis=0)
-    flatandwrite(dfi,dfifile)
-    flatandwrite(mdfi,mdfifile)
-    
+        
     
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfifile)
     mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfifile)
