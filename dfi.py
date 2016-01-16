@@ -502,8 +502,8 @@ if __name__ == "__main__":
     mdfi = np.sum(nrmlperturbMat,axis=0)
         
     
-    dfi, reldfi, pctdfi, zscoredfi = dfianal(dfifile)
-    mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfifile)
+    dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi,Array=True)
+    mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfi,Array=True)
 
 
 
