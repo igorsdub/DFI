@@ -53,6 +53,7 @@ import pdbio
 import os 
 import numpy as np 
 import pandas as pd 
+import ColorDFI
 
 from scipy import linalg as LA
 from scipy import stats 
@@ -349,8 +350,8 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ou
             'VAL':'V'}
     dfx = pd.DataFrame()
     dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]    
-    dfx = dfx.set_index(['ResI'])
-    dfx['chainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
+    #dfx = dfx.set_index(['ResI'])
+    dfx['ChainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
     dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
     dfx['R'] = dfx['Res'].map(mapres)
     dfx['dfi'] = dfi 
@@ -364,8 +365,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ou
         dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
     if(outfile):
         dfx.to_csv(outfile)
-    else:
-        return dfx 
+    return dfx 
 
 def top_quartile_pos(pctfdfi,rlist):
     """
@@ -562,6 +562,10 @@ if __name__ == "__main__":
 
 
     if len(fdfires) > 0:
-        outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,outfile=dfianalfile)
     else:
-        outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
+
+    ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
+    if len(fdfires) > 0:
+        ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')

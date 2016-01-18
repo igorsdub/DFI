@@ -28,7 +28,7 @@ import sys
 #    print __doc__
 #    sys.exit()
 
-def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None,):
+def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     """
     Color by DFI
     =============
@@ -52,15 +52,20 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None,):
     """
     import pandas as pd
     import pdbio as io
-    pdbid = CSVFIL.split('-')[0]
+    
+    if type(CSVFIL) == str:
+        data = pd.read_csv(CSVFIL)
+        pdbid = CSVFIL.split('-')[0]
+    else:
+        data = CSVFIL
+        pdbid = outfile.split('-')[0]
+   
     if(Verbose):
         print "CSVFIL: %s"%(CSVFIL)
         print "PDBFIL: %s"%(PDBFIL)
         print "pdbid: %s"%(pdbid)
-
-
-    data = pd.read_csv(CSVFIL)
-    print data[:10]
+        print data[:10]
+   
     print "Reading in: %s"%(CSVFIL)
 
     ATOMS = []
