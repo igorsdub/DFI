@@ -382,14 +382,10 @@ if __name__ == "__main__":
     print comlinargs 
     pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
-    strucfile = pdbid+'-dfiout.pdb'
-    dfifile= pdbid+'-dfi-Avg.dat'
-    mdfifile= pdbid+'-mdfi-Avg.dat'
     eigenfile = pdbid+'-eigenvalues.txt'
     invhessfile = pdbid+'-pinv_svd.debug'
     dfianalfile = pdbid+'-dfianalysis.csv'
-    hingefile= pdbid+'-hingemdfi-Avg.dat'
-
+  
     mdhess=bool( comlinargs.get('--hess',"") )
     print "mdhess: "
     print mdhess 
@@ -401,7 +397,6 @@ if __name__ == "__main__":
     #read in the pdb file 
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name=chain_name,Verbose=False)
-    pdbio.pdb_writer(ATOMS,msg="HEADER dfi target, CAonly and chainA",filename=strucfile)
     x,y,z,bfac = getcoords(ATOMS) 
 
     #parse the f-dfi inputs 
