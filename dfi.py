@@ -326,7 +326,7 @@ def rdist(r,fr):
     rr = r_ij*r_ij
     return np.sqrt(rr.sum(axis=1))
 
-def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,outfile=None):
+def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
    
     mapres={'ALA':'A',
             'CYS':'C',
@@ -554,10 +554,11 @@ if __name__ == "__main__":
         adfi_topquart = pctrank(fdfi[ls_topquart]) - ls_ravg_rank_topquart 
         print "adfi_topquart",adfi_topquart 
         ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist])
+	ls_rmin = np.array([ rdist(r,fr).min() for f in rlist])
 
 
     if len(fdfires) > 0:
-        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
     else:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
 
