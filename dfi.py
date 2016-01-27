@@ -324,6 +324,7 @@ def rdist(r,fr):
     """
     r_ij = fr - r
     rr = r_ij*r_ij
+    print "r_ij",r_ij,"rr",rr,"r",np.sqrt(rr.sum(axis=1))
     return np.sqrt(rr.sum(axis=1))
 
 def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
@@ -360,8 +361,9 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
         dfx['fdfi'] = fdfi 
         dfx['pctfdfi'] = pctfdfi 
         dfx['adfi'] = adfi 
-        dfx['ravg'] = ls_ravg 
-        mask = (dfx['ravg'] > 8.0) & (dfx['pctfdfi'] > 0.75)
+        dfx['ravg'] = ls_ravg
+        dfx['rmin'] = ls_rmin 
+        mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
         dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
     if(outfile):
         dfx.to_csv(outfile)
@@ -554,8 +556,11 @@ if __name__ == "__main__":
         adfi_topquart = pctrank(fdfi[ls_topquart]) - ls_ravg_rank_topquart 
         print "adfi_topquart",adfi_topquart 
         ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist])
-	ls_rmin = np.array([ rdist(r,fr).min() for f in rlist])
-
+	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
+        print "rlist",rlist
+        print "r",r
+        print "fr",fr
+        print "ls_rmin",ls_rmin 
 
     if len(fdfires) > 0:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)

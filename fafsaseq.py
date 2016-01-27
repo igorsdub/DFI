@@ -44,7 +44,7 @@ def getuniprols(pdbid):
     """Insert PDB and get UNIPROTID from table"""
     import pandas as pd
     pdbid = pdbid.upper()
-    mapdata = pd.read_csv('/Users/brandon/dfi/unipropdb.csv',index_col='pdbID')
+    mapdata = pd.read_csv('/home/avishek/dfi/unipropdb.csv',index_col='pdbID')
     nids=len(mapdata.ix[pdbid].values)
     if nids > 1:
         return [unipro[0] for unipro in mapdata.ix[pdbid].values]
