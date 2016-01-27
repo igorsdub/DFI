@@ -7,7 +7,8 @@ Description
 ------------
 DFI Calculates the dynamics flexibility index. 
 Program calculates the hessian and inverts it 
-and write out to the file pinv_svd.debug. 
+and write out to the file pinv_svd.debug. Does
+a-dfi as well now.
 
 Requirements
 ------------
