@@ -367,7 +367,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
         mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
         dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
     if(outfile):
-        dfx.to_csv(outfile)
+        dfx.to_csv(outfile,index='False')
     return dfx 
 
 def top_quartile_pos(pctfdfi,rlist):
