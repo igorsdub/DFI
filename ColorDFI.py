@@ -88,7 +88,9 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     else:
         io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
 
-if __name__ == "__main__" and len(sys.argv) > 2:
-    colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
-else:
+if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
+
+if __name__ == "__main__":
+    colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
+

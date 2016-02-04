@@ -44,12 +44,6 @@ Example
 """
 
 import sys 
-
-if len(sys.argv) < 2:
-    print __doc__ 
-    sys.exit(1)
-
-
 import pdbio 
 import os 
 import numpy as np 
@@ -377,8 +371,13 @@ def top_quartile_pos(pctfdfi,rlist):
     return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
         
 
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print __doc__
+    sys.exit(1)
+
 if __name__ == "__main__":
     Verbose = False #Setting for Debugging  
+
 
     #Parse the input 
     comlinargs=parseCommandLine(sys.argv)
