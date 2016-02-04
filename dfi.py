@@ -192,7 +192,10 @@ def dfianal(fname,Array=False):
     return dfi, dfirel, dfiperc, dfizscore 
 
 def pctrank(dfi,inverse=False):
-    
+
+    if type(dfi).__module__ != 'numpy':
+        raise ValueError('Input needs to be a numpy array')
+
     dfiperc = [] 
     lendfi = float(len(dfi))
     
