@@ -1,5 +1,3 @@
-sys
-os
-numpy 
+numpy
 pandas
-scipy  
+scipy
