@@ -15,6 +15,7 @@ Requirements
 Python 2.7.5
 NumPy 1.4
 SciPy 1.4 
+Pandas 
 
 Usage
 -----
@@ -30,10 +31,7 @@ RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 Output 
 ------
 * Structure used for DFI: dfi-out.pdb 
-* Eigenvalues: eigenvalues.txt 
 * Inverted Hessian: pinv_svd.debug 
-* DFI: dfi-Avg.dat 
-* MDFI: mdfi-Avg.dat 
 * Master DFI: dfianalysis.csv      
 
 Example
