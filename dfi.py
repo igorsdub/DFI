@@ -15,6 +15,7 @@ Requirements
 Python 2.7.5
 NumPy 1.4
 SciPy 1.4 
+Pandas 
 
 Usage
 -----
@@ -30,10 +31,7 @@ RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 Output 
 ------
 * Structure used for DFI: dfi-out.pdb 
-* Eigenvalues: eigenvalues.txt 
 * Inverted Hessian: pinv_svd.debug 
-* DFI: dfi-Avg.dat 
-* MDFI: mdfi-Avg.dat 
 * Master DFI: dfianalysis.csv      
 
 Example
@@ -49,12 +47,13 @@ import os
 import numpy as np 
 import pandas as pd 
 import ColorDFI
+import dfiplotter
 
 from scipy import linalg as LA
 from scipy import stats 
 
 
-def getcoords(ATOMS):
+def getcoords(ATOMS,Verbose=False):
     """ Returns x,y and z numpy arrays of coordinates """
     x = []
     y = []
@@ -87,7 +86,7 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
 
     Inputs 
     ------
-    resnum: array of residue index (renumbered from 1 to N)
+    resnum: number of residues 
     x: array of x coordinates
     y: array of y coordinates
     z: array of z coordinates
@@ -288,7 +287,7 @@ def chainresmap(ATOMS,Verbose=False):
         print table 
     return table 
 
-def fdfires(ls_chain,table):
+def fdfiresf(ls_chain,table):
     """Returns numpy array of f-dfi res"""
     ls_ind = []
     
@@ -378,10 +377,9 @@ if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
     sys.exit(1)
 
-if __name__ == "__main__":
+
+def dfi():
     Verbose = False #Setting for Debugging  
-
-
     #Parse the input 
     comlinargs=parseCommandLine(sys.argv)
     print comlinargs 
@@ -413,7 +411,7 @@ if __name__ == "__main__":
         ls_reschain.sort()   
         print ls_reschain
         print "Number of f-dfi: %d" %len(ls_reschain)
-        fdfires = np.sort( fdfires(ls_reschain,chainresmap(ATOMS)) )
+        fdfires = np.sort( fdfiresf(ls_reschain,chainresmap(ATOMS)) )
     else:
         fdfires = np.array([],dtype=int) 
 
@@ -573,3 +571,10 @@ if __name__ == "__main__":
     ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
     if len(fdfires) > 0:
         ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
+
+    return pdbid,df_dfi 
+    
+
+if __name__ == "__main__":
+    pdbid , df_dfi = dfi()
+    dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)

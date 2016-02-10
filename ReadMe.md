@@ -2,17 +2,21 @@
 
 The DFI Code is writen in python.  
 
+[ ![Codeship Status for avishekkumar/dfi](https://codeship.com/projects/2216d090-addf-0133-68b3-42dfb775ebd5/status?branch=master)](https://codeship.com/projects/132158)
+
 ### What is this repository for? ###
 
 * Repository of for storing all versions of the dfi code. 
 * 0.0.1
 * [Repository](https://bitbucket.org/avishekkumar/dfi)
 
+
 ### Dependencies ###
 
 * NumPy
 * SciPy
-* Test Cases Coming Soon
+* Pandas
+* Pytest 
 
 ### Description ###
 
@@ -34,10 +38,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 ### Output Files ###
 
 * Structure used for DFI: dfi-out.pdb 
-* Eigenvalues: eigenvalues.txt 
 * Invert the Hessian: pinv_svd.debug
-* DFI: S1-Avg.dat 
-* MDFI: S2-Avg.dat 
 * Master DFI: dfianalysis.csv 
 
 
@@ -65,7 +66,7 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 * Add Plotting Routine 
 * Look into bokeh routines. 
 * Create a DFI API
-* Put output into a DataFrame object and have a separate subroutine to write to csv
+* pUt output into a DataFrame object and have a separate subroutine to write to csv
 
 ### Who do I talk to? ###
 
