@@ -37,39 +37,11 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 
 ### Output Files ###
 
-* Structure used for DFI: dfi-out.pdb 
+* Structure used for DFI: dfi-dficolor.pdb 
 * Invert the Hessian: pinv_svd.debug
 * Master DFI: dfianalysis.csv 
 
-
-### TODO ###
-
-* ~~Create and xml file for all inputs to make parameters more flexible~~ 
-* ~~Fix bugs with the alc~~ 
-* ~~Change name of output files to reflect pdbname and quantities and log files.~~ 
-* ~~Fixed Residus Numbers~~ 
-* ~~Create a feature to make dfiplots~~
-    ~~* Try making publication quality plots instead of bare matplotlib~~  
-* ~~Create a feature to just take in the Hessian from MD~~
-    ~~* Improve on the implementation of the MD Hessian~~ 
-* ~~Check to see how many near singular eigenvalues there are.~~ 
-* ~~Do a check to see if the residue numbers are unique, otherwise renumber them.~~
-    * ~~Going to trust the PDB file numbers for now.~~  
-* ~~Better documentation of the functions~~
-* Add test cases 
-* ~~Allow for ChainID~~
-* ~~Allowed for identifying chains in the f-dfi~~
-* ~~Fix problems with change ids~~
-     * ~~Make sure chain id does not have to be a letter~~ 
-     * ~~Allow for chain ids not to be found, eliminate from dictionary~~ 
-* Add the DFI Color Routine
-* Add Plotting Routine 
-* Look into bokeh routines. 
-* Create a DFI API
-* pUt output into a DataFrame object and have a separate subroutine to write to csv
-
-### Who do I talk to? ###
-
+### Developers ###
 * Avishek Kumar avishek.kumar@asu.edu
 
 
