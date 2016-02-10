@@ -354,7 +354,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
     dfx['R'] = dfx['Res'].map(mapres)
     dfx['dfi'] = dfi 
     dfx['pctdfi'] = pctdfi 
-    if fdfi != None:
+    if type(fdfi).__module__ == 'numpy':
         dfx['fdfi'] = fdfi 
         dfx['pctfdfi'] = pctfdfi 
         dfx['adfi'] = adfi 
@@ -362,6 +362,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
         dfx['rmin'] = ls_rmin 
         mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
         dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
+        
     if(outfile):
         dfx.to_csv(outfile,index=False)
     return dfx 
@@ -378,10 +379,10 @@ if __name__ == "__main__" and len(sys.argv) < 2:
     sys.exit(1)
 
 
-def dfi():
+def dfi(argv):
     Verbose = False #Setting for Debugging  
     #Parse the input 
-    comlinargs=parseCommandLine(sys.argv)
+    comlinargs=parseCommandLine(argv)
     print comlinargs 
     pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
@@ -436,7 +437,7 @@ def dfi():
         i=1
         with open(eigenfile,'w') as outfile:
             for val in np.sort(e_vals):
-                outfile.write("%d\t%f\n"%(i,val))
+                outfile.write("%d\t%f\n"%(i,np.real(val) ) )
                 i += 1
         
         U, w, Vt = LA.svd(hess,full_matrices=False)
@@ -576,5 +577,6 @@ def dfi():
     
 
 if __name__ == "__main__":
-    pdbid , df_dfi = dfi()
+    print sys.argv
+    pdbid , df_dfi = dfi(sys.argv)
     dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)
