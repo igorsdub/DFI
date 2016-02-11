@@ -239,17 +239,12 @@ def parseCommandLine(argv):
             comline_arg[s] = argv[ind+1]
             if (os.path.isfile(argv[ind+1]) != True):
                 print "File "+ argv[ind+1] +" not found."
-                #print __doc__
                 sys.exit(1)
 
         if s ==  "--hess":
             ind = argv.index(s)
             comline_arg[s] = argv[ind+1]
-            if (os.path.isfile(argv[ind+1]) != True):
-                print "File " + argv[ind+1] + " not found."
-                print __doc__ 
-                sys.exit(1) 
-        
+                    
         if s == "--chain":
             ind = argv.index(s)
             comline_arg[s] = argv[ind+1]
@@ -257,8 +252,15 @@ def parseCommandLine(argv):
                
         if s ==  "--fdfi":
             ind = argv.index(s)
-            comline_arg[s] = np.array(argv[ind+1:])
-                  
+            resvals = []
+            for res in argv[ind+1:]:
+                if res.startswith("--"):
+                    break 
+                else:
+                    resvals.append(res)
+            comline_arg[s] = np.array(resvals)
+            print resvals 
+
         if s == "--help":
             print __doc__
             sys.exit(1)
@@ -397,7 +399,7 @@ def dfi(argv):
     CAonly = True
     noalc = True 
     chainA = False
-   
+
     #read in the pdb file 
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name=chain_name,Verbose=False)
