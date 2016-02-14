@@ -74,7 +74,7 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
 
     print "Adding b-factors"
     for i in range(len(ATOMS)):
-        if ATOMS[i].atom_name.strip(' ') == 'CA':
+        if True:
             resind = ATOMS[i].res_index 
             chainind = ATOMS[i].chainID
             val= data[ ( data.ResI == int(resind) ) & ( data.ChainID == chainind ) ][colorbyparam].values[0]

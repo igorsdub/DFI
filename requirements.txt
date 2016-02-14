@@ -1,4 +1,6 @@
 numpy
 pandas
 scipy
-pytest 
+pytest
+matplotlib
+seaborn 
