@@ -65,8 +65,9 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,chain_name='A
                 z = line[47:54]
                 occupancy = line[55:60]
                 temp_factor = line[61:66]
+                atom_type = line[77]
                 ATOMS.append( ATOM(line[:6], line[7:11], line[13:16], line[16], line[17:20], line[21], line[22:27],
-                                   line[26], line[31:38], line[39:46], line[47:54], line[55:60], line[61:66]) )
+                                   line[26], line[31:38], line[39:46], line[47:54], line[55:60], line[61:66],line[77]) )
                 readatoms+=1
     print "Read %d atoms from the %s"%(readatoms,filename)
 
@@ -90,14 +91,15 @@ def pdb_writer(ATOMS,msg="HEADER  frodaN unfolding target\n",filename="out.pdb",
             z = atom.z
             occupancy = 1.00
             temp_factor = atom.temp_factor
-            pdb.write("ATOM  %(atom_index)5d %(atom_name)4s%(alc)1s%(res_name)-3s %(chainID)1s%(res_index)4s%(iCode)1s   %(x)8.3f%(y)8.3f%(z)8.3f%(occupancy)6.2f%(temp_factor)6.2f\n" % vars())
+            atom_type = atom.atom_type
+            pdb.write("ATOM  %(atom_index)5d %(atom_name)4s%(alc)1s%(res_name)-3s %(chainID)1s%(res_index)4s%(iCode)1s   %(x)8.3f%(y)8.3f%(z)8.3f%(occupancy)6.2f%(temp_factor)6.2f%(atom_type)12s  \n" % vars())
         pdb.write("TER\n")
         pdb.write("END\n")
     print "Wrote out to file, %s"%filename
         
                 
 class ATOM:
-    def __init__(self,record,atom_index,atom_name,alc,res_name,chainID,res_index,insert_code,x,y,z,occupancy,temp_factor):
+    def __init__(self,record,atom_index,atom_name,alc,res_name,chainID,res_index,insert_code,x,y,z,occupancy,temp_factor,atom_type):
         self.record=str(record)
         self.atom_index = int(atom_index)
         self.atom_name = str(atom_name)
@@ -115,6 +117,8 @@ class ATOM:
             self.temp_factor = 0.
         else:
             self.temp_factor = float(temp_factor)
+        self.atom_type = str(atom_type)
+    
 
     def get_res_index(self):
         return self.res_index 
