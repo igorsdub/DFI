@@ -350,12 +350,14 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
             'VAL':'V'}
     dfx = pd.DataFrame()
     dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]    
+    dfx['dfi'] = dfi 
+    dfx['pctdfi'] = pctdfi 
     #dfx = dfx.set_index(['ResI'])
     dfx['ChainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
     dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
     dfx['R'] = dfx['Res'].map(mapres)
-    dfx['dfi'] = dfi 
-    dfx['pctdfi'] = pctdfi 
+
+
     if type(fdfi).__module__ == 'numpy':
         dfx['fdfi'] = fdfi 
         dfx['pctfdfi'] = pctfdfi 
