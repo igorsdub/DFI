@@ -26,24 +26,20 @@ Output
 """
 
 import sys
-if len(sys.argv) < 2:
-    print __doc__
-    sys.exit(1)
-
 import random 
 import Bio
 from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
 from Bio import SeqIO
-
+from Bio import Entrez  
 from Bio.Blast.Applications import NcbiblastpCommandline
 from Bio.Seq import Seq 
-
+import pandas as pd 
 
 emails = ['avishek.kumar@asu.edu','akumar67@asu.edu','avishek.kumar@outlook.com','avishekkumar87@gmail.com','brandon.mac.butler@gmail.com']
 
 
-def UniBLAST(code,Verbose=True):
+def UniBLAST(code,Verbose=False):
     """
     Input
     ------
@@ -68,10 +64,12 @@ def UniBLAST(code,Verbose=True):
     with open(code + ".fasta", "w") as out_file:
         net_handle = Entrez.efetch(db="nucleotide", id=code, rettype="fasta")
         out_file.write(net_handle.read())
-    
-    print "Running blastp"
+
+    if(Verbose):
+        print "Running blastp"
     result_handle = NCBIWWW.qblast("blastp", "pdb", code)
-    print "Done running blastp"
+    if(Verbose):
+        print "Done running blastp"
     with open(code + "_blast.xml", "w") as save_file:
         save_file.write(result_handle.read())
     result_handle.close()
@@ -157,9 +155,25 @@ def parseBlastFile(xmlfil):
                 out_file.write("%f"%coverage +",")
                 out_file.write(str(identity) +"\n")
 
-    
-if __name__ == "__main__":
-    blastfile = sys.argv[1]
-    #UniBLAST(code)  
-    parseBlastFile(blastfile)
+def tohtml(csvfile):
+    """
+    Reads the csvfile fromt the blast output
+    Finds all hits that are greater than 80 Sequence Coverage
+    and greater than 80 Query Identity 
+    Outputs the results as an html table 
+    """
+    data = pd.read_csv(csvfile)
+    mask = ( (data['QueryCov'] > 80) & (data['SeqId'] > 80) )
+    data[mask].to_html(sys.stdout)
 
+
+if __name__ == "__main__" and len(sys.argv) > 2:
+    code = sys.argv[1]
+    blastfile = code+'_blast.xml'
+    csvfile = code+'.csv'
+    UniBLAST(code)  
+    parseBlastFile(blastfile)
+    tohtml(csvfile)
+    
+else:
+    print __doc__
