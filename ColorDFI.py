@@ -90,6 +90,7 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
 
 if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
+    exit()
 
 if __name__ == "__main__":
     colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
