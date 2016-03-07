@@ -431,8 +431,7 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
                      chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
 
-    #parse the f-dfi inputs 
-    
+    #parse the f-dfi inputs REFACTOR into a function 
     if len(ls_reschain) > 0:
         print "f-dfires"
         fdfiset = set(ls_reschain)
@@ -448,10 +447,9 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     print fdfires
 
     
-    #start computing the Hessian 
+    #start computing the Hessian REFACTOR
     numres = len(ATOMS)
     numresthree = 3 * numres 
-
     if not(mdhess):
         hess = calchessian(numres,x,y,z,Verbose)
         e_vals, e_vecs = LA.eig(hess)
@@ -461,11 +459,10 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
             flatandwrite(hess,'hesspy.debug')
     
         #TODO Refactor using enumerate 
-        i=1
         with open(eigenfile,'w') as outfile:
-            for val in np.sort(e_vals):
+            for i,val in enumerate(np.sort(e_vals)):
                 outfile.write("%d\t%f\n"%(i,np.real(val) ) )
-                i += 1
+                
         
         U, w, Vt = LA.svd(hess,full_matrices=False)
         if(Verbose):
