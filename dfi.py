@@ -230,8 +230,8 @@ def calcperturbMat(invHrs,direct,resnum,Normalize=True):
     return nrmlperturbMat 
 
 
-def parseCommandLine(argv):
-    """Parse command line string from sys.arv"""
+def CLdict(argv):
+    """Returns a dictionary of the command lines options from sys.argv"""
     comline_arg={}
     for s in argv:
         if s ==  "--pdb":
@@ -326,9 +326,11 @@ def rdist(r,fr):
     #print "r_ij",r_ij,"rr",rr,"r",np.sqrt(rr.sum(axis=1))
     return np.sqrt(rr.sum(axis=1))
 
-def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
-   
-    mapres={'ALA':'A',
+def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
+   """
+   Outputs the results of the DFI calculation to a DataFrame and csv file 
+   """
+   mapres={'ALA':'A',
             'CYS':'C',
             'ASP':'D',
             'GLU':'E',
@@ -348,28 +350,27 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,adfi=None,ls_ravg=None,ls
             'TRP':'W',
             'TYR':'Y',
             'VAL':'V'}
-    dfx = pd.DataFrame()
-    dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]    
-    dfx['dfi'] = dfi 
-    dfx['pctdfi'] = pctdfi 
-    #dfx = dfx.set_index(['ResI'])
-    dfx['ChainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
-    dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
-    dfx['R'] = dfx['Res'].map(mapres)
+   dfx = pd.DataFrame()
+   dfx['ResI'] = [ ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]    
+   dfx['dfi'] = dfi 
+   dfx['pctdfi'] = pctdfi 
+   dfx['ChainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
+   dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
+   dfx['R'] = dfx['Res'].map(mapres)
 
 
-    if type(fdfi).__module__ == 'numpy':
-        dfx['fdfi'] = fdfi 
-        dfx['pctfdfi'] = pctfdfi 
-        dfx['adfi'] = adfi 
-        dfx['ravg'] = ls_ravg
-        dfx['rmin'] = ls_rmin 
-        mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
-        dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
+   if type(fdfi).__module__ == 'numpy':
+       dfx['fdfi'] = fdfi 
+       dfx['pctfdfi'] = pctfdfi 
+       dfx['ravg'] = ls_ravg
+       dfx['rmin'] = ls_rmin 
+       mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
+       dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
         
-    if(outfile):
-        dfx.to_csv(outfile,index=False)
-    return dfx 
+   if(outfile):
+       dfx.to_csv(outfile,index=False)
+   
+   return dfx 
 
 def top_quartile_pos(pctfdfi,rlist):
     """
@@ -382,33 +383,58 @@ if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
     sys.exit(1)
 
+def parseCommandLine(argv):
+    """
+    Parse command lines input
+    
+    Input 
+    -----
+    ls of command line input 
+
+    Output
+    ------
+    pdbfile: name of pdb file to run dfi calculation 
+    pdbid: 4 Letter PDB code 
+    mdhess: name of file that contains hessian matrix from MD 
+    ls_reschain: list of f-dfi Residues (e.g., [A17,A19])
+    chain_name: list of chain to select (Depracated)
+    
+    """
+    comlinargs=CLdict(argv)
+    pdbfile = comlinargs['--pdb']
+    pdbid = pdbfile.split('.')[0]
+    mdhess=bool( comlinargs.get('--hess',"") )
+    ls_reschain=comlinargs.get('--fdfi',[])
+    chain_name = comlinargs.get('--chain','A')
+    
+    return pdbfile, pdbid, mdhess, ls_reschain, chain_name
+
 
 def dfi(argv):
     Verbose = False #Setting for Debugging  
     #Parse the input 
-    comlinargs=parseCommandLine(argv)
-    print comlinargs 
+   
+    comlinargs=CLdict(argv)
+      
     pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
+    mdhess=bool( comlinargs.get('--hess',"") )
+    ls_reschain=comlinargs.get('--fdfi',[])
+    chain_name = comlinargs.get('--chain','A')
+
+    #output file name 
     eigenfile = pdbid+'-eigenvalues.txt'
     invhessfile = pdbid+'-pinv_svd.debug'
     dfianalfile = pdbid+'-dfianalysis.csv'
-  
-    mdhess=bool( comlinargs.get('--hess',"") )
-    print "mdhess: "
-    print mdhess 
-    chain_name = comlinargs.get('--chain','A')
-    CAonly = True
-    noalc = True 
-    chainA = False
+     
 
     #read in the pdb file 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=CAonly,noalc=noalc,chainA=chainA,chain_name=chain_name,Verbose=False)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
 
     #parse the f-dfi inputs 
-    ls_reschain=comlinargs.get('--fdfi',[])
+    
     if len(ls_reschain) > 0:
         print "f-dfires"
         fdfiset = set(ls_reschain)
@@ -514,32 +540,20 @@ def dfi(argv):
     print fdfires 
     fdfifile='fdfi-Avg.dat'
     if len(fdfires) > 0:
+        #Very clunky impplementtation 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         flatandwrite(fdfitop/fdfibot,fdfifile)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
+
         x,y,z,bfac = getcoords(ATOMS)
-        rlist = np.column_stack((x,y,z))
-        fr = fdfires_cords(fdfires,x,y,z)
-        ravg_ls = np.array([ rdist(r,fr).mean() for r in rlist ])
-        ravg_rank = pctrank(ravg_ls,inverse=True)
-        adfi = pctfdfi - ravg_rank 
-        ls_topquart=top_quartile_pos(pctfdfi,rlist)
-        print "top quartile:",ls_topquart
-        ls_topquart_crds = rlist[ls_topquart]
-        ls_ravg_topquart = np.array([ rdist(r,fr).mean() for r in ls_topquart_crds ])
-        print "ls_ravg_topquart",ls_ravg_topquart
-        ls_ravg_rank_topquart = pctrank(ls_ravg_topquart,inverse=True)
-        pctrank_fdfi = pctrank(fdfi[ls_topquart])
-        print "pctrank_fdfi:", pctrank_fdfi 
-        print ls_ravg_rank_topquart 
-        adfi_topquart = pctrank(fdfi[ls_topquart]) - ls_ravg_rank_topquart 
-        print "adfi_topquart",adfi_topquart 
-        ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist])
+        rlist = np.column_stack((x,y,z)) #dump into a list 
+        fr = fdfires_cords(fdfires,x,y,z) #get coordinates of the f-dfi residues 
+        ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist]) 
 	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
 
     if len(fdfires) > 0:
-        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
     else:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
 

@@ -32,4 +32,5 @@ def test_Il2Y():
     import dfi 
     pdbid, df_dfi = dfi.dfi(sysls)
     assert np.all(df_dfi.Res.values == df.Res.values)
-    np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
+    assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
+    assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
