@@ -410,7 +410,7 @@ def parseCommandLine(argv):
     return pdbfile, pdbid, mdhess, ls_reschain, chain_name
 
 
-def dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
+def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
     """
     TODO:
     1. Rename to calc_dfi 
@@ -418,8 +418,7 @@ def dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
     Need to refactor big time! 
     I'm a kitchen sink function, I at least deserve a doctring!
     """
-    
-
+   
     #output file name 
     eigenfile = pdbid+'-eigenvalues.txt'
     invhessfile = pdbid+'-pinv_svd.debug'
