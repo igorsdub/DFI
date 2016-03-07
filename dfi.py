@@ -555,7 +555,6 @@ def dfi(argv):
         ls_ravg_topquart = np.array([ rdist(r,fr).mean() for r in ls_topquart_crds ])
         print "ls_ravg_topquart",ls_ravg_topquart
         ls_ravg_rank_topquart = pctrank(ls_ravg_topquart,inverse=True)
-        #print "fdfi[ls_topquart]", fdfi[ls_topquart]
         pctrank_fdfi = pctrank(fdfi[ls_topquart])
         print "pctrank_fdfi:", pctrank_fdfi 
         print ls_ravg_rank_topquart 
@@ -563,10 +562,6 @@ def dfi(argv):
         print "adfi_topquart",adfi_topquart 
         ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist])
 	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
-        #print "rlist",rlist
-        #print "r",r
-        #print "fr",fr
-        #print "ls_rmin",ls_rmin 
 
     if len(fdfires) > 0:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,adfi=adfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
