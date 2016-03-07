@@ -6,8 +6,7 @@ The DFI Code is writen in python.
 
 ### What is this repository for? ###
 
-* Repository of for storing all versions of the dfi code. 
-* 0.0.1
+* Repository of for storing all versions of the dfi code and related utilties. 
 * [Repository](https://bitbucket.org/avishekkumar/dfi)
 
 
@@ -20,9 +19,7 @@ The DFI Code is writen in python.
 
 ### Description ###
 
-DFI Calculates the dynamics functional index. 
-Right now cacluates the hessian and inverts it 
-and write out to the file pinv_svd.debug. 
+DFI Calculates the dynamic functional index. 
 
 ### Usage ###
 ```
@@ -51,4 +48,9 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 2. Glembo T.J, M.F Thorpe, D.W. Farrell, Z. N. Gerek, and S.B. Ozkan. Collective Dynamics Differentiates Functional Divergence in Protein Evolution. 
 PLos Computational Biology, 2012  
 3. Hayward, S. and B.L. de Groot, Normal modes and essential dynamics. Methods in Molecular Biology 443:89-106,2008
-4. Bahar I, Atilgan AR, Erman B, Fold. & Des., 2:173-81, 1997 
+4. Bahar I, Atilgan AR, Erman B, Fold. & Des., 2:173-81, 1997
+5. Kumar, A., Glembo, T. J. & Ozkan, S. B. The Role of Conformational Dynamics and Allostery in the Disease Development of Human Ferritin. Biophysical Journal (2015). doi:10.1016/j.bpj.2015.06.060
+6. Butler, B. M., Gerek, Z. N., Kumar, S. & Ozkan, S. B. Conformational dynamics of nonsynonymous variants at protein interfaces reveals disease association: The Role of Dynamics in Neutral and Damaging nsSNVs. Proteins: Structure, Function, and Bioinformatics 83, 428–435 (2015).
+7. Kumar, A., Butler, B. M., Kumar, S. & Ozkan, S. B. Integration of structural dynamics and molecular evolution via protein interaction networks: a new era in genomic medicine. Current Opinion in Structural Biology 35, 135–142 (2015).
+
+ 
