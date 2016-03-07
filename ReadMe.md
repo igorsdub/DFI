@@ -15,6 +15,9 @@ The DFI Code is writen in python.
 * NumPy
 * SciPy
 * Pandas
+* Matplotlib 
+* Seaborn 
+* Biopython 
 * Pytest 
 
 ### Description ###
