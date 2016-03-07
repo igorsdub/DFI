@@ -403,24 +403,22 @@ def parseCommandLine(argv):
     comlinargs=CLdict(argv)
     pdbfile = comlinargs['--pdb']
     pdbid = pdbfile.split('.')[0]
-    mdhess=bool( comlinargs.get('--hess',"") )
+    mdhess=comlinargs.get('--hess',None) 
     ls_reschain=comlinargs.get('--fdfi',[])
     chain_name = comlinargs.get('--chain','A')
     
     return pdbfile, pdbid, mdhess, ls_reschain, chain_name
 
 
-def dfi(argv):
-    Verbose = False #Setting for Debugging  
-    #Parse the input 
-   
-    comlinargs=CLdict(argv)
-      
-    pdbfile = comlinargs['--pdb']
-    pdbid = pdbfile.split('.')[0]
-    mdhess=bool( comlinargs.get('--hess',"") )
-    ls_reschain=comlinargs.get('--fdfi',[])
-    chain_name = comlinargs.get('--chain','A')
+def dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
+    """
+    TODO:
+    1. Rename to calc_dfi 
+    2. Cutdown 
+    Need to refactor big time! 
+    I'm a kitchen sink function, I at least deserve a doctring!
+    """
+    
 
     #output file name 
     eigenfile = pdbid+'-eigenvalues.txt'
@@ -430,7 +428,8 @@ def dfi(argv):
 
     #read in the pdb file 
     ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,chain_name=chain_name,Verbose=False)
+    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,
+                     chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
 
     #parse the f-dfi inputs 
@@ -455,8 +454,6 @@ def dfi(argv):
     numresthree = 3 * numres 
 
     if not(mdhess):
-        #numres = len(ATOMS)
-        #numresthree = 3 * numres
         hess = calchessian(numres,x,y,z,Verbose)
         e_vals, e_vecs = LA.eig(hess)
         if(Verbose):
@@ -464,6 +461,7 @@ def dfi(argv):
             print hess
             flatandwrite(hess,'hesspy.debug')
     
+        #TODO Refactor using enumerate 
         i=1
         with open(eigenfile,'w') as outfile:
             for val in np.sort(e_vals):
@@ -477,8 +475,8 @@ def dfi(argv):
             print Vt.shape 
 
         S = LA.diagsvd(w,len(w),len(w))
-        print "Checking If the SVD went well..."
-        print np.allclose(hess,np.dot(U,np.dot(S,Vt)))
+        
+        assert np.allclose(hess,np.dot(U,np.dot(S,Vt))), "SVD didn't go well"
      
         if(Verbose):
             flatandwrite(U,'Upy-test.debug')
@@ -507,8 +505,8 @@ def dfi(argv):
         resnumsq = len(invH)
         resnum = np.sqrt(resnumsq)/3
         invHrs = invH.reshape((3*resnum,3*resnum),order='F')
-    else:
-        invHrs=np.loadtxt( comlinargs['--hess'] )
+    else: #this is where we load the Hessian 
+        invHrs=np.loadtxt( mdhess )
         print "From MD invhess"
         print invHrs
         print invHrs.shape 
@@ -561,10 +559,10 @@ def dfi(argv):
     if len(fdfires) > 0:
         ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
 
-    return pdbid,df_dfi 
+    return df_dfi 
     
 
 if __name__ == "__main__":
-    print sys.argv
-    pdbid , df_dfi = dfi(sys.argv)
+    pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(sys.argv)
+    df_dfi = dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
     dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)
