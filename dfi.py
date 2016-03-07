@@ -179,19 +179,23 @@ def dfianal(fname,Array=False):
             dfi = np.array([x.strip('\n') for x in infile], dtype=float )
     else:
         dfi = fname 
+
     dfirel = dfi/np.mean(dfi)
     dfizscore = stats.zscore(dfi)
-    dfiperc = [] 
-    lendfi = float(len(dfi))
-    for m in dfi:
-        amt = np.sum(dfi <=m)
-        dfiperc.append(amt/lendfi)
-    dfiperc = np.array(dfiperc,dtype=float)
-    
+    dfiperc = pctrank(dfi)
     return dfi, dfirel, dfiperc, dfizscore 
 
 def pctrank(dfi,inverse=False):
-
+    """
+    Calculate %rank of DFI values
+    
+    Input
+    -----
+    dfi: numpy 
+       Array of dfi values 
+    inverse: bool
+       Invert the pct ranking (default False)
+    """
     if type(dfi).__module__ != 'numpy':
         raise ValueError('Input needs to be a numpy array')
 
@@ -199,13 +203,11 @@ def pctrank(dfi,inverse=False):
     lendfi = float(len(dfi))
     
     for m in dfi:
-        
         if inverse:
             amt = np.sum(dfi >=m)
         else:
             amt = np.sum(dfi <=m)
         dfiperc.append(amt/lendfi)
-
     return np.array(dfiperc,dtype=float)
 
 def calcperturbMat(invHrs,direct,resnum,Normalize=True):
@@ -316,7 +318,8 @@ def fdfires_cords(fdfires,x,y,z):
 
 def rdist(r,fr):
     """
-    rdist
+    Calculate the distance or r from fr
+      
     r = array of coordinates 
     fr = nx3 matrix of f-DFI coordinates 
     return rdist: array of distances from f-DFI sites 
@@ -411,12 +414,27 @@ def parseCommandLine(argv):
 
 
 def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
-    """
-    TODO:
-    1. Rename to calc_dfi 
-    2. Cutdown 
-    Need to refactor big time! 
-    I'm a kitchen sink function, I at least deserve a doctring!
+    """Main function for calculating DFI 
+    
+    Inputs 
+    ------
+    pdbfile: file
+       PDB File for dfi calculation 
+    pdbid: str
+       4 character PDBID from PDB
+    mdhess: file
+       hessian file obtained from MD
+    ls_reschain: ls
+       list of f-dfi residues by chain first and then index (e.g., ['A19','A20']
+    chain_name: str
+       chain name (e.g., A) to pull out specific chain of the PDB 
+    Verbose: bool
+       switch for debugging 
+
+    Output
+    ------
+    df_dfi: DataFrame
+       DataFrame object for DFI values  
     """
    
     #output file name 
@@ -471,7 +489,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
             print Vt.shape 
 
         S = LA.diagsvd(w,len(w),len(w))
-        
         assert np.allclose(hess,np.dot(U,np.dot(S,Vt))), "SVD didn't go well"
      
         if(Verbose):
@@ -560,5 +577,5 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
 
 if __name__ == "__main__":
     pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(sys.argv)
-    df_dfi = dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
+    df_dfi = calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
     dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)
