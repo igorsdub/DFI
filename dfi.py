@@ -508,32 +508,7 @@ def dfi(argv):
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi,Array=True)
     mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfi,Array=True)
 
-
-
-    #Identify the residues that have a dfi score less than 25 percent 
-    hingedfipct = 0.10
-    hingedfi = pctdfi < hingedfipct  
-    hingelist = [] 
-
-    #create this in an inline 
-    j = 0 #must start from one beacuse giong to put as the input as an octave function  
-    for i in hingedfi:
-        if i:
-            hingelist.append(j)
-        j+=1
-
-    hingelist = np.array(hingelist,dtype=int)
-    print "Hinges with %.2f tolerance"%hingedfipct 
-    print hingelist 
     
-
-    hingefile='hingemdfi-Avg.dat'
-    hmdfitop=np.sum(nrmlperturbMat[hingelist,:],axis=0)/len(hingelist)
-    hmdfibot=np.sum(nrmlperturbMat,axis=0)/len(nrmlperturbMat)
-    hmdfi=hmdfitop/hmdfibot
-    flatandwrite(hmdfi,hingefile)
-    hmdfi,relhmdfi,pcthmdfi,zscorehmdfi = dfianal(hingefile)
-
     #f-dfi 
     print "Amount of f-dfi res:"+str(len(fdfires))
     print fdfires 
