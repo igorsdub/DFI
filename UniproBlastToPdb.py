@@ -167,7 +167,8 @@ def tohtml(csvfile):
     data[mask].to_html(sys.stdout)
 
 
-if __name__ == "__main__" and len(sys.argv) > 2:
+if __name__ == "__main__" and len(sys.argv) > 1:
+    print sys.argv
     code = sys.argv[1]
     blastfile = code+'_blast.xml'
     csvfile = code+'.csv'
