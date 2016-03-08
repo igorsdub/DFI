@@ -2,7 +2,7 @@
 
 
 def test_hessian():
-    import dfi
+    import dfi_calc 
     import numpy as np
 
     a=np.array([64,0,0,-64,0,0],dtype=float)
@@ -15,7 +15,7 @@ def test_hessian():
     y = np.array([0,0],dtype=float)
     z = np.array([0,0],dtype=float)
     resnum=2
-    hess= dfi.calchessian(resnum,x,y,z)
+    hess= dfi_calc.calchessian(resnum,x,y,z)
     assert np.all(test_hess==hess)
 
 

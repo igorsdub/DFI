@@ -26,8 +26,14 @@ DFI Calculates the dynamic functional index.
 
 ### Usage ###
 ```
-dfi.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
+dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 ```
+
+### Example ###
+```
+./dfi_calc.py --pdb 1l2y.pdb --fdfi A10 
+```
+
 ### Input ###
 
 * PDBFILE:     PDBFILE

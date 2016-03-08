@@ -1,7 +1,7 @@
 import pandas as pd 
 from StringIO import StringIO
 import numpy as np 
-import dfi 
+import dfi_calc 
 def test_Il2Y():
     sample=StringIO("""
     ResI,ChainID,Res,R,dfi,pctdfi,fdfi,pctfdfi,adfi,ravg,rmin,A
@@ -29,8 +29,8 @@ def test_Il2Y():
     df = pd.read_csv(sample)
     print df
     sysls = ['./dfi.py', '--pdb', '1l2y.pdb', '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_name = dfi.parseCommandLine(sysls)
-    df_dfi = dfi.calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
+    pdbfile, pdbid, mdhess, ls_reschain, chain_name = dfi_calc.parseCommandLine(sysls)
+    df_dfi = dfi_calc.calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
