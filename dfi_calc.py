@@ -567,7 +567,7 @@ def calc_covariance(numres,x,y,z,invhessfile=None,Verbose=False):
     assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
     return invHrs 
 
-def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
+def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False,dfianalfile=None):
     """Main function for calculating DFI 
     
     Inputs 
@@ -596,7 +596,8 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     else: 
         eigenfile = None 
         invhessfile = None 
-    dfianalfile = pdbid+'-dfianalysis.csv'
+    if(not(dfianalfile)):
+        dfianalfile = pdbid+'-dfianalysis.csv'
      
     #read in the pdb file 
     ATOMS = [] 

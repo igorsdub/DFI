@@ -190,16 +190,21 @@ def _gettophit(csvfile):
     if data[mask].shape[0] == 0:
         return None 
     else:
-        data[mask].sort(['QueryCov','SeqId']).PDBid[0]
+        return data[mask].sort_values(by=['QueryCov','SeqId']).PDBid[0]
+
+if __name__ == "__main__":
+    print __doc__
 
 if __name__ == "__main__" and len(sys.argv) > 1:
-    print sys.argv
     code = sys.argv[1]
     blastfile = code+'_blast.xml'
     csvfile = code+'.csv'
+    print "Blasting"
     UniBLAST(code)  
+    print "ParseFile"
     parseBlastFile(blastfile)
-    tohtml(csvfile)
+    print "Get top hit"
+    pdbid = _gettophit(csvfile)
+    print pdbid 
     
-else:
-    print __doc__
+

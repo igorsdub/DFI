@@ -1,4 +1,26 @@
 #!/usr/bin/env python 
+"""
+===
+DFI
+===
+
+Description
+-----------
+
+Given a list of uniprot IDs: 
+dfi.py will find do a blast search on the NCBI 
+to find the highest hit PDB and calculate the DFI profile
+of that pdb
+
+Example
+--------
+./dfi.py P42771
+
+"""
+
+import UniproBlastToPdb as uni
+import sys 
+import dfi_calc 
 
 def fetch_pdb(id,Verbose=False):
     """
@@ -15,3 +37,25 @@ def fetch_pdb(id,Verbose=False):
         outfile.write(urllib.urlopen(url).read())
     if(Verbose):
         print("Wrote out %s.pdb"%(id))
+
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print __doc__
+else:
+    uniprotcodes = sys.argv[1:]
+    for code in uniprotcodes:
+        blastfile = code+'_blast.xml'
+        csvfile = code+'.csv'
+        print "Blasting"
+        uni.UniBLAST(code)  
+        print "ParseFile"
+        uni.parseBlastFile(blastfile)
+        print "Get top hit"
+        pdbid = uni._gettophit(csvfile)
+        if pdbid == None:
+            print code, "No Good PDB hit"
+        outfile = code+'_'+pdbid+'-dfianalysis.csv' 
+        print "Running DFI"
+        fetch_pdb(pdbid,Verbose=True)
+        pdbfile = pdbid+'.pdb'
+        dfi_calc.calc_dfi(pdbfile,pdbid,dfianalfile=outfile)
+    
