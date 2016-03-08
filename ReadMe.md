@@ -24,6 +24,20 @@ The DFI Code is writen in python.
 
 DFI Calculates the dynamic functional index. 
 
+### How to install ###
+You can clone this repo:
+```
+git clone https://avishekkumar@bitbucket.org/avishekkumar/dfi.git
+```
+OR to get the latest commit 
+```
+git clone --depth 1 https://avishekkumar@bitbucket.org/avishekkumar/dfi.git
+```
+To install the dependencies you can use pip
+```
+pip install -r requirements.txt 
+```
+
 ### Usage ###
 ```
 dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   

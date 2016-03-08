@@ -3,5 +3,5 @@ pandas
 pytest
 matplotlib
 biopython
-seaborn
-scipy 
+scipy
+seaborn  
