@@ -5,10 +5,9 @@ DFI (Dynamic Flexibility Index)
 
 Description
 ------------
-DFI Calculates the dynamics flexibility index. 
-Program calculates the hessian and inverts it 
-and write out to the file pinv_svd.debug. Does
-a-dfi as well now.
+DFI Calculates the dynamics flexibility index
+in order to study the conformational dynamics 
+of a protein. 
 
 Requirements
 ------------
@@ -26,20 +25,19 @@ dfi.py --pdb PDBFILE [--hess HESSFILE] [--chain CHAINID] [--fdfi RESNUMS] --help
 Input
 -----
 PDBFILE:     PDBFILE
-RESNUMS:     e.g., "1,5,6,8"
 HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
 RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 
 Output 
 ------
-* Structure used for DFI: dfi-out.pdb 
-* Inverted Hessian: pinv_svd.debug 
-* Master DFI: dfianalysis.csv      
+* Structure used for DFI: -dficolor.pdb 
+
+* Master DFI: -dfianalysis.csv      
 
 Example
 -------
 ```
-./dfi.py --pdb 1a2x_BA_1.pdb --hess covariance.dat --chain A --fdfi A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
+./dfi.py --pdb 1a2x_BA_1.pdb [--hess] covariance.dat [--chain] A [--fdfi] A15 A95 A98 A101 A102 A118 A119 A126 B17 B20 B21 B22 B24 B29
 ```
 """
 
