@@ -38,10 +38,18 @@ def fetch_pdb(id,Verbose=False):
     if(Verbose):
         print("Wrote out %s.pdb"%(id))
 
-if __name__ == "__main__" and len(sys.argv) < 2:
-    print __doc__
-else:
-    uniprotcodes = sys.argv[1:]
+def uniproDFI(uniprotcodes):
+    """
+    uniproDFI take a list of uniprot codes, 
+    finds the top pdb hit and then computes
+    the dfi profile 
+
+    Input 
+    -----
+    uniprotcodes: ls
+       ls of uniprot codes to run DFI on 
+
+    """
     for code in uniprotcodes:
         blastfile = code+'_blast.xml'
         csvfile = code+'.csv'
@@ -58,4 +66,13 @@ else:
         fetch_pdb(pdbid,Verbose=True)
         pdbfile = pdbid+'.pdb'
         dfi_calc.calc_dfi(pdbfile,pdbid,dfianalfile=outfile)
+    
+
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print __doc__
+else:
+    uniprotcodes = sys.argv[1:]
+    uniproDFI(uniprotcodes)
+    
+
     
