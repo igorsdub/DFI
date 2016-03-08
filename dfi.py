@@ -59,7 +59,23 @@ from scipy import stats
 
 
 def getcoords(ATOMS,Verbose=False):
-    """ Returns x,y and z numpy arrays of coordinates """
+    """ 
+    Returns x,y and z numpy arrays of coordinates from
+    ATOM object 
+    
+    Input
+    -----
+    ATOMS: ATOM object 
+       Object for holding ATOM entries of pdb file 
+    Verbose: bool:
+       Flag for Verbose Output
+    
+    Output
+    ------
+    (x,y,z,bfac): numpy 
+       numpy arrays of x,y,z and bfactors 
+    
+    """
     x = []
     y = []
     z = [] 
@@ -218,6 +234,26 @@ def pctrank(dfi,inverse=False):
     return np.array(dfiperc,dtype=float)
 
 def calcperturbMat(invHrs,direct,resnum,Normalize=True):
+    """
+    Caclulates perturbation matrix used for dfi calculation. 
+
+    Input 
+    -----
+    invHRS: numpy matrix 
+       covariance matrix (3N,3N), where N is the number of residues
+    direct: numpy matrix 
+       matrix of peturbation directions 
+    resnum: int 
+       number of residues in protein 
+    Normalize: bool
+       Normalize peturbation matrix 
+    
+    Output
+    ------
+    peturbMat: numpy matrix 
+       NxN peturbation matrix where N is the number of residues 
+    
+    """
     perturbMat = np.zeros((resnum,resnum))
     for k in range(len(direct)):
         peturbDir = direct[k,:]
@@ -313,12 +349,18 @@ def fdfiresf(ls_chain,table):
 
 def fdfires_cords(fdfires,x,y,z):
     """
-    fdfires_cords(fdfires,x,y,z)
-    fdfires: indices of fdfires 
-    x: array of x-coordinates 
-    y: array of y-coordinates 
-    z: array of z-coordinates
-    return: nx3 matrix of f-DFI coordinates 
+    Pull out the fdfi coordinates from (x,y,z)
+    
+    Input
+    -----
+    fdfires: ls  
+       indices of fdfires 
+    x,y,z: numpy 
+       numpy arrays of the coordinates
+    
+    Output
+    ------
+    nx3 matrix of f-DFI coordinates 
     """
     print x[:10],y[:10],z[:10]
     return np.column_stack((x[fdfires],y[fdfires],z[fdfires]))
@@ -326,9 +368,16 @@ def fdfires_cords(fdfires,x,y,z):
 def rdist(r,fr):
     """
     Calculate the distance or r from fr
-      
-    r = array of coordinates 
-    fr = nx3 matrix of f-DFI coordinates 
+    
+    Input 
+    ------
+    r: numpy
+       array of coordinates 
+    fr numpy
+       nx3 matrix of f-DFI coordinates
+    
+    Output 
+    ------
     return rdist: array of distances from f-DFI sites 
     """
     r_ij = fr - r
@@ -338,6 +387,33 @@ def rdist(r,fr):
 def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
    """
    Outputs the results of the DFI calculation to a DataFrame and csv file 
+   
+   Input
+   -----
+   ATOMS: ATOM object 
+      Object to hold ATOM entries of PDB files 
+   dfi: numpy 
+      numpy array of dfi values 
+   pctdfi: numpy 
+      numpy array of pctdfi values 
+   fdfi: numpy 
+      numpy array of fdfi values 
+   pctdfi: numpy 
+      numpy array of pctdfi values 
+   ls_ravg: ls
+      list of the average distance of a residue 
+      to all f-dfi residues 
+   ls_rmin: ls
+      list of the min distance of a residue 
+      to all f-dfi residues
+   outfile: str
+      Name of file to write out the DataFrame in csv format 
+
+   Output
+   ------
+   df_dfi: DataFrame
+      DataFrame object containing all the inputs 
+
    """
    mapres={'ALA':'A',
             'CYS':'C',
@@ -546,13 +622,16 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
 
     #f-dfi 
     if len(ls_reschain) > 0:
+        #find the f-dfi residues 
         fdfiset = set(ls_reschain)
         ls_reschain = list(fdfiset)
         ls_reschain.sort()   
         fdfires = np.sort( fdfiresf(ls_reschain,chainresmap(ATOMS)) )
+        #calculate f-dfi 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfitop/fdfibot,Array=True)
+        
         x,y,z,bfac = getcoords(ATOMS)
         rlist = np.column_stack((x,y,z)) #dump into a list 
         fr = fdfires_cords(fdfires,x,y,z) #get coordinates of the f-dfi residues 
