@@ -38,6 +38,21 @@ To install the dependencies you can use pip
 pip install -r requirements.txt 
 ```
 
+### Adding the DFI directory to the PATH (Bash) ###
+You can run the scripts directly from anywhere in your filesystem by appending
+the dfi directory to the PATH variable, e.g., 
+```
+export PATH=${PATH}:~/dfi #assuming this is where the dfi folder is in your filesystem
+```
+You can also import the module from anywhere in your filesystem by appending the 
+dfi directory to the PYTHONPATH variable, e.g.,
+```
+export PYTHONPATH=${PYTHONPATH}:~/dfi #assuming this is where the dfi fold is in your filesystem 
+```
+then you should be able to `import dfi_calc` or `import ColorDFI` or `import dfi` whereever you
+are in the filesystem. 
+ 
+
 ### Usage ###
 ```
 dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
