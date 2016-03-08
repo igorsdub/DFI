@@ -636,19 +636,20 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
 	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
 
     #output to dataframe 
-    if len(fdfires) > 0:
+    if len(ls_reschain) > 0:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
     else:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
     
     #output to ColoredDFI Files 
     ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
-    if len(fdfires) > 0:
+    if len(ls_reschain) > 0:
         ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
 
     return df_dfi 
 
 if __name__ == "__main__":
     pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(sys.argv)
+    print("Processing %s"%pdbfile)
     df_dfi = calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
     dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)
