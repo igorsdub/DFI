@@ -333,7 +333,6 @@ def rdist(r,fr):
     """
     r_ij = fr - r
     rr = r_ij*r_ij
-    #print "r_ij",r_ij,"rr",rr,"r",np.sqrt(rr.sum(axis=1))
     return np.sqrt(rr.sum(axis=1))
 
 def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
@@ -381,9 +380,19 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None
    
    return dfx 
 
-def top_quartile_pos(pctfdfi,rlist):
+def top_quartile_pos(pctfdfi):
     """
-    returns a list of indices of positions in the top quartile of pctdfi 
+    returns a list of indices of positions in the top quartile of pctdfi
+    
+    Input 
+    -----
+    pctdfi: numpy 
+       numpy array of pctdfi or pctfdfi values 
+
+    Output
+    ------
+    top_quartile: ls
+       ls of indices thare in the the top quartile 
     """
     return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
         
@@ -432,7 +441,7 @@ def __writeout_eigevalues(e_vals,eigenfile):
         for i,val in enumerate(np.sort(e_vals)):
             outfile.write("%d\t%f\n"%(i,np.real(val) ) )
         
-def calc_covariance(numres,x,y,z,Verbose=False):
+def calc_covariance(numres,x,y,z,invhessfile=None,Verbose=False):
     """
     Calculates the covariance matrix by first 
     calculating the hessian from coordinates and then 
@@ -507,10 +516,11 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     """
     if(Verbose):
         eigenfile = pdbid+'-eigenvalues.txt'
+        invhessfile = pdbid+'-pinv_svd.debug'
     else: 
         eigenfile = None 
-
-    invhessfile = pdbid+'-pinv_svd.debug'
+        invhessfile = None 
+    
     dfianalfile = pdbid+'-dfianalysis.csv'
      
     #read in the pdb file 
@@ -519,44 +529,30 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
                      chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
 
-    #parse the f-dfi inputs REFACTOR into a function 
-    if len(ls_reschain) > 0:
-        print "f-dfires"
-        fdfiset = set(ls_reschain)
-        ls_reschain = list(fdfiset)
-        ls_reschain.sort()   
-        print ls_reschain
-        print "Number of f-dfi: %d" %len(ls_reschain)
-        fdfires = np.sort( fdfiresf(ls_reschain,chainresmap(ATOMS)) )
-    else:
-        fdfires = np.array([],dtype=int) 
-
-            
+    #create covariance matrix or read it in if provided 
     if not(mdhess):
         numres = len(ATOMS)
         invHrs = calc_covariance(numres,x,y,z,Verbose=False)
     else: #this is where we load the Hessian if provided  
         invHrs=np.loadtxt( mdhess )
-        print "From MD invhess"
-        print invHrs
-        print invHrs.shape 
-        
+                
     #RUN DFI 
     directions = np.vstack(([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]))
     normL = np.linalg.norm(directions,axis=1)
     direct=directions/normL[:,None]
-    
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
     dfi = np.sum(nrmlperturbMat,axis=1)
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi,Array=True)
 
     #f-dfi 
-    if len(fdfires) > 0:
-        #Very clunky impplementtation 
+    if len(ls_reschain) > 0:
+        fdfiset = set(ls_reschain)
+        ls_reschain = list(fdfiset)
+        ls_reschain.sort()   
+        fdfires = np.sort( fdfiresf(ls_reschain,chainresmap(ATOMS)) )
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfitop/fdfibot,Array=True)
-
         x,y,z,bfac = getcoords(ATOMS)
         rlist = np.column_stack((x,y,z)) #dump into a list 
         fr = fdfires_cords(fdfires,x,y,z) #get coordinates of the f-dfi residues 
