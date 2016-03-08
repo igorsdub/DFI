@@ -368,7 +368,6 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None
    dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
    dfx['R'] = dfx['Res'].map(mapres)
 
-
    if type(fdfi).__module__ == 'numpy':
        dfx['fdfi'] = fdfi 
        dfx['pctfdfi'] = pctfdfi 
@@ -388,8 +387,6 @@ def top_quartile_pos(pctfdfi,rlist):
     """
     return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
         
-
-
 def parseCommandLine(argv):
     """
     Parse command lines input
@@ -400,11 +397,16 @@ def parseCommandLine(argv):
 
     Output
     ------
-    pdbfile: name of pdb file to run dfi calculation 
-    pdbid: 4 Letter PDB code 
-    mdhess: name of file that contains hessian matrix from MD 
-    ls_reschain: list of f-dfi Residues (e.g., [A17,A19])
-    chain_name: list of chain to select (Depracated)
+    pdbfile: file
+       name of pdb file to run dfi calculation 
+    pdbid: 'str' 
+       4 Letter PDB code 
+    mdhess: file 
+        name of file that contains hessian matrix from MD 
+    ls_reschain: list 
+       list of f-dfi Residues (e.g., ['A17','A19'])
+    chain_name: str
+       list of chain to select (Depracated)
     
     """
     comlinargs=CLdict(argv)
@@ -430,7 +432,55 @@ def __writeout_eigevalues(e_vals,eigenfile):
         for i,val in enumerate(np.sort(e_vals)):
             outfile.write("%d\t%f\n"%(i,np.real(val) ) )
         
+def calc_covariance(numres,x,y,z,Verbose=False):
+    """
+    Calculates the covariance matrix by first 
+    calculating the hessian from coordinates and then 
+    inverting it. 
+    
+    Input 
+    -----
+    numres: int 
+       number of residues 
+    x,y,z: numpy 
+       numpy array of coordinates 
+    Verbose: bool
+       flag for debugging and writing out contents 
+       of covariance or the inverse Hessian 
 
+    Output
+    ------ 
+    invHRS: numpy 
+       (3*numres,3*numres) matrix 
+    
+    """
+    hess = calchessian(numres,x,y,z,Verbose)
+    if(Verbose):
+        print "Hessian"
+        print hess
+        flatandwrite(hess,'hesspy.debug')
+        e_vals, e_vecs = LA.eig(hess)
+        __writeout_eigenvalues(e_vals,eigenfile)
+        
+    U, w, Vt = LA.svd(hess,full_matrices=False)
+    S = LA.diagsvd(w,len(w),len(w))
+    assert np.allclose(hess,np.dot(U,np.dot(S,Vt))), "SVD didn't go well"
+    if(Verbose):
+        flatandwrite(U,'Upy-test.debug')
+        flatandwrite(w,'wpy-test.debug')
+        flatandwrite(Vt,'Vtpy-test.debug')
+
+    #the near zero eigenvalues blowup the inversion so 
+    #we will truncate them and add a small amount of bias 
+    tol = 1e-6 
+    singular = w < tol 
+    invw = 1/w
+    invw[singular] = 0.
+    invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
+    if(Verbose):
+        flatandwrite(invHrs,invhessfile)
+    assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
+    return invHrs 
 
 def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
     """Main function for calculating DFI 
@@ -455,7 +505,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     df_dfi: DataFrame
        DataFrame object for DFI values  
     """
-   
     if(Verbose):
         eigenfile = pdbid+'-eigenvalues.txt'
     else: 
@@ -482,58 +531,17 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     else:
         fdfires = np.array([],dtype=int) 
 
-    
-    #start computing the Hessian REFACTOR
-    numres = len(ATOMS)
-    numresthree = 3 * numres 
+            
     if not(mdhess):
-        hess = calchessian(numres,x,y,z,Verbose)
-        if(Verbose):
-            print "Hessian"
-            print hess
-            flatandwrite(hess,'hesspy.debug')
-            e_vals, e_vecs = LA.eig(hess)
-            __writeout_eigenvalues(e_vals,eigenfile)
-    
-        U, w, Vt = LA.svd(hess,full_matrices=False)
-        S = LA.diagsvd(w,len(w),len(w))
-        assert np.allclose(hess,np.dot(U,np.dot(S,Vt))), "SVD didn't go well"
-        if(Verbose):
-            flatandwrite(U,'Upy-test.debug')
-            flatandwrite(w,'wpy-test.debug')
-            flatandwrite(Vt,'Vtpy-test.debug')
-
-        #the near zero eigenvalues blowup the inversion so 
-        #we will truncate them and add a small amount of bias 
-        tol = 1e-6 
-        singular = w < tol 
-        invw = 1/w
-        invw[singular] = 0.
-        invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
-        flatandwrite(invHrs,invhessfile)
-        assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
-        
-
-
-    #import the inverse Hessian and turn into a function  
-    if not(mdhess):
-        print "Reading theinverse Hessian from %s"%(invhessfile)
-        with open(invhessfile,'r') as infile:
-            invH = np.array([ x.strip('\n') for x in infile],dtype=float) 
-       
-        resnumsq = len(invH)
-        resnum = np.sqrt(resnumsq)/3
-        invHrs = invH.reshape((3*resnum,3*resnum),order='F')
-    else: #this is where we load the Hessian 
+        numres = len(ATOMS)
+        invHrs = calc_covariance(numres,x,y,z,Verbose=False)
+    else: #this is where we load the Hessian if provided  
         invHrs=np.loadtxt( mdhess )
         print "From MD invhess"
         print invHrs
         print invHrs.shape 
-    if(Verbose):
-        print "invHrs"
-        print invHrs 
-    
-    #RUN DFI CODE HERE 
+        
+    #RUN DFI 
     directions = np.vstack(([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]))
     normL = np.linalg.norm(directions,axis=1)
     direct=directions/normL[:,None]
