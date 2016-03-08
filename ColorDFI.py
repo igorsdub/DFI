@@ -32,8 +32,8 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
 
     Description
     -------------
-    This program should read in a pdb and the dfi analysis of the pdb and then color
-    the CA accordingly to the dfi. 
+    This program reads in a pdb and the dfi analysis of the pdb and then color
+    the CA accordingly to the dfi. It will then write out to a DFI file  
 
     Usage
     ------
@@ -42,11 +42,22 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     colorbydfi(CSVFIL,PDBFIL)
 
     ``` 
-
-    - CSVFIL: DFI CSV FILE 
-    - PDBFIL: Corresponding PDBFIL 
-    - Verbose: Boolean for debugging 
+    Input
+    -----
+    
+    CSVFIL: file
+       DFI CSV FILE 
+    PDBFIL: file 
+       Corresponding PDB FILE 
+    colorbyparam: str 
+       paramter to use for coloring 'pctdfi' (Default) 
+    Verbose: bool  
+       Boolean for debugging
+    outfile: str
+       Name of file to output Default is 
+       pdbid-dficolor.pdb 
     """
+    
     import pandas as pd
     import pdbio as io
     
