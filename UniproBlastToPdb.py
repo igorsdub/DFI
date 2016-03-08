@@ -155,6 +155,8 @@ def parseBlastFile(xmlfil):
                 out_file.write("%f"%coverage +",")
                 out_file.write(str(identity) +"\n")
 
+
+
 def tohtml(csvfile):
     """
     Reads the csvfile fromt the blast output
@@ -166,6 +168,29 @@ def tohtml(csvfile):
     mask = ( (data['QueryCov'] > 80) & (data['SeqId'] > 80) )
     data[mask].to_html(sys.stdout)
 
+
+def _gettophit(csvfile):
+    """
+    Get top pdb hit for BLAST search
+    Set CutOff of QueryCov > 80 and SeqId > 80 
+
+    Input 
+    -----
+    csvfile: file
+       csvfile containing blast hits 
+
+    Output
+    ------
+    tophit: str
+       pdbid for top hit. None if there 
+       is no hit. 
+    """
+    data = pd.read_csv(csvfile)
+    mask = ( (data['QueryCov'] > 80) & (data['SeqId'] > 80) )
+    if data[mask].shape[0] == 0:
+        return None 
+    else:
+        data[mask].sort(['QueryCov','SeqId']).PDBid[0]
 
 if __name__ == "__main__" and len(sys.argv) > 1:
     print sys.argv
