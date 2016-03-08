@@ -446,7 +446,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     invhessfile = pdbid+'-pinv_svd.debug'
     dfianalfile = pdbid+'-dfianalysis.csv'
      
-
     #read in the pdb file 
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,
@@ -535,20 +534,14 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
     dfi = np.sum(nrmlperturbMat,axis=1)
-    mdfi = np.sum(nrmlperturbMat,axis=0)
-        
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi,Array=True)
-    mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfi,Array=True)
 
-    
     #f-dfi 
-    
     if len(fdfires) > 0:
         #Very clunky impplementtation 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
-        flatandwrite(fdfitop/fdfibot,fdfifile)
-        fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfifile)
+        fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfitop/fdfibot,Array=True)
 
         x,y,z,bfac = getcoords(ATOMS)
         rlist = np.column_stack((x,y,z)) #dump into a list 
