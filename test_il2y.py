@@ -34,4 +34,4 @@ def test_Il2Y():
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
-    
+    assert np.allclose(df_dfi.ravg.values, df.ravg.values) 

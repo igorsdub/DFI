@@ -15,6 +15,8 @@ Requirements
 Python 2.7.5
 NumPy 1.4
 SciPy 1.4 
+Matplotlib 
+Seaborn 
 Pandas 
 
 Usage
@@ -596,7 +598,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     else: 
         eigenfile = None 
         invhessfile = None 
-    
     dfianalfile = pdbid+'-dfianalysis.csv'
      
     #read in the pdb file 
@@ -631,14 +632,12 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)
         fdfibot=np.sum(nrmlperturbMat,axis=1)/len(nrmlperturbMat)
         fdfi,relfdfi,pctfdfi,zscorefdfi = dfianal(fdfitop/fdfibot,Array=True)
-        
-        x,y,z,bfac = getcoords(ATOMS)
         rlist = np.column_stack((x,y,z)) #dump into a list 
         fr = fdfires_cords(fdfires,x,y,z) #get coordinates of the f-dfi residues 
         ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist]) 
 	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
 
-    #output to DataFrame
+    #output to dataframe 
     if len(fdfires) > 0:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
     else:
@@ -650,7 +649,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
         ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
 
     return df_dfi 
-    
 
 if __name__ == "__main__":
     pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(sys.argv)
