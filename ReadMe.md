@@ -49,8 +49,8 @@ dfi directory to the PYTHONPATH variable, e.g.,
 ```
 export PYTHONPATH=${PYTHONPATH}:~/dfi #assuming this is where the dfi fold is in your filesystem 
 ```
-then you should be able to `import dfi_calc` or `import ColorDFI` or `import dfi` whereever you
-are in the filesystem. 
+then you should be able to `import dfi_calc` or `import ColorDFI` or `import dfi` anywhere
+in the filesystem. 
  
 
 ### Usage ###
