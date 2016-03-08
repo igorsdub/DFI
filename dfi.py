@@ -41,7 +41,12 @@ Example
 ```
 """
 
+
 import sys 
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print __doc__
+
+
 import pdbio 
 import os 
 import numpy as np 
@@ -99,7 +104,8 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
     hess: numpy array of the Hessian 
     """
 
-    print "Calculating the Hessian..."
+    if(Verbose):
+        print "Calculating the Hessian..."
     
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
@@ -162,7 +168,8 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
             hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   
             hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r) 
 
-    print "Finished Calculating the Hessian..."
+    if(Verbose):
+        print "Finished Calculating the Hessian..."
     return hess  
 
 def flatandwrite(matrix,outfile):
@@ -382,9 +389,6 @@ def top_quartile_pos(pctfdfi,rlist):
     return [i for i,val in enumerate(pctfdfi) if val > 0.75]        
         
 
-if __name__ == "__main__" and len(sys.argv) < 2:
-    print __doc__
-    sys.exit(1)
 
 def parseCommandLine(argv):
     """
@@ -461,9 +465,6 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     else:
         fdfires = np.array([],dtype=int) 
 
-    print "fdfires numpy"
-    print fdfires
-
     
     #start computing the Hessian REFACTOR
     numres = len(ATOMS)
@@ -528,28 +529,20 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
         print invHrs 
     
     #RUN DFI CODE HERE 
-    print "Creating the perturbation directions"
     directions = np.vstack(([1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]))
     normL = np.linalg.norm(directions,axis=1)
     direct=directions/normL[:,None]
-    print "Perturbation Directions"
-    print direct 
-
-
-    print "Calculating the peturbation matrix"
+    
     nrmlperturbMat = calcperturbMat(invHrs,direct,numres)
     dfi = np.sum(nrmlperturbMat,axis=1)
     mdfi = np.sum(nrmlperturbMat,axis=0)
         
-    
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi,Array=True)
     mdfi, relmdfi, pctmdfi, zscoremdfi = dfianal(mdfi,Array=True)
 
     
     #f-dfi 
-    print "Amount of f-dfi res:"+str(len(fdfires))
-    print fdfires 
-    fdfifile='fdfi-Avg.dat'
+    
     if len(fdfires) > 0:
         #Very clunky impplementtation 
         fdfitop=np.sum(nrmlperturbMat[:,fdfires],axis=1)/len(fdfires)

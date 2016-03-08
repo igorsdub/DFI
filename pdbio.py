@@ -33,7 +33,8 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,chain_name='A
     with open(filename) as pdb:
         for line in pdb:
             if line.startswith('ENDMDL'):
-                print "MULTIPLE MODELS...USING MODEL1"
+                if(Verbose):
+                    print "MULTIPLE MODELS...USING MODEL1"
                 return 
             
             if line.startswith('ATOM'):
