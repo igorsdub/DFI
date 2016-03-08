@@ -24,9 +24,6 @@ colorbydfi(CSVFIL,PDBFIL,Verbose)
 
 import sys 
 
-#if len(sys.argv) < 2: 
-#    print __doc__
-#    sys.exit()
 
 def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     """
@@ -65,14 +62,11 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
         print "PDBFIL: %s"%(PDBFIL)
         print "pdbid: %s"%(pdbid)
         print data[:10]
-   
-    print "Reading in: %s"%(CSVFIL)
+        print "Reading in: %s"%(CSVFIL)
 
     ATOMS = []
     io.pdb_reader(PDBFIL,ATOMS)
-    print "Reading in %s"%(PDBFIL)
-
-    print "Adding b-factors"
+        
     for i in range(len(ATOMS)):
         if True:
             resind = ATOMS[i].res_index 

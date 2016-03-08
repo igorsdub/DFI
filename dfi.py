@@ -416,6 +416,21 @@ def parseCommandLine(argv):
     
     return pdbfile, pdbid, mdhess, ls_reschain, chain_name
 
+def __writeout_eigevalues(e_vals,eigenfile):
+    """
+    Write out eigenvalues from the Hessian Matrix 
+    
+    Input:
+    e_vals: numpy 
+       array of eigenfiles 
+    eigenfiel: str
+       eigenfile name 
+    """
+    with open(eigenfile,'w') as outfile:
+        for i,val in enumerate(np.sort(e_vals)):
+            outfile.write("%d\t%f\n"%(i,np.real(val) ) )
+        
+
 
 def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False):
     """Main function for calculating DFI 
@@ -441,8 +456,11 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
        DataFrame object for DFI values  
     """
    
-    #output file name 
-    eigenfile = pdbid+'-eigenvalues.txt'
+    if(Verbose):
+        eigenfile = pdbid+'-eigenvalues.txt'
+    else: 
+        eigenfile = None 
+
     invhessfile = pdbid+'-pinv_svd.debug'
     dfianalfile = pdbid+'-dfianalysis.csv'
      
@@ -470,27 +488,16 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     numresthree = 3 * numres 
     if not(mdhess):
         hess = calchessian(numres,x,y,z,Verbose)
-        e_vals, e_vecs = LA.eig(hess)
         if(Verbose):
             print "Hessian"
             print hess
             flatandwrite(hess,'hesspy.debug')
+            e_vals, e_vecs = LA.eig(hess)
+            __writeout_eigenvalues(e_vals,eigenfile)
     
-        #TODO Refactor using enumerate 
-        with open(eigenfile,'w') as outfile:
-            for i,val in enumerate(np.sort(e_vals)):
-                outfile.write("%d\t%f\n"%(i,np.real(val) ) )
-                
-        
         U, w, Vt = LA.svd(hess,full_matrices=False)
-        if(Verbose):
-            print U.shape
-            print w.shape 
-            print Vt.shape 
-
         S = LA.diagsvd(w,len(w),len(w))
         assert np.allclose(hess,np.dot(U,np.dot(S,Vt))), "SVD didn't go well"
-     
         if(Verbose):
             flatandwrite(U,'Upy-test.debug')
             flatandwrite(w,'wpy-test.debug')
@@ -498,15 +505,14 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
 
         #the near zero eigenvalues blowup the inversion so 
         #we will truncate them and add a small amount of bias 
-        print "Inverting the Hessian..."
         tol = 1e-6 
         singular = w < tol 
         invw = 1/w
         invw[singular] = 0.
         invHrs = np.dot(np.dot(U,np.diag(invw)),Vt)
         flatandwrite(invHrs,invhessfile)
-        print "Number of near-singular eigenvalues: %f"%np.sum(singular)
-        print "Hessian inverted and written out to pinv_svd.debug"
+        assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
+        
 
 
     #import the inverse Hessian and turn into a function  
@@ -549,11 +555,13 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
         ls_ravg = np.array([ rdist(r,fr).mean() for r in rlist]) 
 	ls_rmin = np.array([ rdist(r,fr).min() for r in rlist])
 
+    #output to DataFrame
     if len(fdfires) > 0:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
     else:
         df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
-
+    
+    #output to ColoredDFI Files 
     ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
     if len(fdfires) > 0:
         ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
