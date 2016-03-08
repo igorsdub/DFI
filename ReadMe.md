@@ -30,9 +30,22 @@ dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help
 ```
 
 ### Example ###
+#### Run just bare DFI on a protein ####
 ```
 ./dfi_calc.py --pdb 1l2y.pdb --fdfi A10 
 ```
+This will run dfi on 1l2y.pdb and write out to 1l2y-dfianalysis.csv,
+1l2y-fdficolor.pdb, and 1l2y-dficolor.pdb.
+
+#### Run based on UniprotID ####
+```
+./dfi.py P42771
+```
+This will take the UniprotID and blast it on the NCBI server, find the
+highest PDB hit and then run dfi analysis on that PDB. The output is
+P42771-1DC2-dfianalysis.csv. 
+*Note: If you query the NCBI server too often it will push your query
+down the queue*
 
 ### Input ###
 

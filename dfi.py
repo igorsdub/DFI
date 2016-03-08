@@ -61,6 +61,8 @@ def uniproDFI(uniprotcodes):
         pdbid = uni._gettophit(csvfile)
         if pdbid == None:
             print code, "No Good PDB hit"
+        else:
+            print "Top Hit: ",pdbid 
         outfile = code+'_'+pdbid+'-dfianalysis.csv' 
         print "Running DFI"
         fetch_pdb(pdbid,Verbose=True)

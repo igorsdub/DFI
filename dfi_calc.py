@@ -304,7 +304,7 @@ def CLdict(argv):
                 else:
                     resvals.append(res)
             comline_arg[s] = np.array(resvals)
-            print resvals 
+            #print resvals 
 
         if s == "--help":
             print __doc__
@@ -362,7 +362,7 @@ def fdfires_cords(fdfires,x,y,z):
     ------
     nx3 matrix of f-DFI coordinates 
     """
-    print x[:10],y[:10],z[:10]
+    
     return np.column_stack((x[fdfires],y[fdfires],z[fdfires]))
 
 def rdist(r,fr):
@@ -384,7 +384,8 @@ def rdist(r,fr):
     rr = r_ij*r_ij
     return np.sqrt(rr.sum(axis=1))
 
-def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None,outfile=None):
+def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,
+               ls_rmin=None,outfile=None,Verbose=True):
    """
    Outputs the results of the DFI calculation to a DataFrame and csv file 
    
@@ -408,6 +409,8 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None
       to all f-dfi residues
    outfile: str
       Name of file to write out the DataFrame in csv format 
+   Verbose: bool
+      Output for debugging 
 
    Output
    ------
@@ -453,7 +456,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,ls_rmin=None
         
    if(outfile):
        dfx.to_csv(outfile,index=False)
-   
+       print "Wrote out to %s"%(outfile)
    return dfx 
 
 def top_quartile_pos(pctfdfi):

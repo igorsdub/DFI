@@ -1,7 +1,7 @@
 numpy
 pandas
-scipy
 pytest
 matplotlib
 biopython
-seaborn 
+seaborn
+scipy 
