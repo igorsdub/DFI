@@ -57,7 +57,10 @@ in the filesystem.
 ```
 dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 ```
-
+OR
+```
+dfi.py [UNIPROT IDS]
+```
 ### Example ###
 #### Run just bare DFI on a protein ####
 ```
