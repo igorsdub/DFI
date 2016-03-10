@@ -607,10 +607,11 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,
                      chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
+    numres = len(ATOMS)
 
     #create covariance matrix or read it in if provided 
     if not(mdhess):
-        numres = len(ATOMS)
+
         invHrs = calc_covariance(numres,x,y,z,Verbose=False)
     else: #this is where we load the Hessian if provided  
         invHrs=np.loadtxt( mdhess )
