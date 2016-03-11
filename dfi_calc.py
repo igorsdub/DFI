@@ -385,7 +385,7 @@ def rdist(r,fr):
     return np.sqrt(rr.sum(axis=1))
 
 def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,
-               ls_rmin=None,outfile=None,Verbose=True):
+               ls_rmin=None,outfile=None,Verbose=True,writetofile=False):
    """
    Outputs the results of the DFI calculation to a DataFrame and csv file 
    
@@ -411,6 +411,9 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,
       Name of file to write out the DataFrame in csv format 
    Verbose: bool
       Output for debugging 
+   writetofile: bool 
+      If True will write out to file, otherwise just return the 
+      df. 
 
    Output
    ------
@@ -454,7 +457,7 @@ def outputToDF(ATOMS,dfi,pctdfi,fdfi=None,pctfdfi=None,ls_ravg=None,
        mask = (dfx['rmin'] > 8.0) & (dfx['pctfdfi'] > 0.75)
        dfx['A'] = mask.map(lambda x: 'A' if x else 'NotA')
         
-   if(outfile):
+   if(writetofile):
        dfx.to_csv(outfile,index=False)
        print "Wrote out to %s"%(outfile)
    return dfx 
@@ -570,7 +573,8 @@ def calc_covariance(numres,x,y,z,invhessfile=None,Verbose=False):
     assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
     return invHrs 
 
-def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False,dfianalfile=None):
+def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False,
+             writetofile=False,colorpdb=False,dfianalfile=None):
     """Main function for calculating DFI 
     
     Inputs 
@@ -587,6 +591,10 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
        chain name (e.g., A) to pull out specific chain of the PDB 
     Verbose: bool
        switch for debugging 
+    writefofile: bool
+       If True will writeou to a csv file 
+    colorpdb: bool
+       If True will output a colorpdb 
 
     Output
     ------
@@ -642,19 +650,22 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
 
     #output to dataframe 
     if len(ls_reschain) > 0:
-        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,fdfi=fdfi,pctfdfi=pctfdfi,ls_ravg=ls_ravg,ls_rmin=ls_rmin,outfile=dfianalfile,
+                            writetofile=writetofile)
     else:
-        df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile)
+        df_dfi = outputToDF(ATOMS,dfi,pctdfi,outfile=dfianalfile,writetofile=writetofile)
     
     #output to ColoredDFI Files 
-    ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
-    if len(ls_reschain) > 0:
-        ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
+    if(colorpdb):
+        ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctdfi',outfile=pdbid+'-dficolor.pdb')
+        if len(ls_reschain) > 0:
+            ColorDFI.colorbydfi(dfianalfile,pdbfile,colorbyparam='pctfdfi',outfile=pdbid+'-fdficolor.pdb')
 
     return df_dfi 
 
 if __name__ == "__main__":
     pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(sys.argv)
     print("Processing %s"%pdbfile)
-    df_dfi = calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
+    df_dfi = calc_dfi(pdbfile,pdbid,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name,
+                      writetofile=True,colorpdb=True)
     dfiplotter.plotdfi(df_dfi,'pctdfi',pdbid)
