@@ -509,7 +509,7 @@ def parseCommandLine(argv):
     
     return pdbfile, pdbid, mdhess, ls_reschain, chain_name
 
-def __writeout_eigevalues(e_vals,eigenfile):
+def _writeout_eigevalues(e_vals,eigenfile):
     """
     Write out eigenvalues from the Hessian Matrix 
     
@@ -573,7 +573,7 @@ def calc_covariance(numres,x,y,z,invhessfile=None,Verbose=False):
     assert np.sum(singular) == 6., "Number of near-singular eigenvalues: %f"%np.sum(singular)
     return invHrs 
 
-def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False,
+def calc_dfi(pdbfile,pdbid=None,mdhess=None,ls_reschain=[],chain_name=None,Verbose=False,
              writetofile=False,colorpdb=False,dfianalfile=None):
     """Main function for calculating DFI 
     
@@ -607,9 +607,11 @@ def calc_dfi(pdbfile,pdbid,mdhess=None,ls_reschain=[],chain_name=None,Verbose=Fa
     else: 
         eigenfile = None 
         invhessfile = None 
+    if(not(pdbid)):
+        pdbid = pdbfile.split('.')[0]
     if(not(dfianalfile)):
         dfianalfile = pdbid+'-dfianalysis.csv'
-     
+        
     #read in the pdb file 
     ATOMS = [] 
     pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,
