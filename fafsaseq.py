@@ -17,6 +17,7 @@ fafsaseq.py DFICSVFILE
 
 import pandas as pd
 import numpy as np 
+import os 
 
 mapres={'ALA':'A',
 'CYS':'C',
@@ -41,10 +42,24 @@ mapres={'ALA':'A',
 
 
 def getuniprols(pdbid):
-    """Insert PDB and get UNIPROTID from table"""
+    """
+    Insert PDB and get UNIPROTID(s) from table
+    
+    Input
+    -----
+    pdbid: str
+       4 letter code PDBID 
+
+    Output
+    ------
+    ls_unipro: ls
+       list of uniprotID(s) associated with PDBID 
+    """
     import pandas as pd
     pdbid = pdbid.upper()
-    mapdata = pd.read_csv('/home/avishek/dfi/unipropdb.csv',index_col='pdbID')
+    wk_dir = os.path.dirname(os.path.realpath('__file__'))
+    filepath = wk_dir+'/data/unipropdb.csv'
+    mapdata = pd.read_csv(filepath,index_col='pdbID')
     nids=len(mapdata.ix[pdbid].values)
     if nids > 1:
         return [unipro[0] for unipro in mapdata.ix[pdbid].values]
