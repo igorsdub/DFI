@@ -45,7 +45,7 @@ Example
 import sys 
 if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
-
+    exit()
 
 import pdbio 
 import os 
