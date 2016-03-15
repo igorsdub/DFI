@@ -28,14 +28,39 @@ def read_pdb(filename):
     return np.array(Pos,dtype=float), ResNames 
 
 
-def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,chain_name='A',Verbose=False):
+def pdb_reader(filename,CAonly=False,noalc=True,chainA=False,chain_name='A',Verbose=False):
+    """
+    Reads in the ATOM entry of a pdb file. In the case of an NMR structure, the function
+    reads in the first model. 
+
+    Input
+    -----
+    filename: file
+       Filename of pdb file
+    CAonly: bool
+       Flag to only read the alpha-carbons. 
+    noalc: bool
+       Flag to not read an alc 
+    chainA: bool
+       Read only a single chain
+    chain_name: str
+       Name of chain to select (e.g., 'A')
+    Verbose: str
+       Flag for debugging
+
+    Output
+    ------
+    ATOMS: ls
+       ls of ATOM objects that make up the pdb. 
+    """
+    ATOMS = []
     readatoms=0
     with open(filename) as pdb:
         for line in pdb:
             if line.startswith('ENDMDL'):
                 if(Verbose):
                     print "MULTIPLE MODELS...USING MODEL1"
-                return 
+                return ATOMS  
             
             if line.startswith('ATOM'):
                 record = line[:6]
@@ -70,8 +95,10 @@ def pdb_reader(filename,ATOMS,CAonly=False,noalc=True,chainA=False,chain_name='A
                 ATOMS.append( ATOM(line[:6], line[7:11], line[13:16], line[16], line[17:20], line[21], line[22:27],
                                    line[26], line[31:38], line[39:46], line[47:54], line[55:60], line[61:66],line[77]) )
                 readatoms+=1
-    print "Read %d atoms from the %s"%(readatoms,filename)
 
+    print "Read %d atoms from the %s"%(readatoms,filename)
+    return ATOMS 
+    
 def pdb_writer(ATOMS,msg="HEADER  frodaN unfolding target\n",filename="out.pdb",modelnum=1,atomoffset=0,residueoffset=0,mode="w"):
     
     with open(filename,mode) as pdb:

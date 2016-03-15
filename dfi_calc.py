@@ -613,8 +613,7 @@ def calc_dfi(pdbfile,pdbid=None,mdhess=None,ls_reschain=[],chain_name=None,Verbo
         dfianalfile = pdbid+'-dfianalysis.csv'
         
     #read in the pdb file 
-    ATOMS = [] 
-    pdbio.pdb_reader(pdbfile,ATOMS,CAonly=True,noalc=True,chainA=False,
+    ATOMS = pdbio.pdb_reader(pdbfile,CAonly=True,noalc=True,chainA=False,
                      chain_name=chain_name,Verbose=False)
     x,y,z,bfac = getcoords(ATOMS) 
     numres = len(ATOMS)
