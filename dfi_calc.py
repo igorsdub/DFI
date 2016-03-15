@@ -101,34 +101,31 @@ def getcoords(ATOMS,Verbose=False):
 def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
     """ 
     Calculates the hessian and retuns the result 
-    ============================================
-    
-    calchessian(resnum,x,y,z,gamma=100,cutoff=None,Verbose=False)
-
-    Inputs 
+        
+    Input 
     ------
-    resnum: number of residues 
-    x: array of x coordinates
-    y: array of y coordinates
-    z: array of z coordinates
-    gamma: value of spring constant(default set to 100)
-    cutoff: value of cutoff when using a distance based Hessian (default None)
-    Verbose: Verbose Output for debug mode (default False).
+    resnum: int  
+       Number of residues 
+    x,y,z: numpy arrays
+       Numpy array of coordinates 
+    gamma: int  
+       Value of spring constant(default set to 100)
+    cutoff: float  
+       value of cutoff when using a distance based Hessian (default None)
+    Verbose: bool  
+       Verbose Output for debug mode (default False).
     
     Output 
     ------
-    hess: numpy array of the Hessian 
+    hess: numpy  
+       numpy array of the Hessian 3Nx3N shape  
     """
-
-    if(Verbose):
-        print "Calculating the Hessian..."
-    
     numresthree = 3*resnum 
     hess = np.zeros((numresthree,numresthree))
     gamma=100 
        
-    #compute the Hessian 
-    #compute the Hii terms 
+    if(Verbose):
+        print("i,j,x1,y1,z1,x2,y2,z2,x_ij,y_ij,z_ij,r,k,g")
     for i in range(resnum):
         for j in range(resnum):
             if i==j:
@@ -144,20 +141,15 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
             z_ij = z_i - z_j 
             r = x_ij*x_ij + y_ij*y_ij + z_ij*z_ij 
             sprngcnst = (gamma*gamma*gamma)/(r*r*r)
-            if(Verbose):
-                print "sprngcnst:",sprngcnst,"gamma",gamma
             if(cutoff):
                 if sqrt(r) > cutoff:
                     if(Verbose):
                         print cutoff
                     #sprngcnst = 0. 
             if(Verbose):
-                print "i:%d j:%f"%(i,j)
-                print "x_i:%f y_i:%f z_i:%f"%(x_i,y_i,z_i)
-                print "x_j:%f y_j:%f z_j:%f"%(x_j,y_j,z_j)
-                print "x_ij:%f y_ij:%f z_ij:%f r:%f sprngcnst:%f"%(x_ij,y_ij,z_ij,r,sprngcnst)
-                       
-
+                print ','.join(np.array( [i,j,x_i,y_i,z_i,x_j,y_j,z_j,x_ij,y_ij,z_ij,r,sprngcnst,gamma],
+                                         dtype=str ))
+                        
             #creation of Hii 
             hess[3*i,3*i] += sprngcnst*(x_ij*x_ij/r) 
             hess[3*i+1,3*i+1] += sprngcnst*(y_ij*y_ij/r) 
@@ -184,8 +176,6 @@ def calchessian(resnum,x,y,z,gamma=float(100),cutoff=None,Verbose=False):
             hess[3*i+2,3*j] -= sprngcnst*(x_ij*z_ij/r)   
             hess[3*i+2,3*j+1] -= sprngcnst*(y_ij*z_ij/r) 
 
-    if(Verbose):
-        print "Finished Calculating the Hessian..."
     return hess  
 
 def flatandwrite(matrix,outfile):
