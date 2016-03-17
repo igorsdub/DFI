@@ -1,10 +1,10 @@
 # IPython log file
 """
-Fasta Convert 
+Fasta Convert
 -------------
 
-Suite of Tools for converting to and from the 
-fasta sequence. 
+Suite of Tools for converting to and from the
+fasta sequence.
 """
 import pdbio
 import glob
@@ -34,12 +34,12 @@ mapres = {'ALA': 'A',
 
 def get_seq(fname):
     """
-    Get the structural sequence from a PDB file. 
+    Get the structural sequence from a PDB file.
 
     Input
     -----
     fname: file
-       name of pdb file 
+       name of pdb file
     """
     ATOMS = []
     pdbio.pdb_reader(fname, ATOMS, CAonly=True, noalc=True, Verbose=False)
@@ -53,13 +53,13 @@ def format_seq(seq):
 
     Input
     -----
-    seq: str 
-       String of the protein's sequence. 
+    seq: str
+       String of the protein's sequence.
 
     Output
     ------
-    seq_str: str 
-       Formatted Sequence 
+    seq_str: str
+       Formatted Sequence
     """
     i, seq_str = 0, ''
     for s in seq:
@@ -73,21 +73,21 @@ def format_seq(seq):
 
 def fafsa_format(fname, outfileobj=None):
     """
-    Converts a sequence in pdb format into 
-    fafsa format. 
+    Converts a sequence in pdb format into
+    fafsa format.
 
     Input
     -----
     fname: file
-       Name of pdb file 
-    outfileobj: file object 
+       Name of pdb file
+    outfileobj: file object
        file object to write out to can be a filename
        or just stdout
 
     Output
     ------
     fafsafmt: str
-       fafsa format of pdb file. 
+       fafsa format of pdb file.
     """
     title = fname.split('_')[0]  # could lead to a bug
     seq_str = format_seq([x for x in get_seq(fname)])
@@ -102,15 +102,15 @@ def fafsa_format(fname, outfileobj=None):
 
 def separate_fasta(fname):
     """
-    Given a filename with multiple fasta sequences 
-    this function will separate them and write them 
+    Given a filename with multiple fasta sequences
+    this function will separate them and write them
     to individual files labeled the title of the fasta
     sequence.fasta
 
-    Input 
+    Input
     -----
     fname: file
-       File containing multiple fasta sequences 
+       File containing multiple fasta sequences
     """
     outfile = None
     with open(fname, 'r') as infile:
