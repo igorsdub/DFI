@@ -17,8 +17,7 @@ def test_pctrank_descending():
 
 
 def test_comlineargs():
-    comline = '. / dfi.py - -fdfi A19 A10 - -hess mwcovar.dat - -pdb
-    . / data / 1l2y.pdb'
+    comline = '--fdfi A19 A10 --hess mwcovar.dat --pdb ./data/1l2y.pdb'
     dict_parms = dfi_calc.CLdict(comline.split())
     assert dict_parms['--pdb'] == './data/1l2y.pdb'
     assert dict_parms['--hess'] == 'mwcovar.dat'
