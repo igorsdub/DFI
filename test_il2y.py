@@ -1,9 +1,11 @@
-import pandas as pd 
+import pandas as pd
 from StringIO import StringIO
-import numpy as np 
-import dfi_calc 
+import numpy as np
+import dfi_calc
+
+
 def test_Il2Y():
-    sample=StringIO("""
+    sample = StringIO("""
     ResI,ChainID,Res,R,dfi,pctdfi,fdfi,pctfdfi,adfi,ravg,rmin,A
 1,A,ASN,N,0.0739300399161,0.95,0.733721,0.55,0.45,14.8066793711,14.8066793711,NotA
 2,A,LEU,L,0.0570598728478,0.75,0.760436,0.65,0.5,13.3382425379,13.3382425379,NotA
@@ -29,9 +31,11 @@ def test_Il2Y():
     df = pd.read_csv(sample)
     print df
     sysls = ['./dfi.py', '--pdb', './data/1l2y.pdb', '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_name = dfi_calc.parseCommandLine(sysls)
-    df_dfi = dfi_calc.calc_dfi(pdbfile,mdhess=mdhess,ls_reschain=ls_reschain,chain_name=chain_name)
+    pdbfile, pdbid, mdhess, ls_reschain, chain_name = dfi_calc.
+    parseCommandLine(sysls)
+    df_dfi = dfi_calc.calc_dfi(
+        pdbfile, mdhess=mdhess, ls_reschain=ls_reschain, chain_name=chain_name)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
-    assert np.allclose(df_dfi.ravg.values, df.ravg.values) 
+    assert np.allclose(df_dfi.ravg.values, df.ravg.values)
