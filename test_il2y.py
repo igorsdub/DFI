@@ -31,10 +31,10 @@ def test_Il2Y():
     df = pd.read_csv(sample)
     print df
     sysls = ['./dfi.py', '--pdb', './data/1l2y.pdb', '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_name = dfi_calc.parseCommandLine(
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi_calc.parseCommandLine(
         sysls)
     df_dfi = dfi_calc.calc_dfi(
-        pdbfile, mdhess=mdhess, ls_reschain=ls_reschain, chain_name=chain_name)
+        pdbfile, mdhess=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)

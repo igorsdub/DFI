@@ -5,19 +5,20 @@ import numpy as np
 import sys
 
 
-def pdb_reader(filename, CAonly=False, noalc=True, chainA=False, chain_name='A', Verbose=False):
+def pdb_reader(filename, CAonly=False, noalc=True, chainA=False,
+               chain_name='A', Verbose=False):
     """
-    Reads in the ATOM entry of a pdb file. In the case of an NMR structure, the function
-    reads in the first model. 
+    Reads in the ATOM entry of a pdb file. In the case of an NMR structure,
+    the function reads in the first model.
 
     Input
     -----
     filename: file
        Filename of pdb file
     CAonly: bool
-       Flag to only read the alpha-carbons. 
+       Flag to only read the alpha-carbons.
     noalc: bool
-       Flag to not read an alc 
+       Flag to not read an alc
     chainA: bool
        Read only a single chain
     chain_name: str
@@ -28,7 +29,7 @@ def pdb_reader(filename, CAonly=False, noalc=True, chainA=False, chain_name='A',
     Output
     ------
     ATOMS: ls
-       ls of ATOM objects that make up the pdb. 
+       ls of ATOM objects that make up the pdb.
     """
     ATOMS = []
     readatoms = 0
@@ -69,15 +70,18 @@ def pdb_reader(filename, CAonly=False, noalc=True, chainA=False, chain_name='A',
                 occupancy = line[55:60]
                 temp_factor = line[61:66]
                 atom_type = line[77]
-                ATOMS.append(ATOM(line[:6], line[7:11], line[13:16], line[16], line[17:20], line[21], line[22:27],
-                                  line[26], line[31:38], line[39:46], line[47:54], line[55:60], line[61:66], line[77]))
+                ATOMS.append(ATOM(line[:6], line[7:11], line[13:16], line[16],
+                                  line[17:20], line[21], line[22:27], line[26],
+                                  line[31:38], line[39:46], line[47:54],
+                                  line[55:60], line[61:66], line[77]))
                 readatoms += 1
 
     print "Read %d atoms from the %s" % (readatoms, filename)
     return ATOMS
 
 
-def pdb_writer(ATOMS, msg="HEADER  frodaN unfolding target\n", filename="out.pdb", modelnum=1, atomoffset=0, residueoffset=0, mode="w"):
+def pdb_writer(ATOMS, msg="HEADER  FROM PDBIO\n", filename="out.pdb",
+               modelnum=1, atomoffset=0, residueoffset=0, mode="w"):
 
     with open(filename, mode) as pdb:
         pdb.write(msg)
@@ -106,7 +110,9 @@ def pdb_writer(ATOMS, msg="HEADER  frodaN unfolding target\n", filename="out.pdb
 
 class ATOM:
 
-    def __init__(self, record, atom_index, atom_name, alc, res_name, chainID, res_index, insert_code, x, y, z, occupancy, temp_factor, atom_type):
+    def __init__(self, record, atom_index, atom_name, alc, res_name, chainID,
+                 res_index, insert_code, x, y, z, occupancy,
+                 temp_factor, atom_type):
         self.record = str(record)
         self.atom_index = int(atom_index)
         self.atom_name = str(atom_name)
@@ -118,7 +124,7 @@ class ATOM:
         self.x = float(x)
         self.y = float(y)
         self.z = float(z)
-        #self.occupancy = float(occupancy)
+        # self.occupancy = float(occupancy)
         self.occupancy = 1.
         if temp_factor == '':
             self.temp_factor = 0.
