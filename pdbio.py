@@ -4,29 +4,6 @@
 import numpy as np 
 import sys
 
-def read_pdb(filename):
-    """
-    DEPRICATED FUNCTION 
-    function: 
-        read_pdb, reads the alpha carbons of a model 
-    arguments:
-        pdbfile,string filename of a pdb file
-    returns:
-        Pos, a (N,3) dimensional NumPy array of positions
-        ResNames, a N-length list containing the three-letter code for
-           the amino acid type. 
-    """
-    with open(filename) as PDB:
-        ResNames=[]
-        Pos=[]
-        for line in PDB:
-            if line.startswith('TER') or line.startswith('ENDMDL'):
-                break
-            if line.startswith('ATOM') and line[13:16].strip(' ')=='CA':
-                ResNames.append(line[17:20])
-                Pos.append([line[31:38],line[39:46],line[47:54]])
-    return np.array(Pos,dtype=float), ResNames 
-
 
 def pdb_reader(filename,CAonly=False,noalc=True,chainA=False,chain_name='A',Verbose=False):
     """
