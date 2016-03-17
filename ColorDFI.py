@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # coding: utf-8
 """
 Color by DFI
@@ -6,8 +6,8 @@ Color by DFI
 
 Description
 -------------
-This program should read in a pdb and the dfi analysis of the pdb and then color
-the CA accordingly to the dfi. 
+This program should read in a pdb and the dfi analysis of the pdb and then
+color the CA accordingly to the dfi.
 
 Usage
 ------
@@ -15,17 +15,18 @@ Usage
 CMDLINE:ColorDFI.py CSVFIL PDBFIL
 colorbydfi(CSVFIL,PDBFIL,Verbose)
 
-``` 
+```
 
-- CSVFIL: DFI CSV FILE 
-- PDBFIL: Corresponding PDBFIL 
-- Verboose: Boolean for debugging 
+- CSVFIL: DFI CSV FILE
+- PDBFIL: Corresponding PDBFIL
+- Verboose: Boolean for debugging
 """
 
-import sys 
+import sys
 
 
-def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
+def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
+               outfile=None):
     """
     Color by DFI
     =============
@@ -33,7 +34,7 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     Description
     -------------
     This program reads in a pdb and the dfi analysis of the pdb and then color
-    the CA accordingly to the dfi. It will then write out to a DFI file  
+    the CA accordingly to the dfi. It will then write out to a DFI file
 
     Usage
     ------
@@ -41,62 +42,62 @@ def colorbydfi(CSVFIL,PDBFIL,Verbose=False,colorbyparam='pctdfi',outfile=None):
     CMDLINE:ColorDFI.py CSVFIL PDBFIL
     colorbydfi(CSVFIL,PDBFIL)
 
-    ``` 
+    ```
     Input
     -----
-    
+
     CSVFIL: file
-       DFI CSV FILE 
-    PDBFIL: file 
-       Corresponding PDB FILE 
-    colorbyparam: str 
-       paramter to use for coloring 'pctdfi' (Default) 
-    Verbose: bool  
+       DFI CSV FILE
+    PDBFIL: file
+       Corresponding PDB FILE
+    colorbyparam: str
+       paramter to use for coloring 'pctdfi' (Default)
+    Verbose: bool
        Boolean for debugging
     outfile: str
-       Name of file to output Default is 
-       pdbid-dficolor.pdb 
+       Name of file to output Default is
+       pdbid-dficolor.pdb
     """
-    
+
     import pandas as pd
     import pdbio as io
-    
+
     if type(CSVFIL) == str:
         data = pd.read_csv(CSVFIL)
         pdbid = CSVFIL.split('-')[0]
     else:
         data = CSVFIL
         pdbid = outfile.split('-')[0]
-   
+
     if(Verbose):
-        print "CSVFIL: %s"%(CSVFIL)
-        print "PDBFIL: %s"%(PDBFIL)
-        print "pdbid: %s"%(pdbid)
+        print "CSVFIL: %s" % (CSVFIL)
+        print "PDBFIL: %s" % (PDBFIL)
+        print "pdbid: %s" % (pdbid)
         print data[:10]
-        print "Reading in: %s"%(CSVFIL)
+        print "Reading in: %s" % (CSVFIL)
 
     ATOMS = []
-    io.pdb_reader(PDBFIL,ATOMS)
-        
+    io.pdb_reader(PDBFIL, ATOMS)
+
     for i in range(len(ATOMS)):
         if True:
-            resind = ATOMS[i].res_index 
+            resind = ATOMS[i].res_index
             chainind = ATOMS[i].chainID
-            val= data[ ( data.ResI == int(resind) ) & ( data.ChainID == chainind ) ][colorbyparam].values[0]
+            val = data[(data.ResI == int(resind)) & (
+                data.ChainID == chainind)][colorbyparam].values[0]
             if Verbose:
-                print ATOMS[i].res_index, ATOMS[i].temp_factor,val
+                print ATOMS[i].res_index, ATOMS[i].temp_factor, val
             ATOMS[i].temp_factor = val
         else:
-            ATOMS[i].temp_factor = 0. 
+            ATOMS[i].temp_factor = 0.
     if(outfile):
-        io.pdb_writer(ATOMS,filename=outfile)
+        io.pdb_writer(ATOMS, filename=outfile)
     else:
-        io.pdb_writer(ATOMS,filename=pdbid+'-dficolor.pdb')
+        io.pdb_writer(ATOMS, filename=pdbid + '-dficolor.pdb')
 
 if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
     exit()
 
 if __name__ == "__main__":
-    colorbydfi(sys.argv[1],sys.argv[2],Verbose=False)
-
+    colorbydfi(sys.argv[1], sys.argv[2], Verbose=False)
