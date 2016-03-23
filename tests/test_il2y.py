@@ -1,15 +1,11 @@
 import pandas as pd
 from StringIO import StringIO
 import numpy as np
-import dfi
-
-import os 
-
 import os.path, sys
 sys.path.append(os.path.join(os.path.dirname(
     os.path.realpath(__file__)), os.pardir)
 
-
+import dfi 
 
 def test_Il2Y():
     sample = StringIO("""
