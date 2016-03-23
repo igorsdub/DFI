@@ -1,11 +1,11 @@
 # IPython log file
 
-import sys 
-import os 
-
-sys.path.append( os.getcwd().strip('/tests') )
 
 def test_hessian():
+    
+    import sys 
+    import os 
+    sys.path.append( os.getcwd().strip('/tests') )
     import dfi_calc
     import numpy as np
 
