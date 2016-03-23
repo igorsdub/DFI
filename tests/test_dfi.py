@@ -22,8 +22,6 @@ def test_pctrank_descending():
 def test_comlineargs():
     wk_dir = os.path.dirname(os.path.realpath('__file__'))
     filepath = wk_dir+'/data/1l2y.pdb'
-    
-
     comline = '--fdfi A19 A10 --hess mwcovar.dat --pdb %s'%filepath
     dict_parms = dfi.CLdict(comline.split())
     assert dict_parms['--pdb'] == filepath 
