@@ -3,10 +3,10 @@
 
 def test_hessian():
     
-    import os.path, sys
-    sys.path.append(os.path.join(os.path.dirname(
-        os.path.realpath(__file__)), os.pardir))
-    import dfi_calc
+    #import os.path, sys
+    #sys.path.append(os.path.join(os.path.dirname(
+    #    os.path.realpath(__file__)), os.pardir))
+    import dfi
     import numpy as np
 
     a = np.array([64, 0, 0, -64, 0, 0], dtype=float)
@@ -19,5 +19,5 @@ def test_hessian():
     y = np.array([0, 0], dtype=float)
     z = np.array([0, 0], dtype=float)
     resnum = 2
-    hess = dfi_calc.calchessian(resnum, x, y, z)
+    hess = dfi.calchessian(resnum, x, y, z)
     assert np.all(test_hess == hess)

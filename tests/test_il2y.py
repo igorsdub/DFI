@@ -1,13 +1,9 @@
 import pandas as pd
 from StringIO import StringIO
 import numpy as np
+import dfi
 
-import os.path, sys
-sys.path.append(os.path.join(os.path.dirname(
-os.path.realpath(__file__)), os.pardir))
-import dfi_calc
-
-
+import os 
 
 
 
@@ -37,10 +33,15 @@ def test_Il2Y():
 """)
     df = pd.read_csv(sample)
     print df
-    sysls = ['./dfi.py', '--pdb', './data/1l2y.pdb', '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi_calc.parseCommandLine(
+    wk_dir = os.path.dirname(os.path.realpath('__file__'))
+    filepath = wk_dir+'/data/1l2y.pdb'
+
+    sysls = ['./dfi.py', '--pdb',
+             filepath, 
+             '--fdfi', 'A10']
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
         sysls)
-    df_dfi = dfi_calc.calc_dfi(
+    df_dfi = dfi.calc_dfi(
         pdbfile, mdhess=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
