@@ -3,9 +3,9 @@
 
 def test_hessian():
     
-    #import os.path, sys
-    #sys.path.append(os.path.join(os.path.dirname(
-    #    os.path.realpath(__file__)), os.pardir))
+    import os.path, sys
+    sys.path.append(os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), os.pardir))
     import dfi
     import numpy as np
 
