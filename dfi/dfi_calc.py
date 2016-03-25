@@ -37,7 +37,7 @@ Output
 Example
 -------
 ```
-./dfi.py --pdb 1l2y.pdb [--hess] covariance.dat [--chain] A [--fdfi] A10
+./dfi.py --pdb 1l2y.pdb [--covar] covariance.dat [--chain] A [--fdfi] A10
 ```
 """
 
@@ -578,7 +578,7 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     return invHrs
 
 
-def calc_dfi(pdbfile, pdbid=None, mdhess=None, ls_reschain=[], chain_name=None, Verbose=False,
+def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None, Verbose=False,
              writetofile=False, colorpdb=False, dfianalfile=None):
     """Main function for calculating DFI 
 
@@ -588,7 +588,7 @@ def calc_dfi(pdbfile, pdbid=None, mdhess=None, ls_reschain=[], chain_name=None, 
        PDB File for dfi calculation 
     pdbid: str
        4 character PDBID from PDB
-    mdhess: file
+    covar: file
        hessian file obtained from MD
     ls_reschain: ls
        list of f-dfi residues by chain first and then index (e.g., ['A19','A20']
@@ -624,11 +624,10 @@ def calc_dfi(pdbfile, pdbid=None, mdhess=None, ls_reschain=[], chain_name=None, 
     numres = len(ATOMS)
 
     # create covariance matrix or read it in if provided
-    if not(mdhess):
-
+    if not(covar):
         invHrs = calc_covariance(numres, x, y, z, Verbose=False)
     else:  # this is where we load the Hessian if provided
-        invHrs = np.loadtxt(mdhess)
+        invHrs = np.loadtxt(covar)
 
     # RUN DFI
     directions = np.vstack(([1, 0, 0], [0, 1, 0], [0, 0, 1], [
@@ -676,9 +675,9 @@ def calc_dfi(pdbfile, pdbid=None, mdhess=None, ls_reschain=[], chain_name=None, 
     return df_dfi
 
 if __name__ == "__main__":
-    pdbfile, pdbid, mdhess, ls_reschain, chain_name = parseCommandLine(
+    pdbfile, pdbid, covar, ls_reschain, chain_name = parseCommandLine(
         sys.argv)
     print("Processing %s" % pdbfile)
-    df_dfi = calc_dfi(pdbfile, pdbid, mdhess=mdhess, ls_reschain=ls_reschain, chain_name=chain_name,
+    df_dfi = calc_dfi(pdbfile, pdbid, covar=covar, ls_reschain=ls_reschain, chain_name=chain_name,
                       writetofile=True, colorpdb=True)
     dfiplotter.plotdfi(df_dfi, 'pctdfi', pdbid)
