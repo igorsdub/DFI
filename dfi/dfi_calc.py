@@ -76,23 +76,9 @@ def getcoords(ATOMS, Verbose=False):
        numpy arrays of x,y,z 
 
     """
-    x = []
-    y = []
-    z = []
-
-    for atom in ATOMS:
-        if(Verbose):
-            print atom.atom_name
-            print "%s %f %f %f %f" % (atom.atom_name, atom.x, atom.y, atom.z, atom.temp_factor)
-        if atom.atom_name == 'CA ':
-            x.append(atom.x)
-            y.append(atom.y)
-            z.append(atom.z)
-
-
-    x = np.array(x, dtype=float)
-    y = np.array(y, dtype=float)
-    z = np.array(z, dtype=float)
+    x = np.array( [atom.x for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
+    y = np.array( [atom.y for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
+    z = np.array( [atom.z for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
     
     return x, y, z
 
