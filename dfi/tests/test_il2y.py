@@ -35,9 +35,6 @@ def test_Il2Y():
 """)
     df = pd.read_csv(sample)
     print df
-    #wk_dir = os.path.dirname(os.path.realpath('__file__'))
-    #filepath = wk_dir+'/data/1l2y.pdb'
-
     sysls = ['./dfi.py', '--pdb',
              example_pdb, 
              '--fdfi', 'A10']
