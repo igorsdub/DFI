@@ -2,7 +2,7 @@ import numpy as np
 import os 
     
 import dfi 
-from datafiles import *
+from dfi.datafiles import *
 
 # test pctrank code
 

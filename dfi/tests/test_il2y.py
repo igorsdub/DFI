@@ -6,7 +6,7 @@ import numpy as np
 #    os.path.realpath(__file__)), os.pardir))
 
 import dfi 
-from datafiles import * 
+from dfi.datafiles import * 
 
 
 def test_Il2Y():
