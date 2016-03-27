@@ -83,7 +83,7 @@ def getcoords(ATOMS, Verbose=False):
     return x, y, z
 
 
-def calchessian(resnum, x, y, z, gamma=float(100), cutoff=None, Verbose=False):
+def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
     """ 
     Calculates the hessian and retuns the result 
 
@@ -107,10 +107,9 @@ def calchessian(resnum, x, y, z, gamma=float(100), cutoff=None, Verbose=False):
     """
     numresthree = 3 * resnum
     hess = np.zeros((numresthree, numresthree))
-    gamma = 100
-
+  
     if(Verbose):
-        print("i,j,x1,y1,z1,x2,y2,z2,x_ij,y_ij,z_ij,r,k,g")
+        print("i,j,x1,y1,z1,x2,y2,z2,x_ij,y_ij,z_ij,r,k,g,cut")
     for i in range(resnum):
         for j in range(resnum):
             if i == j:
@@ -128,11 +127,10 @@ def calchessian(resnum, x, y, z, gamma=float(100), cutoff=None, Verbose=False):
             sprngcnst = (gamma * gamma * gamma) / (r * r * r)
             if(cutoff):
                 if sqrt(r) > cutoff:
-                    if(Verbose):
-                        print cutoff
-                    #sprngcnst = 0.
+                    sprngcnst = 0.
             if(Verbose):
-                print ','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij, y_ij, z_ij, r, sprngcnst, gamma],
+                print ','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij, 
+                                         y_ij, z_ij, r, sprngcnst, gamma, cutoff], 
                                         dtype=str))
 
             # creation of Hii
@@ -532,7 +530,8 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
        (3*numres,3*numres) matrix 
 
     """
-    hess = calchessian(numres, x, y, z, Verbose)
+    gamma = 100
+    hess = calchessian(numres, x, y, z, gamma, Verbose)
     if(Verbose):
         print "Hessian"
         print hess
