@@ -72,14 +72,13 @@ def getcoords(ATOMS, Verbose=False):
 
     Output
     ------
-    (x,y,z,bfac): numpy 
-       numpy arrays of x,y,z and bfactors 
+    (x,y,z): numpy 
+       numpy arrays of x,y,z 
 
     """
     x = []
     y = []
     z = []
-    bfac = []
 
     for atom in ATOMS:
         if(Verbose):
@@ -89,14 +88,13 @@ def getcoords(ATOMS, Verbose=False):
             x.append(atom.x)
             y.append(atom.y)
             z.append(atom.z)
-            bfac.append(atom.temp_factor)
+
 
     x = np.array(x, dtype=float)
     y = np.array(y, dtype=float)
     z = np.array(z, dtype=float)
-    bfac = np.array(bfac, dtype=float)
-
-    return x, y, z, bfac
+    
+    return x, y, z
 
 
 def calchessian(resnum, x, y, z, gamma=float(100), cutoff=None, Verbose=False):
@@ -620,7 +618,7 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None, V
     # read in the pdb file
     ATOMS = pdbio.pdb_reader(pdbfile, CAonly=True, noalc=True, chainA=False,
                              chain_name=chain_name, Verbose=False)
-    x, y, z, bfac = getcoords(ATOMS)
+    x, y, z = getcoords(ATOMS)
     numres = len(ATOMS)
 
     # create covariance matrix or read it in if provided
