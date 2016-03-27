@@ -94,7 +94,7 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
     x,y,z: numpy arrays
        Numpy array of coordinates 
     gamma: int  
-       Value of spring constant(default set to 100)
+       Value of spring constant (default set to 100)
     cutoff: float  
        value of cutoff when using a distance based Hessian (default None)
     Verbose: bool  
