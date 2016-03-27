@@ -1,11 +1,13 @@
 import pandas as pd
 from StringIO import StringIO
 import numpy as np
-import os.path, sys
-sys.path.append(os.path.join(os.path.dirname(
-    os.path.realpath(__file__)), os.pardir))
+#import os.path, sys
+#sys.path.append(os.path.join(os.path.dirname(
+#    os.path.realpath(__file__)), os.pardir))
 
 import dfi 
+from datafiles import * 
+
 
 def test_Il2Y():
     sample = StringIO("""
@@ -33,11 +35,11 @@ def test_Il2Y():
 """)
     df = pd.read_csv(sample)
     print df
-    wk_dir = os.path.dirname(os.path.realpath('__file__'))
-    filepath = wk_dir+'/data/1l2y.pdb'
+    #wk_dir = os.path.dirname(os.path.realpath('__file__'))
+    #filepath = wk_dir+'/data/1l2y.pdb'
 
     sysls = ['./dfi.py', '--pdb',
-             filepath, 
+             example_pdb, 
              '--fdfi', 'A10']
     pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
         sysls)
