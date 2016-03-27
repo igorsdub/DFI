@@ -1,11 +1,8 @@
 import numpy as np
 import os 
     
-import os.path, sys
-sys.path.append(os.path.join(os.path.dirname(
-    os.path.realpath(__file__)), os.pardir))
-
 import dfi 
+from datafiles import *
 
 # test pctrank code
 
@@ -23,9 +20,7 @@ def test_pctrank_descending():
 
 
 def test_comlineargs():
-    wk_dir = os.path.dirname(os.path.realpath('__file__'))
-    filepath = wk_dir+'/data/1l2y.pdb'
-    comline = '--fdfi A19 A10 --hess mwcovar.dat --pdb %s'%filepath
+    comline = '--fdfi A19 A10 --hess mwcovar.dat --pdb %s'%example_pdb
     dict_parms = dfi.CLdict(comline.split())
     assert dict_parms['--pdb'] == filepath 
     assert dict_parms['--hess'] == 'mwcovar.dat'
