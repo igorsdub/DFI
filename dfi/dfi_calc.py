@@ -47,7 +47,7 @@ if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
     exit()
 
-import dfi.pdbio
+import dfi.pdbio as pdbio 
 import os
 import numpy as np
 import pandas as pd
