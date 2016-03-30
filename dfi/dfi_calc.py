@@ -51,7 +51,7 @@ import pdbio
 import os
 import numpy as np
 import pandas as pd
-import ColorDFI
+import dfi.ColorDFI
 import dfiplotter
 
 from scipy import linalg as LA
