@@ -1,7 +1,7 @@
 import dfi 
 import glob 
 
-def bulk_dfi(pdbfile,Verbose=False)
+def bulk_dfi(pdbfile,Verbose=False):
     """
     Calculates dfi for all covariance matrices. 
     Globs all covariance matrices with _mwcovarmat.dat
