@@ -47,15 +47,14 @@ if __name__ == "__main__" and len(sys.argv) < 2:
     print __doc__
     exit()
 
-import dfi.pdbio as pdbio 
 import os
 import numpy as np
 import pandas as pd
-import dfi.ColorDFI
-import dfiplotter
-
 from scipy import linalg as LA
 from scipy import stats
+import dfi.pdbio as pdbio 
+import dfi.ColorDFI
+import dfi.dfiplotter
 
 
 def getcoords(ATOMS, Verbose=False):
@@ -164,11 +163,11 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
 
 def flatandwrite(matrix, outfile):
     """Flattens out a matrix to a Nx1 column and write out to a file. """
-    outfile = open(outfile, 'w')
-    for f in matrix.flatten():
-        outfile.write('%f\n' % f)
-    outfile.close()
-
+    #outfile = open(outfile, 'w')
+    #for f in matrix.flatten():
+    #    outfile.write('%f\n' % f)
+    #outfile.close()
+    np.savetext(outfile,matrix.flatten())
 
 def dfianal(fname, Array=False):
     """Calculate various dfi quantities and then output"""
