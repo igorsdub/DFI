@@ -60,7 +60,7 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
     """
 
     import pandas as pd
-    import pdbio as io
+    import dfi.pdbio as io
 
     if type(CSVFIL) == str:
         data = pd.read_csv(CSVFIL)
@@ -77,7 +77,7 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
         print "Reading in: %s" % (CSVFIL)
 
     ATOMS = []
-    io.pdb_reader(PDBFIL, ATOMS)
+    ATOMS = io.pdb_reader(PDBFIL, ATOMS)
 
     for i in range(len(ATOMS)):
         if True:
