@@ -53,8 +53,8 @@ import pandas as pd
 from scipy import linalg as LA
 from scipy import stats
 import dfi.pdbio as pdbio 
-import dfi.ColorDFI
-import dfi.dfiplotter
+import dfi.ColorDFI as ColorDFI
+import dfi.dfiplotter as dfiplotter
 
 
 def getcoords(ATOMS, Verbose=False):
