@@ -65,12 +65,34 @@ def getuniprols(pdbid):
     else:
         return [unipro for unipro in mapdata.ix[pdbid].values]
 
-def parsefafsaurl(html):
+
+def get_fastaseq(uniprotID):
+    """
+    get_fasta sequence from the uniprot database
+    
+    Input
+    -----
+    uniprot: str
+       uniprotID 
+
+    Output
+    ------
+    fasta_seq: str
+       fasta sequence 
+    """
+    import urllib2
+    uniproURL="http://www.uniprot.org/uniprot/"
+    response = urllib2.urlopen(uniproURL+uniprotID+'.fasta')
+    return parsefafsaurl(response.read())
+           
+    
+def parsefafstaaurl(html,Verbose=False):
     "Parses html fafasa sequence and returns a string of the sequence"
     html = html.split('\n')
     fseq=''
     for line in html:
-        print line
+        if(Verbose):
+            print(line)
         if line.startswith('>'):
             continue
         fseq = fseq + line
