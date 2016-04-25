@@ -83,17 +83,18 @@ def get_fastaseq(uniprotID):
     import urllib2
     uniproURL="http://www.uniprot.org/uniprot/"
     response = urllib2.urlopen(uniproURL+uniprotID+'.fasta')
-    return parsefafsaurl(response.read())
+    return response.read()
+
            
     
-def parsefafstaaurl(html,Verbose=False):
+def parsefafstaurl(html,seqonly=True,Verbose=False):
     "Parses html fafasa sequence and returns a string of the sequence"
     html = html.split('\n')
     fseq=''
     for line in html:
         if(Verbose):
             print(line)
-        if line.startswith('>'):
+        if line.startswith('>') and seqonly:
             continue
         fseq = fseq + line
     return fseq 
@@ -136,7 +137,7 @@ def parsefafsaseq(fname,uniprols=None):
             print uniproid
             print uniproURL+uniproid+'.fasta'
             response = urllib2.urlopen(uniproURL+uniproid+'.fasta')
-            fseq = parsefafsaurl(response.read())
+            fseq = parsefafstaurl(response.read())
             struc_match, seq_match = compareseq(smallseq,fseq,numseq=4)
             if seq_match:
                 print "seq_match", seq_match 
