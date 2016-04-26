@@ -18,7 +18,7 @@ fafsaseq.py DFICSVFILE
 import pandas as pd
 import numpy as np 
 import os 
-from datafiles import * 
+from dfi.datafiles import * 
 
 mapres={'ALA':'A',
 'CYS':'C',
