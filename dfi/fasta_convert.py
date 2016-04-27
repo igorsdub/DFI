@@ -41,10 +41,8 @@ def get_seq(fname):
     fname: file
        name of pdb file
     """
-    ATOMS = []
-    pdbio.pdb_reader(fname, ATOMS, CAonly=True, noalc=True, Verbose=False)
-    for a in ATOMS:
-        yield mapres[a.res_name]
+    ATOMS =pdbio.pdb_reader(fname, CAonly=True, noalc=True, Verbose=False)
+    return [mapres[a.res_name] for a in ATOMS]
 
 
 def format_seq(seq):
