@@ -18,8 +18,8 @@ Example
 
 """
 import sys 
-import UniproBlastToPdb as uni
-from download_pdb import fetch_pdb 
+import dfi.UniproBlastToPdb as uni
+from dfi.download_pdb import fetch_pdb 
 import dfi_calc 
 
 def uniproDFI(uniprotcodes):
