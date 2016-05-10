@@ -89,8 +89,7 @@ def fafsa_format(fname, outfileobj=None):
     """
     title = fname.split('_')[0]  # could lead to a bug
     seq_str = format_seq([x for x in get_seq(fname)])
-    fafsafmt = """
->{}| | |len={}
+    fafsafmt = """>{}| | |len={}
 {}""".format(title, len(seq_str), seq_str)
     if outfileobj:
         outfileobj.write(fafsafmt)
