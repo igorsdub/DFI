@@ -95,7 +95,7 @@ def fafsa_format(fname, outfileobj=None):
     if outfileobj:
         outfileobj.write(fafsafmt)
     else:
-        print fafsafmt
+        return fafsafmt
 
 
 def separate_fasta(fname):
