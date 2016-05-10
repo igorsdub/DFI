@@ -66,14 +66,14 @@ def getuniprols(pdbid):
         return [unipro for unipro in mapdata.ix[pdbid].values]
 
 
-def get_fastaseq(uniprotID):
+def get_fastaseq(ID):
     """
     get_fasta sequence from the uniprot database
     
     Input
     -----
-    uniprot: str
-       uniprotID 
+    ID: str
+       uniprotID or pdbID 
 
     Output
     ------
@@ -81,8 +81,13 @@ def get_fastaseq(uniprotID):
        fasta sequence 
     """
     import urllib2
-    uniproURL="http://www.uniprot.org/uniprot/"
-    response = urllib2.urlopen(uniproURL+uniprotID+'.fasta')
+
+    if len(ID) == 4:
+        pdbURL="http://www.rcsb.org/pdb/files/fasta.txt?structureIdList="
+        response=urllib2.urlopen(pdbURL+ID)
+    else:
+        uniproURL="http://www.uniprot.org/uniprot/"
+        response = urllib2.urlopen(uniproURL+ID+'.fasta')
     return response.read()
 
            
