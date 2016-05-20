@@ -41,17 +41,17 @@ def uniproDFI(uniprotcodes):
         uni.UniBLAST(code)  
         print "ParseFile"
         uni.parseBlastFile(blastfile)
-        print "Get top hit"
-        pdbid = uni._gettophit(csvfile)
-        if pdbid == None:
-            print code, "No Good PDB hit"
-        else:
-            print "Top Hit: ",pdbid 
-        outfile = code+'_'+pdbid+'-dfianalysis.csv' 
-        print "Running DFI"
-        fetch_pdb(pdbid,Verbose=True)
-        pdbfile = pdbid+'.pdb'
-        dfi_calc.calc_dfi(pdbfile,pdbid,dfianalfile=outfile)
+        #print "Get top hit"
+        #pdbid = uni._gettophit(csvfile)
+        #if pdbid == None:
+        #    print code, "No Good PDB hit"
+        #else:
+        #    print "Top Hit: ",pdbid 
+        #outfile = code+'_'+pdbid+'-dfianalysis.csv' 
+        #print "Running DFI"
+        #fetch_pdb(pdbid,Verbose=True)
+        #pdbfile = pdbid+'.pdb'
+        #dfi_calc.calc_dfi(pdbfile,pdbid,dfianalfile=outfile)
     
 
 if __name__ == "__main__" and len(sys.argv) < 2:

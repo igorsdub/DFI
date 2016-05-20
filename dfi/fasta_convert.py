@@ -116,7 +116,7 @@ def separate_fasta(fname):
                 print "Begin"
                 if outfile:
                     outfile.close()
-                title = line[1:]
+                title = line.split('|')[1]
                 title = str(title.strip(' '))
                 print title
                 outfile = open(title + '.fasta', 'w')
