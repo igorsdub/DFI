@@ -17,6 +17,7 @@ SciPy 1.4
 Matplotlib 
 Seaborn 
 Pandas 
+Biopython 
 
 Usage
 -----
