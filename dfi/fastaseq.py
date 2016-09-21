@@ -39,7 +39,7 @@ mapres={'ALA':'A',
 'THR':'T',
 'TRP':'W',
 'TYR':'Y',
-'VAL':'V'
+'VAL':'V',
 'HIE':'H'}
 
 

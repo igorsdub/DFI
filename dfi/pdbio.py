@@ -129,7 +129,7 @@ class ATOM:
         if temp_factor == '':
             self.temp_factor = 0.
         else:
-            self.temp_factor = float(temp_factor)
+            self.temp_factor = 0.
         self.atom_type = str(atom_type)
 
 
