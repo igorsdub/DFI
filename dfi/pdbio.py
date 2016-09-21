@@ -126,8 +126,8 @@ class ATOM:
         self.z = float(z)
         # self.occupancy = float(occupancy)
         self.occupancy = 1.
-        if temp_factor == '':
-            self.temp_factor = 0.
+        if not(temp_factor == ''):
+            self.temp_factor = float(temp_factor)
         else:
             self.temp_factor = 0.
         self.atom_type = str(atom_type)
