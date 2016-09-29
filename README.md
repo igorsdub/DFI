@@ -1,24 +1,15 @@
 # Dynamic Flexibility Index #
 
-The DFI Code is writen in python.  
+
 
 [ ![Codeship Status for avishekkumar/dfi](https://codeship.com/projects/2216d090-addf-0133-68b3-42dfb775ebd5/status?branch=master)](https://codeship.com/projects/132158)
 
-### What is this repository for? ###
 
-* Repository of for storing all versions of the dfi code and related utilties. 
-* [Repository](https://bitbucket.org/avishekkumar/dfi)
 
 
 ### Dependencies ###
 
-* NumPy
-* SciPy
-* Pandas
-* Matplotlib 
-* Seaborn 
-* Biopython 
-* Pytest 
+See the requirments file [dependencies](https://github.com/avishek-r-kumar/dfi/requirements.txt)
 
 ### Description ###
 
@@ -27,11 +18,11 @@ DFI Calculates the dynamic functional index.
 ### How to install ###
 You can clone this repo:
 ```
-git clone https://avishekkumar@bitbucket.org/avishekkumar/dfi.git
+git clone https://github.com/avishek-r-kumar/dfi.git
 ```
 OR to get the latest commit 
 ```
-git clone --depth 1 https://avishekkumar@bitbucket.org/avishekkumar/dfi.git
+git clone --depth 1 https://github.com/avishek-r-kumar/dfi.git
 ```
 To install the dependencies you can use pip
 ```
@@ -39,11 +30,6 @@ pip install -r requirements.txt
 ```
 
 ### Adding the DFI directory to the PATH (Bash) ###
-You can run the scripts directly from anywhere in your filesystem by appending
-the dfi directory to the PATH variable, e.g., 
-```
-export PATH=${PATH}:~/dfi #assuming this is where the dfi folder is in your filesystem
-```
 You can also import the module from anywhere in your filesystem by appending the 
 dfi directory to the PYTHONPATH variable, e.g.,
 ```
