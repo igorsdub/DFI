@@ -9,7 +9,7 @@
 
 ### Dependencies ###
 
-See the requirments file [dependencies](https://github.com/avishek-r-kumar/dfi/requirements.txt)
+See the requirements file [dependencies](https://github.com/avishek-r-kumar/dfi/requirements.txt)
 
 ### Description ###
 
@@ -54,7 +54,7 @@ dfi.py [UNIPROT IDS]
 ```
 This will run dfi on 1l2y.pdb and write out to 1l2y-dfianalysis.csv,
 1l2y-fdficolor.pdb, and 1l2y-dficolor.pdb.
-
+	
 #### Run based on UniprotID ####
 ```
 ./dfi.py P42771
