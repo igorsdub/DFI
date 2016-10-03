@@ -23,7 +23,7 @@ associated with disease.
 See the requirements file [dependencies](https://github.com/avishek-r-kumar/dfi/
 requirements.txt)
 
-### How to install ###
+## How to install ##
 You can clone this repo:
 ```
 git clone https://github.com/avishek-r-kumar/dfi.git
@@ -37,7 +37,7 @@ To install the dependencies you can use pip
 pip install -r requirements.txt 
 ```
 
-### Usage ###
+## Usage ##
 ```
 dfi_calc.py --pdb PDBFILE [--hess HESSFILE] [--fdfi RESNUMS] --help   
 ```
