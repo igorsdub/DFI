@@ -2,10 +2,10 @@
 
 
 ### Short Description ###
-DFI is a python package that calculates protein dynamics from the ["Ozkan Group"][OzkanLab] 
-at Arizona State University.
+DFI is a python package that calculates protein dynamics from the
+[Ozkan Group][OzkanLab] at Arizona State University.
 
-[OzkanLab]: <ozkanlab.physics.asu.edu> "Ozkan Lab Website"
+[OzkanLab]: <http://ozkanlab.physics.asu.edu> "Ozkan Lab Website"
 
 ### Longer Description ###
 The Dynamic Flexiblity index (DFI) is a measure of each residue's contribution to
