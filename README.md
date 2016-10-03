@@ -7,16 +7,21 @@
 s/132158)
 
 
-
+### Description ###
+The Dynamic Flexiblity index (DFI) is a measure of each residue's contribution to
+a protein's dynamics. A low %DFI score indicates a rigid portion of the protein
+while a high %DFI score indicated a flexible portion of the protein. The %DFI
+score has been used as a predictive feature in genetic disease prediction. 
+Mutations in genomes can lead to proteins which can misfunction, manifesting in 
+genetic disease. Our proteome-wide analysis using DFI indicates that certain 
+sites play a critical role in the functinally reated dynamics (i.e, those with
+low dfi values); therefore, mutations at those sites are more likely to be 
+associated with disease. 
 
 ### Dependencies ###
 
 See the requirements file [dependencies](https://github.com/avishek-r-kumar/dfi/
 requirements.txt)
-
-### Description ###
-
-DFI Calculates the dynamic functional index. 
 
 ### How to install ###
 You can clone this repo:
@@ -31,19 +36,6 @@ To install the dependencies you can use pip
 ```
 pip install -r requirements.txt 
 ```
-
-### Adding the DFI directory to the PATH (Bash) ###
-You can also import the module from anywhere in your filesystem by appending the
- 
-dfi directory to the PYTHONPATH variable, e.g.,
-```
-export PYTHONPATH=${PYTHONPATH}:~/dfi #assuming this is where the dfi fold is in
- your filesystem 
-```
-then you should be able to `import dfi_calc` or `import ColorDFI` or `import dfi
-` anywhere
-in the filesystem. 
- 
 
 ### Usage ###
 ```
