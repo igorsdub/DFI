@@ -2,8 +2,10 @@
 
 
 ### Short Description ###
-DFI is a python package that calculates each residue's contribution to protein 
-dynamics. 
+DFI is a python package that calculates protein dynamics from the ["Ozkan Group"][OzkanLab] 
+at Arizona State University.
+
+[OzkanLab]: <ozkanlab.physics.asu.edu> "Ozkan Lab Website"
 
 ### Longer Description ###
 The Dynamic Flexiblity index (DFI) is a measure of each residue's contribution to
