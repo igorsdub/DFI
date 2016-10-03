@@ -10,7 +10,7 @@ s/132158)
 ### Description ###
 The Dynamic Flexiblity index (DFI) is a measure of each residue's contribution to
 a protein's dynamics. A low %DFI score indicates a rigid portion of the protein
-while a high %DFI score indicated a flexible portion of the protein. The %DFI
+while a high %DFI score indicates a flexible portion of the protein. The %DFI
 score has been used as a predictive feature in genetic disease prediction. 
 Mutations in genomes can lead to proteins which can misfunction, manifesting in 
 genetic disease. Our proteome-wide analysis using DFI indicates that certain 
