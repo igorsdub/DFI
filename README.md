@@ -20,8 +20,9 @@ associated with disease.
 
 ### Dependencies ###
 
-See the requirements file [dependencies](https://github.com/avishek-r-kumar/dfi/
-requirements.txt)
+See the requirements file [dependencies][Requirements]
+
+[Requirements]: <https://raw.githubusercontent.com/avishek-r-kumar/DFI/master/requirements.txt>
 
 ## How to install ##
 You can clone this repo:
