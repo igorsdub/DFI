@@ -1,13 +1,11 @@
 # Dynamic Flexibility Index #
 
 
+### Short Description ###
+DFI is a python package that calculates each residue's contribution to protein 
+dynamics. 
 
-[ ![Codeship Status for avishekkumar/dfi](https://codeship.com/projects/2216d090
--addf-0133-68b3-42dfb775ebd5/status?branch=master)](https://codeship.com/project
-s/132158)
-
-
-### Description ###
+### Longer Description ###
 The Dynamic Flexiblity index (DFI) is a measure of each residue's contribution to
 a protein's dynamics. A low %DFI score indicates a rigid portion of the protein
 while a high %DFI score indicates a flexible portion of the protein. The %DFI
