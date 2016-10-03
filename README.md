@@ -1,5 +1,6 @@
 # Dynamic Flexibility Index #
 
+[![Build Status](https://travis-ci.org/avishek-r-kumar/DFI.svg?branch=master)](https://travis-ci.org/avishek-r-kumar/DFI)
 
 ### Short Description ###
 DFI is a python package that calculates protein dynamics from the
