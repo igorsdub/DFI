@@ -23,6 +23,7 @@ sites play a critical role in the functinally reated dynamics (i.e, those with
 low dfi values); therefore, mutations at those sites are more likely to be 
 associated with disease. 
 
+---
 ### Dependencies ###
 
 See the requirements file [dependencies][Requirements]
