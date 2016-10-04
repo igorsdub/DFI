@@ -1,7 +1,7 @@
 # Dynamic Flexibility Index #
 
 
-[![Build Status](https://travis-ci.org/avishek-r-kumar/DFI.svg?branch=master)](https://travis-ci.org/avishek-r-kumar/DFI)
+[![Build Status](https://travis-ci.com/avishek-r-kumar/DFI.svg?token=qr1WKDpoEiNDipEKFzrb&branch=master)](https://travis-ci.com/avishek-r-kumar/DFI)
 [![codecov](https://codecov.io/gh/avishek-r-kumar/DFI/branch/master/graph/badge.svg)](https://codecov.io/gh/avishek-r-kumar/DFI)
 
 
