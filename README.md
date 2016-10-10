@@ -26,7 +26,7 @@ associated with disease.
 ---
 ### Dependencies ###
 DFI was written and tested using Python 2.7. We are in the process of making DFI 
-with Python 3. See the requirements file for dependencies
+compatible with Python 3. See the requirements file for dependencies
 [dependencies][Requirements]. 
 
 [Requirements]: <https://raw.githubusercontent.com/avishek-r-kumar/DFI/master/requirements.txt>
