@@ -77,6 +77,7 @@ highest PDB hit and then run dfi analysis on that PDB. The output is
 P42771-1DC2-dfianalysis.csv. 
 *Note: If you query the NCBI server too often it will push your query
 down the queue*
+
 ---
 
 # Input and Output files
