@@ -8,6 +8,7 @@ try:
 except ImportError:
     from io import StringIO
 
+
 def test_Il2Y():
     sample = StringIO("""
     ResI,ChainID,Res,R,dfi,pctdfi,fdfi,pctfdfi,adfi,ravg,rmin,A
@@ -35,9 +36,9 @@ def test_Il2Y():
     df = pd.read_csv(sample)
     print(df)
     sysls = ['./dfi.py', '--pdb', example_pdb, '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.dfi_calc.parseCommandLine(
         sysls)
-    df_dfi = dfi.calc_dfi(
+    df_dfi = dfi.dfi_calc.calc_dfi(
         pdbfile, covar=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
@@ -46,12 +47,11 @@ def test_Il2Y():
 
     sysls = ['./dfi.py', '--pdb', example_pdb, '--covar', example_covar,
              '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.dfi_calc.parseCommandLine(
         sysls)
-    df_dfi = dfi.calc_dfi(
+    df_dfi = dfi.dfi_calc.calc_dfi(
         pdbfile, covar=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)
     assert np.all(df_dfi.Res.values == df.Res.values)
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
     assert np.allclose(df_dfi.ravg.values, df.ravg.values)
-
