@@ -10,7 +10,7 @@ from setuptools import setup
 def parse_requirements(fname):
     """
     Parses requirments.txt file into a list
-    
+
     Parameters
     ----------
     fname: str
@@ -24,28 +24,27 @@ def parse_requirements(fname):
     """
     with open(fname, 'r') as infile:
         dependencies = (
-        infile.read().splitlines()
+            infile.read().splitlines()
         )
 
     return dependencies
 
 
-
 setup(name='dfi',
-      version='0.1.0',
+      version='0.10.0',
       description='Dynamic Flexibility Index',
       author='Avishek Kumar',
       author_email='avishek@asu.edu',
       classifiers=[
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Operating System :: POSIX',
-        'Programming Language :: Python',
-        'Topic :: Scientific/Engineering',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        ],
+          'Development Status :: 4 - Beta',
+          'Environment :: Console',
+          'Intended Audience :: Science/Research',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: POSIX',
+          'Programming Language :: Python',
+          'Topic :: Scientific/Engineering',
+          'Topic :: Software Development :: Libraries :: Python Modules',
+      ],
       packages=['dfi'],
       scripts=['./dfi/dfi_calc.py',
                './dfi/uniprot_dfi.py',
@@ -54,6 +53,3 @@ setup(name='dfi',
       long_description=open('README.md').read(),
       install_requires=parse_requirements('requirements.txt')
       )
-
-
-

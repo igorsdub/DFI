@@ -1,8 +1,9 @@
 # Dynamic Flexibility Index 
 
 
-[![Build Status](https://travis-ci.com/avishek-r-kumar/DFI.svg?token=qr1WKDpoEiNDipEKFzrb&branch=master)](https://travis-ci.com/avishek-r-kumar/DFI)
+[![Build Status](https://travis-ci.com/avishekrk/DFI.svg?token=qr1WKDpoEiNDipEKFzrb&branch=master)](https://travis-ci.com/avishekrk/DFI)
 [![codecov](https://codecov.io/gh/avishek-r-kumar/DFI/branch/master/graph/badge.svg)](https://codecov.io/gh/avishek-r-kumar/DFI)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 
 
