@@ -39,8 +39,8 @@ git clone --depth 1 https://github.com/avishek-r-kumar/dfi.git
 ## Dependencies
 
 
-DFI was written and tested using Python 2.7. We are in the process of making DFI 
-compatible with Python 3. See the requirements file for dependencies
+DFI was written and tested using Python 2.7 and Pyton 3.5. 
+See the requirements file for dependencies
 [dependencies][Requirements]. 
 
 [Requirements]: <https://raw.githubusercontent.com/avishek-r-kumar/DFI/master/requirements.txt>
