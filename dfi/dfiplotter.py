@@ -23,7 +23,7 @@ pdbid-mpctdfi.png
 pdbid-pcthmdfi.png
 pdbid-DFIfig.png
 """
-
+from __future__ import print_function
 
 def plotdfi(df, quant, pdbid):
     import numpy as np
@@ -42,4 +42,4 @@ def plotdfi(df, quant, pdbid):
     plt.xlabel('Residue Index')
     plt.savefig(pdbid + '-' + quant + '.png')
     return plt
-    print "Printed: %s" % (pdbid + '-' + quant + '.png')
+    print("Printed: %s" % (pdbid + '-' + quant + '.png'))

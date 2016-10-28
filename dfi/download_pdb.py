@@ -7,6 +7,8 @@ Description
 Download pdb is suite of tools for interfacing
 with the protein data bank (PDB)
 """
+from __future__ import print_function
+
 def fetch_pdb(id,writetofile=True,Verbose=False):
     """
     Download pdb file and write out to file id.pdb

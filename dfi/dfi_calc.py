@@ -9,30 +9,20 @@ DFI Calculates the dynamics flexibility index
 in order to study the conformational dynamics 
 of a protein. 
 
-Requirements
-------------
-Python 2.7.5
-NumPy 1.4
-SciPy 1.4 
-Matplotlib 
-Seaborn 
-Pandas 
-Biopython 
 
 Usage
 -----
-dfi.py --pdb PDBFILE [--hess HESSFILE] [--chain CHAINID] [--fdfi RESNUMS] --help   
+dfi_calc.py --pdb PDBFILE [--covar COVARFILE] [--chain CHAINID] [--fdfi RESNUMS] --help   
 
 Input
 -----
 PDBFILE:     PDBFILE
-HESSFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
+COVARFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
 RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 
 Output 
 ------
 * Structure used for DFI: -dficolor.pdb 
-
 * Master DFI: -dfianalysis.csv      
 
 Example
@@ -41,18 +31,17 @@ Example
 ./dfi.py --pdb 1l2y.pdb [--covar] covariance.dat [--chain] A [--fdfi] A10
 ```
 """
-
-
+from __future__ import print_function, division
 import sys
 if __name__ == "__main__" and len(sys.argv) < 2:
-    print __doc__
+    print( __doc__)
     exit()
-
 import os
 import numpy as np
 import pandas as pd
 from scipy import linalg as LA
 from scipy import stats
+from six.moves import zip, range
 import dfi.pdbio as pdbio 
 import dfi.ColorDFI as ColorDFI
 import dfi.dfiplotter as dfiplotter
@@ -129,9 +118,9 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
                 if sqrt(r) > cutoff:
                     sprngcnst = 0.
             if(Verbose):
-                print ','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij, 
+                print(','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij, 
                                          y_ij, z_ij, r, sprngcnst, gamma, cutoff], 
-                                        dtype=str))
+                                        dtype=str)))
 
             # creation of Hii
             hess[3 * i, 3 * i] += sprngcnst * (x_ij * x_ij / r)
@@ -246,7 +235,7 @@ def calcperturbMat(invHrs, direct, resnum, Normalize=True):
     if(Normalize):
         nrmlperturbMat = perturbMat / np.sum(perturbMat)
     else:
-        print "WARNING: The perturbation matrix is not NORMALIZED"
+        print("WARNING: The perturbation matrix is not NORMALIZED")
         nrmlperturbMat = perturbMat
 
     return nrmlperturbMat
@@ -260,10 +249,10 @@ def CLdict(argv):
             ind = argv.index(s)
             comline_arg[s] = argv[ind + 1]
             if (os.path.isfile(argv[ind + 1]) != True):
-                print "File " + argv[ind + 1] + " not found."
+                print("File " + argv[ind + 1] + " not found.")
                 sys.exit(1)
 
-        if s == "--hess":
+        if s == "--covar":
             ind = argv.index(s)
             comline_arg[s] = argv[ind + 1]
 
@@ -283,13 +272,13 @@ def CLdict(argv):
             # print resvals
 
         if s == "--help":
-            print __doc__
+            print(__doc__)
             sys.exit(1)
 
     if ("--pdb" not in argv):
-        print argv
-        print "No --pdb"
-        print __doc__
+        print(argv)
+        print("No --pdb")
+        print( __doc__)
         sys.exit(1)
 
     return comline_arg
@@ -309,7 +298,7 @@ def chainresmap(ATOMS, Verbose=False):
             entry = ATOMS[i].chainID + ATOMS[i].res_index
         table[entry] = i
     if(Verbose):
-        print table
+        print(table)
     return table
 
 
@@ -321,7 +310,7 @@ def fdfiresf(ls_chain, table):
         if res in table:
             ls_ind.append(table[res])
         else:
-            print "WARNING: Can't find %s" % res
+            print("WARNING: Can't find %s" % res)
             continue
     return np.array(ls_ind, dtype=int)
 
@@ -423,11 +412,11 @@ def outputToDF(ATOMS, dfi, pctdfi, fdfi=None, pctfdfi=None, ls_ravg=None,
               'TYR': 'Y',
               'VAL': 'V'}
     dfx = pd.DataFrame()
-    dfx['ResI'] = [ATOMS[i].res_index.strip(' ') for i in xrange(len(ATOMS))]
+    dfx['ResI'] = [ATOMS[i].res_index.strip(' ') for i in range(len(ATOMS))]
     dfx['dfi'] = dfi
     dfx['pctdfi'] = pctdfi
-    dfx['ChainID'] = [ATOMS[i].chainID for i in xrange(len(ATOMS))]
-    dfx['Res'] = [ATOMS[i].res_name for i in xrange(len(ATOMS))]
+    dfx['ChainID'] = [ATOMS[i].chainID for i in range(len(ATOMS))]
+    dfx['Res'] = [ATOMS[i].res_name for i in range(len(ATOMS))]
     dfx['R'] = dfx['Res'].map(mapres)
 
     if type(fdfi).__module__ == 'numpy':
@@ -440,7 +429,7 @@ def outputToDF(ATOMS, dfi, pctdfi, fdfi=None, pctfdfi=None, ls_ravg=None,
 
     if(writetofile):
         dfx.to_csv(outfile, index=False)
-        print "Wrote out to %s" % (outfile)
+        print("Wrote out to %s" % (outfile))
     return dfx
 
 
@@ -533,8 +522,8 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     gamma = 100
     hess = calchessian(numres, x, y, z, gamma, Verbose)
     if(Verbose):
-        print "Hessian"
-        print hess
+        print( "Hessian")
+        print(hess)
         flatandwrite(hess, 'hesspy.debug')
         e_vals, e_vecs = LA.eig(hess)
         __writeout_eigenvalues(e_vals, eigenfile)

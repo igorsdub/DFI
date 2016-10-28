@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # For reading and writing pdb files
-
+from __future__ import print_function
 import numpy as np
 import sys
 
@@ -37,7 +37,7 @@ def pdb_reader(filename, CAonly=False, noalc=True, chainA=False,
         for line in pdb:
             if line.startswith('ENDMDL'):
                 if(Verbose):
-                    print "MULTIPLE MODELS...USING MODEL1"
+                    print("MULTIPLE MODELS...USING MODEL1")
                 return ATOMS
 
             if line.startswith('ATOM'):
@@ -53,16 +53,13 @@ def pdb_reader(filename, CAonly=False, noalc=True, chainA=False,
                     continue
 
                 res_name = line[17:20]
-                if(Verbose):
-                    print res_name
 
                 chainID = line[21]
                 if chainA and not(chainID == chain_name):
                     continue
 
                 res_index = line[22:27]
-                if(Verbose):
-                    print res_index
+
                 insert_code = line[26]
                 x = line[31:38]
                 y = line[39:46]
@@ -76,7 +73,7 @@ def pdb_reader(filename, CAonly=False, noalc=True, chainA=False,
                                   line[55:60], line[61:66], line[77]))
                 readatoms += 1
 
-    print "Read %d atoms from the %s" % (readatoms, filename)
+    print("Read %d atoms from the %s" % (readatoms, filename))
     return ATOMS
 
 
@@ -105,7 +102,7 @@ def pdb_writer(ATOMS, msg="HEADER  FROM PDBIO\n", filename="out.pdb",
             pdb.write("ATOM  %(atom_index)5d %(atom_name)4s%(alc)1s%(res_name)-3s %(chainID)1s%(res_index)4s%(iCode)1s   %(x)8.3f%(y)8.3f%(z)8.3f%(occupancy)6.2f%(temp_factor)6.2f%(atom_type)12s  \n" % vars())
         pdb.write("TER\n")
         pdb.write("END\n")
-    print "Wrote out to file, %s" % filename
+    print("Wrote out to file, %s" % filename)
 
 
 class ATOM:
@@ -124,12 +121,9 @@ class ATOM:
         self.x = float(x)
         self.y = float(y)
         self.z = float(z)
-        # self.occupancy = float(occupancy)
         self.occupancy = 1.
         if temp_factor == '    ':
             self.temp_factor = 0.
         else:
             self.temp_factor = float(temp_factor)
         self.atom_type = str(atom_type)
-
-
