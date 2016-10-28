@@ -1,5 +1,6 @@
 # IPython log file
-import dfi 
+import dfi.dfi_calc
+import dfi.pdbio 
 from dfi.datafiles import *
 import numpy as np 
 
