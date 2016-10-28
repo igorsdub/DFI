@@ -21,7 +21,7 @@ colorbydfi(CSVFIL,PDBFIL,Verbose)
 - PDBFIL: Corresponding PDBFIL
 - Verboose: Boolean for debugging
 """
-
+from __future__ import print_function
 import sys
 
 
@@ -70,11 +70,11 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
         pdbid = outfile.split('-')[0]
 
     if(Verbose):
-        print "CSVFIL: %s" % (CSVFIL)
-        print "PDBFIL: %s" % (PDBFIL)
-        print "pdbid: %s" % (pdbid)
-        print data[:10]
-        print "Reading in: %s" % (CSVFIL)
+        print("CSVFIL: %s" % (CSVFIL))
+        print("PDBFIL: %s" % (PDBFIL))
+        print("pdbid: %s" % (pdbid))
+        print(data[:10])
+        print("Reading in: %s" % (CSVFIL))
 
     ATOMS = []
     ATOMS = io.pdb_reader(PDBFIL, ATOMS)
@@ -83,11 +83,11 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
         if True:
             resind = ATOMS[i].res_index
             chainind = ATOMS[i].chainID
-            resmask = ( data.ResI == int(resind) )
-            chainmask = ( data.ChainID == chainind )
-            val = data[resmask & chainmask ][colorbyparam].values[0]
+            resmask = (data.ResI == int(resind))
+            chainmask = (data.ChainID == chainind)
+            val = data[resmask & chainmask][colorbyparam].values[0]
             if Verbose:
-                print ATOMS[i].res_index, ATOMS[i].temp_factor, val
+                print(ATOMS[i].res_index, ATOMS[i].temp_factor, val)
             ATOMS[i].temp_factor = val
         else:
             ATOMS[i].temp_factor = 0.
@@ -97,7 +97,7 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
         io.pdb_writer(ATOMS, filename=pdbid + '-dficolor.pdb')
 
 if __name__ == "__main__" and len(sys.argv) < 2:
-    print __doc__
+    print(__doc__)
     exit()
 
 if __name__ == "__main__":

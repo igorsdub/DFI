@@ -6,6 +6,7 @@ Fasta Convert
 Suite of Tools for converting to and from the
 fasta sequence.
 """
+from __future__ import print_function
 import pdbio
 import glob
 
@@ -113,11 +114,11 @@ def separate_fasta(fname):
     with open(fname, 'r') as infile:
         for line in infile:
             if line.startswith(">"):
-                print "Begin"
+                print("Begin")
                 if outfile:
                     outfile.close()
                 title = line.split('|')[1]
                 title = str(title.strip(' '))
-                print title
+                print(title)
                 outfile = open(title + '.fasta', 'w')
             outfile.write(line)

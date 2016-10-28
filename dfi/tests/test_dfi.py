@@ -20,8 +20,8 @@ def test_pctrank_descending():
 
 
 def test_comlineargs():
-    comline = '--fdfi A19 A10 --hess mwcovar.dat --pdb %s'%example_pdb
+    comline = '--fdfi A19 A10 --covar mwcovar.dat --pdb %s'%example_pdb
     dict_parms = dfi.CLdict(comline.split())
     assert dict_parms['--pdb'] == example_pdb  
-    assert dict_parms['--hess'] == 'mwcovar.dat'
+    assert dict_parms['--covar'] == 'mwcovar.dat'
     assert np.all(dict_parms['--fdfi'] == np.array(['A19', 'A10']))

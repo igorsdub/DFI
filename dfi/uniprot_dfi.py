@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 """
 ===
 DFI
@@ -17,10 +17,12 @@ Example
 ./dfi.py P42771
 
 """
-import sys 
+from __future__ import print_function
+import sys
 import dfi.UniproBlastToPdb as uni
-from dfi.download_pdb import fetch_pdb 
-import dfi_calc 
+from dfi.download_pdb import fetch_pdb
+import dfi_calc
+
 
 def uniproDFI(uniprotcodes):
     """
@@ -35,30 +37,16 @@ def uniproDFI(uniprotcodes):
 
     """
     for code in uniprotcodes:
-        blastfile = code+'_blast.xml'
-        csvfile = code+'.csv'
-        print "Blasting"
-        uni.UniBLAST(code)  
-        print "ParseFile"
+        blastfile = code + '_blast.xml'
+        csvfile = code + '.csv'
+        print("Blasting")
+        uni.UniBLAST(code)
+        print("ParseFile")
         uni.parseBlastFile(blastfile)
-        #print "Get top hit"
-        #pdbid = uni._gettophit(csvfile)
-        #if pdbid == None:
-        #    print code, "No Good PDB hit"
-        #else:
-        #    print "Top Hit: ",pdbid 
-        #outfile = code+'_'+pdbid+'-dfianalysis.csv' 
-        #print "Running DFI"
-        #fetch_pdb(pdbid,Verbose=True)
-        #pdbfile = pdbid+'.pdb'
-        #dfi_calc.calc_dfi(pdbfile,pdbid,dfianalfile=outfile)
-    
+
 
 if __name__ == "__main__" and len(sys.argv) < 2:
-    print __doc__
+    print(__doc__)
 else:
     uniprotcodes = sys.argv[1:]
     uniproDFI(uniprotcodes)
-    
-
-    

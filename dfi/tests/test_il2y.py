@@ -1,13 +1,12 @@
 import pandas as pd
-from StringIO import StringIO
 import numpy as np
-#import os.path, sys
-#sys.path.append(os.path.join(os.path.dirname(
-#    os.path.realpath(__file__)), os.pardir))
+import dfi
+from dfi.datafiles import *
 
-import dfi 
-from dfi.datafiles import * 
-
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 def test_Il2Y():
     sample = StringIO("""
@@ -34,7 +33,7 @@ def test_Il2Y():
 20,A,SER,S,0.164519007168,1.0,0.878281,0.8,0.75,16.6916192444,16.6916192444,A
 """)
     df = pd.read_csv(sample)
-    print df
+    print(df)
     sysls = ['./dfi.py', '--pdb', example_pdb, '--fdfi', 'A10']
     pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
         sysls)
@@ -45,7 +44,7 @@ def test_Il2Y():
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
     assert np.allclose(df_dfi.ravg.values, df.ravg.values)
 
-    sysls = ['./dfi.py', '--pdb', example_pdb,'--covar', example_covar, 
+    sysls = ['./dfi.py', '--pdb', example_pdb, '--covar', example_covar,
              '--fdfi', 'A10']
     pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.parseCommandLine(
         sysls)
@@ -55,6 +54,4 @@ def test_Il2Y():
     assert np.allclose(df_dfi.pctdfi.values, df.pctdfi.values)
     assert np.allclose(df_dfi.pctfdfi.values, df.pctfdfi.values)
     assert np.allclose(df_dfi.ravg.values, df.ravg.values)
-
-    
 
