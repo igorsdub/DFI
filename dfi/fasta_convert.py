@@ -8,7 +8,6 @@ fasta sequence.
 """
 from __future__ import print_function
 import pdbio
-import glob
 
 
 mapres = {'ALA': 'A',
@@ -42,7 +41,7 @@ def get_seq(fname):
     fname: file
        name of pdb file
     """
-    ATOMS =pdbio.pdb_reader(fname, CAonly=True, noalc=True, Verbose=False)
+    ATOMS = pdbio.pdb_reader(fname, CAonly=True, noalc=True, Verbose=False)
     return [mapres[a.res_name] for a in ATOMS]
 
 

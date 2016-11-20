@@ -4,25 +4,25 @@
 UniproBlastToPDB
 =================
 
-Description 
+Description
 ------------
-Given a Uniprot code will run blastp to retreive fasta sequence and blast xml output 
-and parse the output in the following way:
+Given a Uniprot code will run blastp to retreive fasta sequence
+ and blast xml outputand parse the output in the following way:
 
-Uniprot | PDBid | chain | query_to | query_from | Iter Query Len | e-value | Query Coverage | Sequence Identity 
+Uniprot|PDBid|chain|query_to|query_from|IterQueryLen|e-value|QueryCoverage|SequenceIdentity
 
 Usage
 -----
 
 ```
-UniproBlastToPdb.py UNIPROid 
+UniproBlastToPdb.py UNIPROid
 ```
 
-Output 
+Output
 -------
 - UniproID.fasta
-- Unipro_blast.xml 
-- Unipro.csv 
+- Unipro_blast.xml
+- Unipro.csv
 """
 from __future__ import print_function
 import sys
@@ -122,8 +122,6 @@ def parseBlastFile(xmlfil):
     result_handle = open(xmlfil)
     blast_record = NCBIXML.read(result_handle)
     result_handle.close()
-
-    #E_VALUE_THRESH = 1E-25
 
     outfilname = NP_id + '.csv'
 

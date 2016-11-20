@@ -25,6 +25,11 @@ from __future__ import print_function
 import sys
 
 
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print(__doc__)
+    exit()
+
+
 def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
                outfile=None):
     """
@@ -96,9 +101,6 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
     else:
         io.pdb_writer(ATOMS, filename=pdbid + '-dficolor.pdb')
 
-if __name__ == "__main__" and len(sys.argv) < 2:
-    print(__doc__)
-    exit()
 
 if __name__ == "__main__":
     colorbydfi(sys.argv[1], sys.argv[2], Verbose=False)

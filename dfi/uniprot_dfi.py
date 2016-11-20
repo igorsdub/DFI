@@ -20,17 +20,15 @@ Example
 from __future__ import print_function
 import sys
 import dfi.UniproBlastToPdb as uni
-from dfi.download_pdb import fetch_pdb
-import dfi_calc
 
 
 def uniproDFI(uniprotcodes):
     """
     uniproDFI take a list of uniprot codes, 
     finds the top pdb hit and then computes
-    the dfi profile 
+    the dfi profile
 
-    Input 
+    Input
     -----
     uniprotcodes: ls
        ls of uniprot codes to run DFI on 
@@ -38,7 +36,6 @@ def uniproDFI(uniprotcodes):
     """
     for code in uniprotcodes:
         blastfile = code + '_blast.xml'
-        csvfile = code + '.csv'
         print("Blasting")
         uni.UniBLAST(code)
         print("ParseFile")
