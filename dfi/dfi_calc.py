@@ -33,18 +33,20 @@ Example
 """
 from __future__ import print_function, division
 import sys
-if __name__ == "__main__" and len(sys.argv) < 2:
-    print( __doc__)
-    exit()
 import os
 import numpy as np
 import pandas as pd
 from scipy import linalg as LA
 from scipy import stats
-from six.moves import zip, range
-import dfi.pdbio as pdbio 
+from six.moves import range
+import dfi.pdbio as pdbio
 import dfi.ColorDFI as ColorDFI
 import dfi.dfiplotter as dfiplotter
+
+
+if __name__ == "__main__" and len(sys.argv) < 2:
+    print(__doc__)
+    exit()
 
 
 def getcoords(ATOMS, Verbose=False):
@@ -65,10 +67,13 @@ def getcoords(ATOMS, Verbose=False):
        numpy arrays of x,y,z 
 
     """
-    x = np.array( [atom.x for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
-    y = np.array( [atom.y for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
-    z = np.array( [atom.z for atom in ATOMS if atom.atom_name == 'CA '], dtype = float)
-    
+    x = np.array(
+        [atom.x for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+    y = np.array(
+        [atom.y for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+    z = np.array(
+        [atom.z for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+
     return x, y, z
 
 
@@ -96,7 +101,7 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
     """
     numresthree = 3 * resnum
     hess = np.zeros((numresthree, numresthree))
-  
+
     if(Verbose):
         print("i,j,x1,y1,z1,x2,y2,z2,x_ij,y_ij,z_ij,r,k,g,cut")
     for i in range(resnum):
@@ -118,8 +123,8 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
                 if sqrt(r) > cutoff:
                     sprngcnst = 0.
             if(Verbose):
-                print(','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij, 
-                                         y_ij, z_ij, r, sprngcnst, gamma, cutoff], 
+                print(','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij,
+                                         y_ij, z_ij, r, sprngcnst, gamma, cutoff],
                                         dtype=str)))
 
             # creation of Hii
@@ -154,10 +159,11 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
 def flatandwrite(matrix, outfile):
     """Flattens out a matrix to a Nx1 column and write out to a file. """
     #outfile = open(outfile, 'w')
-    #for f in matrix.flatten():
+    # for f in matrix.flatten():
     #    outfile.write('%f\n' % f)
-    #outfile.close()
-    np.savetext(outfile,matrix.flatten())
+    # outfile.close()
+    np.savetext(outfile, matrix.flatten())
+
 
 def dfianal(fname, Array=False):
     """Calculate various dfi quantities and then output"""
@@ -278,7 +284,7 @@ def CLdict(argv):
     if ("--pdb" not in argv):
         print(argv)
         print("No --pdb")
-        print( __doc__)
+        print(__doc__)
         sys.exit(1)
 
     return comline_arg
@@ -522,7 +528,7 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     gamma = 100
     hess = calchessian(numres, x, y, z, gamma, Verbose)
     if(Verbose):
-        print( "Hessian")
+        print("Hessian")
         print(hess)
         flatandwrite(hess, 'hesspy.debug')
         e_vals, e_vecs = LA.eig(hess)
@@ -550,8 +556,8 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     return invHrs
 
 
-def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None, Verbose=False,
-             writetofile=False, colorpdb=False, dfianalfile=None):
+def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
+             Verbose=False, writetofile=False, colorpdb=False, dfianalfile=None):
     """Main function for calculating DFI 
 
     Inputs 
@@ -630,7 +636,9 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None, V
 
     # output to dataframe
     if len(ls_reschain) > 0:
-        df_dfi = outputToDF(ATOMS, dfi, pctdfi, fdfi=fdfi, pctfdfi=pctfdfi, ls_ravg=ls_ravg, ls_rmin=ls_rmin, outfile=dfianalfile,
+        df_dfi = outputToDF(ATOMS, dfi, pctdfi, fdfi=fdfi, pctfdfi=pctfdfi,
+                            ls_ravg=ls_ravg, ls_rmin=ls_rmin,
+                            outfile=dfianalfile,
                             writetofile=writetofile)
     else:
         df_dfi = outputToDF(ATOMS, dfi, pctdfi,
@@ -650,6 +658,7 @@ if __name__ == "__main__":
     pdbfile, pdbid, covar, ls_reschain, chain_name = parseCommandLine(
         sys.argv)
     print("Processing %s" % pdbfile)
-    df_dfi = calc_dfi(pdbfile, pdbid, covar=covar, ls_reschain=ls_reschain, chain_name=chain_name,
+    df_dfi = calc_dfi(pdbfile, pdbid, covar=covar, ls_reschain=ls_reschain,
+                      chain_name=chain_name,
                       writetofile=True, colorpdb=True)
     dfiplotter.plotdfi(df_dfi, 'pctdfi', pdbid)

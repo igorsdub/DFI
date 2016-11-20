@@ -2,6 +2,7 @@ import dfi
 import glob
 from six.moves import zip
 
+
 def bulk_dfi(pdbfile, Verbose=False):
     """
     Calculates dfi for all covariance matrices. 

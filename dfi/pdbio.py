@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # For reading and writing pdb files
 from __future__ import print_function
-import numpy as np
-import sys
 
 
 def pdb_reader(filename, CAonly=False, noalc=True, chainA=False,
