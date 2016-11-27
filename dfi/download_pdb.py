@@ -19,11 +19,11 @@ def fetch_pdb(id, writetofile=True, Verbose=False):
     id: str
        4 letter pdb code
     writetofile: bool
-       Write out to file otherwise return file. 
+       Write out to file otherwise return file.
     Output
     ------
     id.pdb: file
-       filename id.pdb 
+       filename id.pdb
     """
     from StringIO import StringIO
     import urllib

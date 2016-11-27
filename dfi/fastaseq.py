@@ -6,7 +6,7 @@ FAFSA SEQ
 Description
 ------------
 Downloads the fafsa sequence from the pdb and sees where the sequence begins in
-the fafsa sequence and adds it to the csv file. 
+the fafsa sequence and adds it to the csv file.
 
 Usage
 -----
@@ -17,7 +17,6 @@ fafsaseq.py DFICSVFILE
 from __future__ import print_function
 import pandas as pd
 import numpy as np
-import os
 from dfi.datafiles import *
 
 mapres = {'ALA': 'A',
@@ -50,12 +49,12 @@ def getuniprols(pdbid):
     Input
     -----
     pdbid: str
-       4 letter code PDBID 
+       4 letter code PDBID
 
     Output
     ------
     ls_unipro: ls
-       list of uniprotID(s) associated with PDBID 
+       list of uniprotID(s) associated with PDBID
     """
     import pandas as pd
     pdbid = pdbid.upper()
@@ -74,12 +73,12 @@ def get_fastaseq(ID):
     Input
     -----
     ID: str
-       uniprotID or pdbID 
+       uniprotID or pdbID
 
     Output
     ------
     fasta_seq: str
-       fasta sequence 
+       fasta sequence
     """
     import urllib2
 
@@ -121,7 +120,7 @@ def compareseq(smallseq, fseq, numseq=4):
 def parsefafsaseq(fname, uniprols=None):
     """
     Parse the fafas seq using the csv filename and uniprotids.
-    Returns a list of the outfile names 
+    Returns a list of the outfile names
     """
     outfilels = []
     data = pd.read_csv(fname, index_col='ResI')
@@ -150,9 +149,7 @@ def parsefafsaseq(fname, uniprols=None):
                 print("struc_match", struc_match)
                 ind_match = seq_match - 1
                 matchseq = [f for f in fseq[ind_match - struc_match:]]
-                #matchseq = [f for f in fseq[ind_match:ind_match+len(smallseq)+ind_match] ]
                 na_ls = ['NA' for i in range(struc_match)]
-                #matchseq = na_ls + matchseq
                 print('fseq', fseq)
                 print("---")
                 print('smallseq', smallseq)

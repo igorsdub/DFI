@@ -251,7 +251,7 @@ def CLdict(argv):
         if s == "--pdb":
             ind = argv.index(s)
             comline_arg[s] = argv[ind + 1]
-            if (os.path.isfile(argv[ind + 1]) != True):
+            if (os.path.isfile(argv[ind + 1]) is False):
                 print("File " + argv[ind + 1] + " not found.")
                 sys.exit(1)
 
@@ -500,7 +500,8 @@ def _writeout_eigevalues(e_vals, eigenfile):
             outfile.write("%d\t%f\n" % (i, np.real(val)))
 
 
-def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
+def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False,
+                    eigenfile=None):
     """
     Calculates the covariance matrix by first
     calculating the hessian from coordinates and then
@@ -529,7 +530,7 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
         print(hess)
         flatandwrite(hess, 'hesspy.debug')
         e_vals, e_vecs = LA.eig(hess)
-        _writeout_eigevalues(e_vals, 'eigenfile.txt')
+        _writeout_eigevalues(e_vals, eigenfile)
 
     U, w, Vt = LA.svd(hess, full_matrices=False)
     S = LA.diagsvd(w, len(w), len(w))
@@ -586,12 +587,8 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     df_dfi: DataFrame
        DataFrame object for DFI values
     """
-    if(Verbose):
-        eigenfile = pdbid + '-eigenvalues.txt'
-        invhessfile = pdbid + '-pinv_svd.debug'
-    else:
-        eigenfile = None
-        invhessfile = None
+    eigenfile = pdbid + '-eigenvalues.txt'
+    invhessfile = pdbid + '-pinv_svd.debug'
     if(not(pdbid)):
         pdbid = pdbfile.split('.')[0]
     if(not(dfianalfile)):
@@ -605,7 +602,9 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
 
     # create covariance matrix or read it in if provided
     if not(covar):
-        invHrs = calc_covariance(numres, x, y, z, Verbose=False)
+        invHrs = calc_covariance(numres, x, y, z, Verbose=False,
+                                 eigenfile=eigenfile,
+                                 invhessfile=invhessfile)
     else:  # this is where we load the Hessian if provided
         invHrs = np.loadtxt(covar)
 
