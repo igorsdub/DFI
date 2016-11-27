@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
 import dfi
-from dfi.datafiles import *
-
+from dfi.datafiles import example_covar, example_pdb
 try:
     from StringIO import StringIO
 except ImportError:

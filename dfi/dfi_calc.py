@@ -587,10 +587,10 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     df_dfi: DataFrame
        DataFrame object for DFI values
     """
-    eigenfile = pdbid + '-eigenvalues.txt'
-    invhessfile = pdbid + '-pinv_svd.debug'
     if(not(pdbid)):
         pdbid = pdbfile.split('.')[0]
+    eigenfile = pdbid + '-eigenvalues.txt'
+    invhessfile = pdbid + '-pinv_svd.debug'
     if(not(dfianalfile)):
         dfianalfile = pdbid + '-dfianalysis.csv'
 
