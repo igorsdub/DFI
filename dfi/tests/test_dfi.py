@@ -1,10 +1,6 @@
 import numpy as np
-import os
-
 import dfi
-from dfi.datafiles import *
-
-# test pctrank code
+from dfi.datafiles import example_pdb
 
 
 def test_pctrank_ascending():

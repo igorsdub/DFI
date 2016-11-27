@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 import dfi
-from dfi.datafiles import *
-
+from dfi.datafiles import example_covar, example_pdb
+from dfi.dfi_calc import parseCommandLine
 try:
     from StringIO import StringIO
 except ImportError:
@@ -36,7 +36,7 @@ def test_Il2Y():
     df = pd.read_csv(sample)
     print(df)
     sysls = ['./dfi.py', '--pdb', example_pdb, '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.dfi_calc.parseCommandLine(
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = parseCommandLine(
         sysls)
     df_dfi = dfi.dfi_calc.calc_dfi(
         pdbfile, covar=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)
@@ -47,7 +47,7 @@ def test_Il2Y():
 
     sysls = ['./dfi.py', '--pdb', example_pdb, '--covar', example_covar,
              '--fdfi', 'A10']
-    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = dfi.dfi_calc.parseCommandLine(
+    pdbfile, pdbid, mdhess, ls_reschain, chain_nam = parseCommandLine(
         sysls)
     df_dfi = dfi.dfi_calc.calc_dfi(
         pdbfile, covar=mdhess, ls_reschain=ls_reschain, chain_name=chain_nam)

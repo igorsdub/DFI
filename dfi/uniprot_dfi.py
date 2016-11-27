@@ -7,8 +7,8 @@ DFI
 Description
 -----------
 
-Given a list of uniprot IDs: 
-dfi.py will find do a blast search on the NCBI 
+Given a list of uniprot IDs:
+dfi.py will find do a blast search on the NCBI
 to find the highest hit PDB and calculate the DFI profile
 of that pdb
 
@@ -24,14 +24,14 @@ import dfi.UniproBlastToPdb as uni
 
 def uniproDFI(uniprotcodes):
     """
-    uniproDFI take a list of uniprot codes, 
+    uniproDFI take a list of uniprot codes,
     finds the top pdb hit and then computes
     the dfi profile
 
     Input
     -----
     uniprotcodes: ls
-       ls of uniprot codes to run DFI on 
+       ls of uniprot codes to run DFI on
 
     """
     for code in uniprotcodes:

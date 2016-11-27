@@ -1,4 +1,3 @@
-# IPython log file
 """
 Fasta Convert
 -------------

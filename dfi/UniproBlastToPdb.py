@@ -27,13 +27,9 @@ Output
 from __future__ import print_function
 import sys
 import random
-import Bio
 from Bio.Blast import NCBIXML
 from Bio.Blast import NCBIWWW
-from Bio import SeqIO
 from Bio import Entrez
-from Bio.Blast.Applications import NcbiblastpCommandline
-from Bio.Seq import Seq
 import pandas as pd
 
 emails = ['123fakeemail@email.com']
@@ -43,21 +39,20 @@ def UniBLAST(code, Verbose=False):
     """
     Input
     ------
-    Uniprot Code 
+    Uniprot Code
     UniBLAST(code)
     e.g. UniBLAST('O00238')
 
     Description
     -----------
     Outputs a Fasta sequence and
-    Runs blasp looking through pdb database with the Uniprot code 
+    Runs blasp looking through pdb database with the Uniprot code
 
     Output
     ------
-    - UniproID.fasta     FASTA Sequence 
-    - UniproID_blast.xml Blast output in XML Format 
+    - UniproID.fasta     FASTA Sequence
+    - UniproID_blast.xml Blast output in XML Format
     """
-
     Entrez.email = random.choice(emails)
     if(Verbose):
         print("Using email: %s" % (Entrez.email))
@@ -79,16 +74,16 @@ def getfasta(code, Verbose=True):
     """
     Input
     -----
-    Uniprot code 
+    Uniprot code
 
     Description
     ------------
     getfasta(code,Verbose=True)
-    Query Webserver for FASTA sequence 
+    Query Webserver for FASTA sequence
 
     Output
     ------
-    code.fasta FASTA sequence 
+    code.fasta FASTA sequence
     """
     from Bio import Entrez
     Entrez.email = random.choice(emails)
@@ -101,21 +96,21 @@ def getfasta(code, Verbose=True):
 
 def parseBlastFile(xmlfil):
     """
-    Input 
+    Input
     -----
-    Uniprot XML Output  
+    Uniprot XML Output
     parseBlastFile(xmlfil)
     e.g. parsebBlastFile('O00238_blast.xml')
 
     Description
     -----------
-    Parses the following information out of the bast output xml file. 
+    Parses the following information out of the bast output xml file.
 
-    Uniprot | PDBid | chain | query_to | query_from | Iter Query Len | e-value | Query Coverage | Sequence Identity 
+    Uniprot|PDB|chain|query_to|query_from|IterQueryLen|e-val|QCov|SeqIdent
 
-    Output 
+    Output
     -------
-    Uniprot.csv 
+    Uniprot.csv
     """
     NP_id = xmlfil.split('_')[0]
 
@@ -127,8 +122,8 @@ def parseBlastFile(xmlfil):
 
     with open(outfilname, "w") as out_file:
         print("Writing output to %s" % (outfilname))
-        out_file.write(
-            'Uniprot,PDBid,chain,query_to,query_from,IterQueryLen,e-value,QueryCov,SeqId\n')
+        out_file.write("""Uniprot, PDBid, chain, query_to, query_from,
+        IterQueryLen, e - value, QueryCov, SeqId\n""")
         sequencequeryLength = blast_record.query_length
         for alignment in blast_record.alignments:
             for hsp in alignment.hsps:
@@ -136,8 +131,9 @@ def parseBlastFile(xmlfil):
                 second = len(hsp.query)
                 identity = 100 * float(first / second)
                 identity = int(round(identity, 0))
-                coverage = round(100 * float(hsp.query_end -
-                                             hsp.query_start) / sequencequeryLength, 0)
+                query_len = float(hsp.query_end - hsp.query_start)
+                coverage = round(
+                    100 * query_len / sequencequeryLength, 0)
 
                 line1 = alignment.title
                 b = line1.split('|')
@@ -161,8 +157,8 @@ def tohtml(csvfile):
     """
     Reads the csvfile fromt the blast output
     Finds all hits that are greater than 80 Sequence Coverage
-    and greater than 80 Query Identity 
-    Outputs the results as an html table 
+    and greater than 80 Query Identity
+    Outputs the results as an html table
     """
     data = pd.read_csv(csvfile)
     mask = ((data['QueryCov'] > 80) & (data['SeqId'] > 80))
@@ -172,18 +168,18 @@ def tohtml(csvfile):
 def _gettophit(csvfile):
     """
     Get top pdb hit for BLAST search
-    Set CutOff of QueryCov > 80 and SeqId > 80 
+    Set CutOff of QueryCov > 80 and SeqId > 80
 
-    Input 
+    Input
     -----
     csvfile: file
-       csvfile containing blast hits 
+       csvfile containing blast hits
 
     Output
     ------
     tophit: str
-       pdbid for top hit. None if there 
-       is no hit. 
+       pdbid for top hit. None if there
+       is no hit.
     """
     data = pd.read_csv(csvfile)
     mask = ((data['QueryCov'] > 80) & (data['SeqId'] > 80))
@@ -191,6 +187,7 @@ def _gettophit(csvfile):
         return None
     else:
         return data[mask].sort_values(by=['QueryCov', 'SeqId']).PDBid[0]
+
 
 if __name__ == "__main__":
     print(__doc__)

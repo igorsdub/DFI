@@ -3,8 +3,6 @@
 
 def test_hessian():
 
-    import os.path
-    import sys
     import dfi
     import numpy as np
 
