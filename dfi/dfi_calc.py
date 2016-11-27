@@ -6,24 +6,24 @@ DFI (Dynamic Flexibility Index)
 Description
 ------------
 DFI Calculates the dynamics flexibility index
-in order to study the conformational dynamics 
-of a protein. 
+in order to study the conformational dynamics
+of a protein.
 
 
 Usage
 -----
-dfi_calc.py --pdb PDBFILE [--covar COVARFILE] [--chain CHAINID] [--fdfi RESNUMS] --help   
+dfi_calc.py --pdb PDBFILE [--covar COVARFILE --chain CHAINID --fdfi RESNUMS]
 
 Input
 -----
 PDBFILE:     PDBFILE
-COVARFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format  
+COVARFILE:    Covariance (Inverse Hessian) Matrix in a [NxN] ascii format
 RESNUMS:     Chain + Residues number in the pdb, e.g. A15 B21
 
-Output 
+Output
 ------
-* Structure used for DFI: -dficolor.pdb 
-* Master DFI: -dfianalysis.csv      
+* Structure used for DFI: -dficolor.pdb
+* Master DFI: -dfianalysis.csv
 
 Example
 -------
@@ -50,21 +50,21 @@ if __name__ == "__main__" and len(sys.argv) < 2:
 
 
 def getcoords(ATOMS, Verbose=False):
-    """ 
+    """
     Returns x,y and z numpy arrays of coordinates from
-    ATOM object 
+    ATOM object
 
     Input
     -----
-    ATOMS: ATOM object 
-       Object for holding ATOM entries of pdb file 
+    ATOMS: ATOM object
+       Object for holding ATOM entries of pdb file
     Verbose: bool:
        Flag for Verbose Output
 
     Output
     ------
-    (x,y,z): numpy 
-       numpy arrays of x,y,z 
+    (x,y,z): numpy
+       numpy arrays of x,y,z
 
     """
     x = np.array(
@@ -78,26 +78,26 @@ def getcoords(ATOMS, Verbose=False):
 
 
 def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
-    """ 
-    Calculates the hessian and retuns the result 
+    """
+    Calculates the hessian and retuns the result
 
-    Input 
+    Input
     ------
-    resnum: int  
-       Number of residues 
+    resnum: int
+       Number of residues
     x,y,z: numpy arrays
-       Numpy array of coordinates 
-    gamma: int  
+       Numpy array of coordinates
+    gamma: int
        Value of spring constant (default set to 100)
-    cutoff: float  
+    cutoff: float
        value of cutoff when using a distance based Hessian (default None)
-    Verbose: bool  
+    Verbose: bool
        Verbose Output for debug mode (default False).
 
-    Output 
+    Output
     ------
-    hess: numpy  
-       numpy array of the Hessian 3Nx3N shape  
+    hess: numpy
+       numpy array of the Hessian 3Nx3N shape
     """
     numresthree = 3 * resnum
     hess = np.zeros((numresthree, numresthree))
@@ -120,11 +120,12 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
             r = x_ij * x_ij + y_ij * y_ij + z_ij * z_ij
             sprngcnst = (gamma * gamma * gamma) / (r * r * r)
             if(cutoff):
-                if sqrt(r) > cutoff:
+                if np.sqrt(r) > cutoff:
                     sprngcnst = 0.
             if(Verbose):
-                print(','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j, z_j, x_ij,
-                                         y_ij, z_ij, r, sprngcnst, gamma, cutoff],
+                print(','.join(np.array([i, j, x_i, y_i, z_i, x_j, y_j,
+                                         z_j, x_ij, y_ij, z_ij, r,
+                                         sprngcnst, gamma, cutoff],
                                         dtype=str)))
 
             # creation of Hii
@@ -158,10 +159,6 @@ def calchessian(resnum, x, y, z, gamma, cutoff=None, Verbose=False):
 
 def flatandwrite(matrix, outfile):
     """Flattens out a matrix to a Nx1 column and write out to a file. """
-    #outfile = open(outfile, 'w')
-    # for f in matrix.flatten():
-    #    outfile.write('%f\n' % f)
-    # outfile.close()
     np.savetext(outfile, matrix.flatten())
 
 
@@ -185,8 +182,8 @@ def pctrank(dfi, inverse=False):
 
     Input
     -----
-    dfi: numpy 
-       Array of dfi values 
+    dfi: numpy
+       Array of dfi values
     inverse: bool
        Invert the pct ranking (default False)
     """
@@ -207,23 +204,23 @@ def pctrank(dfi, inverse=False):
 
 def calcperturbMat(invHrs, direct, resnum, Normalize=True):
     """
-    Caclulates perturbation matrix used for dfi calculation. 
+    Caclulates perturbation matrix used for dfi calculation.
 
-    Input 
+    Input
     -----
-    invHRS: numpy matrix 
+    invHRS: numpy matrix
        covariance matrix (3N,3N), where N is the number of residues
-    direct: numpy matrix 
-       matrix of peturbation directions 
-    resnum: int 
-       number of residues in protein 
+    direct: numpy matrix
+       matrix of peturbation directions
+    resnum: int
+       number of residues in protein
     Normalize: bool
-       Normalize peturbation matrix 
+       Normalize peturbation matrix
 
     Output
     ------
-    peturbMat: numpy matrix 
-       NxN peturbation matrix where N is the number of residues 
+    peturbMat: numpy matrix
+       NxN peturbation matrix where N is the number of residues
 
     """
     perturbMat = np.zeros((resnum, resnum))
@@ -293,7 +290,7 @@ def CLdict(argv):
 def chainresmap(ATOMS, Verbose=False):
     """
     Returns a dict object with the chainResNum as the key and the index
-    of the atom 
+    of the atom
     """
     table = {}
     for i in range(len(ATOMS)):
@@ -327,14 +324,14 @@ def fdfires_cords(fdfires, x, y, z):
 
     Input
     -----
-    fdfires: ls  
-       indices of fdfires 
-    x,y,z: numpy 
+    fdfires: ls
+       indices of fdfires
+    x,y,z: numpy
        numpy arrays of the coordinates
 
     Output
     ------
-    nx3 matrix of f-DFI coordinates 
+    nx3 matrix of f-DFI coordinates
     """
 
     return np.column_stack((x[fdfires], y[fdfires], z[fdfires]))
@@ -344,16 +341,16 @@ def rdist(r, fr):
     """
     Calculate the distance or r from fr
 
-    Input 
+    Input
     ------
     r: numpy
-       array of coordinates 
+       array of coordinates
     fr numpy
        nx3 matrix of f-DFI coordinates
 
-    Output 
+    Output
     ------
-    return rdist: array of distances from f-DFI sites 
+    return rdist: array of distances from f-DFI sites
     """
     r_ij = fr - r
     rr = r_ij * r_ij
@@ -363,38 +360,38 @@ def rdist(r, fr):
 def outputToDF(ATOMS, dfi, pctdfi, fdfi=None, pctfdfi=None, ls_ravg=None,
                ls_rmin=None, outfile=None, Verbose=True, writetofile=False):
     """
-    Outputs the results of the DFI calculation to a DataFrame and csv file 
+    Outputs the results of the DFI calculation to a DataFrame and csv file
 
     Input
     -----
-    ATOMS: ATOM object 
-       Object to hold ATOM entries of PDB files 
-    dfi: numpy 
-       numpy array of dfi values 
-    pctdfi: numpy 
-       numpy array of pctdfi values 
-    fdfi: numpy 
-       numpy array of fdfi values 
-    pctdfi: numpy 
-       numpy array of pctdfi values 
+    ATOMS: ATOM object
+       Object to hold ATOM entries of PDB files
+    dfi: numpy
+       numpy array of dfi values
+    pctdfi: numpy
+       numpy array of pctdfi values
+    fdfi: numpy
+       numpy array of fdfi values
+    pctdfi: numpy
+       numpy array of pctdfi values
     ls_ravg: ls
-       list of the average distance of a residue 
-       to all f-dfi residues 
+       list of the average distance of a residue
+       to all f-dfi residues
     ls_rmin: ls
-       list of the min distance of a residue 
+       list of the min distance of a residue
        to all f-dfi residues
     outfile: str
-       Name of file to write out the DataFrame in csv format 
+       Name of file to write out the DataFrame in csv format
     Verbose: bool
-       Output for debugging 
-    writetofile: bool 
-       If True will write out to file, otherwise just return the 
-       df. 
+       Output for debugging
+    writetofile: bool
+       If True will write out to file, otherwise just return the
+       df.
 
     Output
     ------
     df_dfi: DataFrame
-       DataFrame object containing all the inputs 
+       DataFrame object containing all the inputs
 
     """
     mapres = {'ALA': 'A',
@@ -443,15 +440,15 @@ def top_quartile_pos(pctfdfi):
     """
     returns a list of indices of positions in the top quartile of pctdfi
 
-    Input 
+    Input
     -----
-    pctdfi: numpy 
-       numpy array of pctdfi or pctfdfi values 
+    pctdfi: numpy
+       numpy array of pctdfi or pctfdfi values
 
     Output
     ------
     top_quartile: ls
-       ls of indices thare in the the top quartile 
+       ls of indices thare in the the top quartile
     """
     return [i for i, val in enumerate(pctfdfi) if val > 0.75]
 
@@ -460,19 +457,19 @@ def parseCommandLine(argv):
     """
     Parse command lines input
 
-    Input 
+    Input
     -----
-    ls of command line input 
+    ls of command line input
 
     Output
     ------
     pdbfile: file
-       name of pdb file to run dfi calculation 
-    pdbid: 'str' 
-       4 Letter PDB code 
-    mdhess: file 
-        name of file that contains hessian matrix from MD 
-    ls_reschain: list 
+       name of pdb file to run dfi calculation
+    pdbid: 'str'
+       4 Letter PDB code
+    mdhess: file
+        name of file that contains hessian matrix from MD
+    ls_reschain: list
        list of f-dfi Residues (e.g., ['A17','A19'])
     chain_name: str
        list of chain to select (Depracated)
@@ -490,13 +487,13 @@ def parseCommandLine(argv):
 
 def _writeout_eigevalues(e_vals, eigenfile):
     """
-    Write out eigenvalues from the Hessian Matrix 
+    Write out eigenvalues from the Hessian Matrix
 
     Input:
-    e_vals: numpy 
-       array of eigenfiles 
+    e_vals: numpy
+       array of eigenfiles
     eigenfiel: str
-       eigenfile name 
+       eigenfile name
     """
     with open(eigenfile, 'w') as outfile:
         for i, val in enumerate(np.sort(e_vals)):
@@ -505,24 +502,24 @@ def _writeout_eigevalues(e_vals, eigenfile):
 
 def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     """
-    Calculates the covariance matrix by first 
-    calculating the hessian from coordinates and then 
-    inverting it. 
+    Calculates the covariance matrix by first
+    calculating the hessian from coordinates and then
+    inverting it.
 
-    Input 
+    Input
     -----
-    numres: int 
-       number of residues 
-    x,y,z: numpy 
-       numpy array of coordinates 
+    numres: int
+       number of residues
+    x,y,z: numpy
+       numpy array of coordinates
     Verbose: bool
-       flag for debugging and writing out contents 
-       of covariance or the inverse Hessian 
+       flag for debugging and writing out contents
+       of covariance or the inverse Hessian
 
     Output
-    ------ 
-    invHRS: numpy 
-       (3*numres,3*numres) matrix 
+    ------
+    invHRS: numpy
+       (3*numres,3*numres) matrix
 
     """
     gamma = 100
@@ -532,7 +529,7 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
         print(hess)
         flatandwrite(hess, 'hesspy.debug')
         e_vals, e_vecs = LA.eig(hess)
-        __writeout_eigenvalues(e_vals, eigenfile)
+        _writeout_eigevalues(e_vals, 'eigenfile.txt')
 
     U, w, Vt = LA.svd(hess, full_matrices=False)
     S = LA.diagsvd(w, len(w), len(w))
@@ -557,13 +554,14 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
 
 
 def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
-             Verbose=False, writetofile=False, colorpdb=False, dfianalfile=None):
-    """Main function for calculating DFI 
+             Verbose=False, writetofile=False, colorpdb=False,
+             dfianalfile=None):
+    """Main function for calculating DFI
 
-    Inputs 
+    Inputs
     ------
     pdbfile: file
-       PDB File for dfi calculation 
+       PDB File for dfi calculation
     pdbid: str
        4 character PDBID from PDB
     covar: file
@@ -571,18 +569,18 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     ls_reschain: ls
        list of f-dfi residues by chain first and then index (e.g., ['A19','A20']
     chain_name: str
-       chain name (e.g., A) to pull out specific chain of the PDB 
+       chain name (e.g., A) to pull out specific chain of the PDB
     Verbose: bool
-       switch for debugging 
+       switch for debugging
     writefofile: bool
-       If True will writeou to a csv file 
+       If True will writeou to a csv file
     colorpdb: bool
-       If True will output a colorpdb 
+       If True will output a colorpdb
 
     Output
     ------
     df_dfi: DataFrame
-       DataFrame object for DFI values  
+       DataFrame object for DFI values
     """
     if(Verbose):
         eigenfile = pdbid + '-eigenvalues.txt'
@@ -647,12 +645,16 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     # output to ColoredDFI Files
     if(colorpdb):
         ColorDFI.colorbydfi(
-            dfianalfile, pdbfile, colorbyparam='pctdfi', outfile=pdbid + '-dficolor.pdb')
+            dfianalfile, pdbfile, colorbyparam='pctdfi',
+            outfile=pdbid + '-dficolor.pdb')
+
         if len(ls_reschain) > 0:
             ColorDFI.colorbydfi(
-                dfianalfile, pdbfile, colorbyparam='pctfdfi', outfile=pdbid + '-fdficolor.pdb')
+                dfianalfile, pdbfile, colorbyparam='pctfdfi',
+                outfile=pdbid + '-fdficolor.pdb')
 
     return df_dfi
+
 
 if __name__ == "__main__":
     pdbfile, pdbid, covar, ls_reschain, chain_name = parseCommandLine(
