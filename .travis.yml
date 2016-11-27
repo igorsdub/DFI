@@ -2,12 +2,16 @@ language: python
 python:
   - "2.7"
   - "3.5"
-  
+
 before_install:
     - sudo apt-get install -qq python-numpy python-scipy python-matplotlib
 
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+    - pip install codecov
+    - pip install pytest-cov
+    - pip install pytest-pep8
+    - pip install -e .
 
 # command to run tests
 script: python -m pytest --cov=./
