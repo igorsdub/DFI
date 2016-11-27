@@ -1,6 +1,8 @@
-import dfi.dfi_calc
-import dfi.pdbio
+#import dfi.dfi_calc
+#import dfi.pdbio
+import dfi
 from dfi.datafiles import xyz_npy, example_pdb
+
 import numpy as np
 
 
