@@ -549,7 +549,7 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False):
     if(Verbose):
         flatandwrite(invHrs, invhessfile)
     assert np.sum(
-        singular) == 6., "Number of near-singular eigenvalues: %f" % np.sum(singular)
+        singular) == 6., "# of near-singular eigenvals: %f" % np.sum(singular)
     return invHrs
 
 
@@ -567,7 +567,7 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     covar: file
        hessian file obtained from MD
     ls_reschain: ls
-       list of f-dfi residues by chain first and then index (e.g., ['A19','A20']
+       list of f-dfi residues by chain and index (e.g., ['A19','A20']
     chain_name: str
        chain name (e.g., A) to pull out specific chain of the PDB
     Verbose: bool
@@ -576,6 +576,10 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
        If True will writeou to a csv file
     colorpdb: bool
        If True will output a colorpdb
+    dfianalfile: str
+       Name of custom output file. This is useful for when you may
+       want to number outputs using different covariance matrices
+       that correspond to different time windows.
 
     Output
     ------
@@ -653,7 +657,8 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
                 dfianalfile, pdbfile, colorbyparam='pctfdfi',
                 outfile=pdbid + '-fdficolor.pdb')
 
-    return df_dfi
+    if not(writetofile):
+        return df_dfi
 
 
 if __name__ == "__main__":
