@@ -19,7 +19,7 @@ Example
 """
 from __future__ import print_function
 import sys
-import dfi.UniproBlastToPdb as uni
+import dfi.unipro_blast_to_pdb as uni
 
 
 def uniproDFI(uniprotcodes):

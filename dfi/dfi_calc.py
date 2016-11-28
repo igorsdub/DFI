@@ -40,7 +40,7 @@ from scipy import linalg as LA
 from scipy import stats
 from six.moves import range
 import dfi.pdbio as pdbio
-import dfi.ColorDFI as ColorDFI
+import dfi.colordfi as colordfi
 import dfi.dfiplotter as dfiplotter
 
 
@@ -647,12 +647,12 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
 
     # output to ColoredDFI Files
     if(colorpdb):
-        ColorDFI.colorbydfi(
+        colordfi.colorbydfi(
             dfianalfile, pdbfile, colorbyparam='pctdfi',
             outfile=pdbid + '-dficolor.pdb')
 
         if len(ls_reschain) > 0:
-            ColorDFI.colorbydfi(
+            colordfi.colorbydfi(
                 dfianalfile, pdbfile, colorbyparam='pctfdfi',
                 outfile=pdbid + '-fdficolor.pdb')
 
