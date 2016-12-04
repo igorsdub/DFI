@@ -68,11 +68,14 @@ def getcoords(ATOMS, Verbose=False):
 
     """
     x = np.array(
-        [atom.x for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+        [atom.x for atom in ATOMS if atom.atom_name.strip() == 'CA'],
+        dtype=float)
     y = np.array(
-        [atom.y for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+        [atom.y for atom in ATOMS if atom.atom_name.strip() == 'CA'],
+        dtype=float)
     z = np.array(
-        [atom.z for atom in ATOMS if atom.atom_name == 'CA '], dtype=float)
+        [atom.z for atom in ATOMS if atom.atom_name.strip() == 'CA'],
+        dtype=float)
 
     return x, y, z
 
@@ -618,7 +621,7 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
     dfi, reldfi, pctdfi, zscoredfi = dfianal(dfi, Array=True)
 
     # f-dfi
-    if len(ls_reschain) > 0:
+    if ls_reschain:
         # find the f-dfi residues
         fdfiset = set(ls_reschain)
         ls_reschain = list(fdfiset)
@@ -667,4 +670,3 @@ if __name__ == "__main__":
     df_dfi = calc_dfi(pdbfile, pdbid, covar=covar, ls_reschain=ls_reschain,
                       chain_name=chain_name,
                       writetofile=True, colorpdb=True)
-    dfiplotter.plotdfi(df_dfi, 'pctdfi', pdbid)

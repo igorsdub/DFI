@@ -34,7 +34,7 @@ def plotdfi(df, quant, pdbid):
     sns.set_context("poster", font_scale=1.25, rc={
                     "lines.linewidth": 1.25, "lines.markersize": 8})
 
-    df[quant].plot(marker='o', label='pdbid')
+    df[quant].plot(marker='o', label=pdbid)
 
     plt.ylabel('%DFI')
     plt.xlabel('Residue Index')

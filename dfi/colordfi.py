@@ -93,9 +93,9 @@ def colorbydfi(CSVFIL, PDBFIL, Verbose=False, colorbyparam='pctdfi',
             val = data[resmask & chainmask][colorbyparam].values[0]
             if Verbose:
                 print(ATOMS[i].res_index, ATOMS[i].temp_factor, val)
-            ATOMS[i].temp_factor = val
+            ATOMS[i]._replace(temp_factor=val)
         else:
-            ATOMS[i].temp_factor = 0.
+            ATOMS[i]._replace(temp_factor=0.)
     if(outfile):
         io.pdb_writer(ATOMS, filename=outfile)
     else:
