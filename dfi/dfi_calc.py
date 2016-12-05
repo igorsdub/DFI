@@ -28,7 +28,7 @@ Output
 Example
 -------
 ```
-./dfi.py --pdb 1l2y.pdb [--covar] covariance.dat [--chain] A [--fdfi] A10
+./dfi_calc.py --pdb 1l2y.pdb [--covar covariance.dat --chain] A --fdfi A10]
 ```
 """
 from __future__ import print_function, division
@@ -41,7 +41,6 @@ from scipy import stats
 from six.moves import range
 import dfi.pdbio as pdbio
 import dfi.colordfi as colordfi
-import dfi.dfiplotter as dfiplotter
 
 
 if __name__ == "__main__" and len(sys.argv) < 2:
