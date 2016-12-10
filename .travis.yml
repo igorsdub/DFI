@@ -17,4 +17,4 @@ install:
 script: python -m pytest --pep8 --cov=./
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -t 6c24803c-ddea-4fc1-990e-3ff2d759093b
