@@ -5,7 +5,9 @@ from dfi.datafiles import example_pdb, test_pdb
 
 
 class TestPDBIO():
-    ATOMS = dfi.pdbio.pdb_reader(example_pdb, CAonly=True)
+    ATOMS = dfi.pdbio.pdb_reader(example_pdb,
+                                 CAonly=True,
+                                 Verbose=True)
 
     def test_coordinates(self):
         x = -8.608
@@ -30,9 +32,3 @@ class TestPDBIO():
         assert 'CA' == ATOMS[0].atom_name.strip()
         assert 'ASN' == ATOMS[0].res_name
         assert 'A' == ATOMS[0].chainID
-
-
-if __name__ == "__main__":
-    print('Test')
-    test = TestPDBIO()
-    test.test_writer()

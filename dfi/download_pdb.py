@@ -26,13 +26,21 @@ def fetch_pdb(id, writetofile=True, Verbose=False):
     id.pdb: file
        filename id.pdb
     """
-    from StringIO import StringIO
-    import urllib
+    try:
+        from StringIO import StringIO as stream
+    except ImportError:
+        from io import StringIO as stream
+        from io import BytesIO as stream
+    try:
+        from urllib.request import urlopen
+    except ImportError:
+        from urllib2 import urlopen
+
     url = 'http://www.rcsb.org/pdb/files/%s.pdb' % id
     if(writetofile):
-        with open(id + '.pdb', 'w') as outfile:
-            outfile.write(urllib.urlopen(url).read())
+        with open(id + '.pdb', 'wb') as outfile:
+            outfile.write(urlopen(url).read())
         if(Verbose):
             print("Wrote out %s.pdb" % (id))
     else:
-        return StringIO(urllib.urlopen(url).read())
+        return stream(urlopen(url).read())
