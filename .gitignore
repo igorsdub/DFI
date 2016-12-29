@@ -6,4 +6,8 @@
 *.out
 *~
 *.ipynb*
-#*#
+^#*#$
+.cache/
+*.egg-info/
+.tox/
+.coverage
