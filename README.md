@@ -109,24 +109,38 @@ If you would like to call DFI as a package within python. This
 
 # References
 
-1. Atilgan AR, Durell SR, Jernigan RL, Demirel MC, Keskin Bahar I, Biophys. J.,
-80:505-15, 2001
-2. Glembo T.J, M.F Thorpe, D.W. Farrell, Z. N. Gerek, and S.B. Ozkan. Collective
- Dynamics Differentiates Functional Divergence in Protein Evolution.
-PLos Computational Biology, 2012
-3. Hayward, S. and B.L. de Groot, Normal modes and essential dynamics. Methods i
-n Molecular Biology 443:89-106,2008
-4. Bahar I, Atilgan AR, Erman B, Fold. & Des., 2:173-81, 1997
-5. Kumar, A., Glembo, T. J. & Ozkan, S. B. The Role of Conformational Dynamics a
-nd Allostery in the Disease Development of Human Ferritin. Biophysical Journal (
-2015). doi:10.1016/j.bpj.2015.06.060
-6. Butler, B. M., Gerek, Z. N., Kumar, S. & Ozkan, S. B. Conformational dynamics
- of nonsynonymous variants at protein interfaces reveals disease association: Th
-e Role of Dynamics in Neutral and Damaging nsSNVs. Proteins: Structure, Function
-, and Bioinformatics 83, 428–435 (2015).
-7. Kumar, A., Butler, B. M., Kumar, S. & Ozkan, S. B. Integration of structural
-dynamics and molecular evolution via protein interaction networks: a new era in
-genomic medicine. Current Opinion in Structural Biology 35, 135–142 (2015).
+1. Gerek, Z. N., Keskin, O. & Ozkan, S. B. Identification of specificity and promiscuity of PDZ domain interactions
+through their dynamic behavior. Proteins 77, 796–811 (2009).
+2. Gerek, Z. N. & Ozkan, S. B. Change in allosteric network affects binding affinities of PDZ domains: analysis
+through perturbation response scanning. PLoS computational biology 7, e1002154 (2011).
+3. Glembo, T. J., Farrell, D. W., Gerek, Z. N., Thorpe, M. & Ozkan, S. B. Collective dynamics differentiates
+functional divergence in protein evolution. PLoS computational biology 8, e1002428 (2012).
+4. Nevin Gerek, Z., Kumar, S. & Banu Ozkan, S. Structural dynamics flexibility informs function and evolution
+at a proteome scale. Evolutionary applications 6, 423–33 (2013).
+5. Woodrum, B. W., Maxwell, J. D., Bolia, A., Ozkan, S. B. & Ghirlanda, G. The antiviral lectin cyanovirin-N:
+probing multivalency and glycan recognition through experimental and computational approaches. Biochemical Society transactions 41, 1170–6 (2013).
+6. Bolia, A., Gerek, Z. N. & Ozkan, S. B. BP-Dock: a flexible docking scheme for exploring protein-ligand
+interactions based on unbound structures. Journal of chemical information and modeling 54, 913–25 (2014).
+7. Bolia, A. et al. A Flexible Docking Scheme Efficiently Captures the Energetics of Glycan-Cyanovirin
+Binding. Biophysical Journal 106, 1142–1151 (2014).
+8. Zou, T., Risso, V. A., Gavira, J. A., Sanchez-Ruiz, J. M. & Ozkan, S. B. Evolution of Conformational
+Dynamics Determines the Conversion of a Promiscuous Generalist into a Specialist Enzyme. Molecular
+biology and evolution (2014). doi:10.1093/molbev/msu281
+9. Li, Z., Bolia, A., Ozkan, S. B., Ghirlanda, G. & Margulis, C. J. How hinge flexibility alters glycan
+binding affinity of cyanovirin. in preparation (2014).
+10. Bolia, A. & Ozkan, S. B. Adaptive BP-Dock: An Induced Fit Docking Approach for Full Receptor Flexibility.
+Journal of Chemical Information and Modeling 56, 734–746 (2016).
+11. Kim, H. et al. A Hinge Migration Mechanism Unlocks the Evolution of Green-to-Red Photoconversion in GFP-like
+Proteins. Structure 23, 34–43 (2015).
+12. Li, Z. et al. A Rigid Hinge Region Is Necessary for High-Affinity Binding of Dimannose to Cyanovirin and
+Associated Constructs. Biochemistry 54, 6951–6960 (2015).
+13. Butler, B. M., Gerek, Z. N., Kumar, S. & Ozkan, S. B. Conformational dynamics of nonsynonymous variants at protein
+interfaces reveals disease association: The Role of Dynamics in Neutral and Damaging nsSNVs. Proteins: Structure,
+Function, and Bioinformatics 83, 428–435 (2015).
+14. Kumar, A., Butler, B. M., Kumar, S. & Ozkan, S. B. Integration of structural dynamics and molecular evolution
+via protein interaction networks: a new era in genomic medicine. Current Opinion in Structural Biology 35, 135–142 (2015).
+15. Kumar, A., Glembo, T. J. & Ozkan, S. B. The Role of Conformational Dynamics and Allostery in the Disease
+Development of Human Ferritin. Biophysical Journal (2015). doi:10.1016/j.bpj.2015.06.060
 
 ---
 
