@@ -34,6 +34,7 @@ Example
 from __future__ import print_function, division
 import sys
 import os
+import argparse
 import numpy as np
 import pandas as pd
 from scipy import linalg as LA
@@ -246,49 +247,6 @@ def calcperturbMat(invHrs, direct, resnum, Normalize=True):
     return nrmlperturbMat
 
 
-def CLdict(argv):
-    """Returns a dictionary of the command lines options from sys.argv"""
-    comline_arg = {}
-    for s in argv:
-        if s == "--pdb":
-            ind = argv.index(s)
-            comline_arg[s] = argv[ind + 1]
-            if (os.path.isfile(argv[ind + 1]) is False):
-                print("File " + argv[ind + 1] + " not found.")
-                sys.exit(1)
-
-        if s == "--covar":
-            ind = argv.index(s)
-            comline_arg[s] = argv[ind + 1]
-
-        if s == "--chain":
-            ind = argv.index(s)
-            comline_arg[s] = argv[ind + 1]
-
-        if s == "--fdfi":
-            ind = argv.index(s)
-            resvals = []
-            for res in argv[ind + 1:]:
-                if res.startswith("--"):
-                    break
-                else:
-                    resvals.append(res)
-            comline_arg[s] = np.array(resvals)
-            # print resvals
-
-        if s == "--help":
-            print(__doc__)
-            sys.exit(1)
-
-    if ("--pdb" not in argv):
-        print(argv)
-        print("No --pdb")
-        print(__doc__)
-        sys.exit(1)
-
-    return comline_arg
-
-
 def chainresmap(ATOMS, Verbose=False):
     """
     Returns a dict object with the chainResNum as the key and the index
@@ -455,7 +413,7 @@ def top_quartile_pos(pctfdfi):
     return [i for i, val in enumerate(pctfdfi) if val > 0.75]
 
 
-def parseCommandLine(argv):
+def check_args(args=None):
     """
     Parse command lines input
 
@@ -477,14 +435,22 @@ def parseCommandLine(argv):
        list of chain to select (Depracated)
 
     """
-    comlinargs = CLdict(argv)
-    pdbfile = comlinargs['--pdb']
-    pdbid = pdbfile.split('.')[0]
-    mdhess = comlinargs.get('--hess', None)
-    ls_reschain = comlinargs.get('--fdfi', [])
-    chain_name = comlinargs.get('--chain', 'A')
+    parser = argparse.ArgumentParser(
+        description='DFI CLI')
+    parser.add_argument('--pdb',
+                        help='PDB File to run DFI',
+                        required=True)
+    parser.add_argument('--covar',
+                        help='3Nx3N covariance matrix')
+    parser.add_argument('--chain',
+                        help='port of the web server')
+    parser.add_argument('--fdfi',
+                        help='f-DFI residues',
+                        nargs='+')
 
-    return pdbfile, pdbid, mdhess, ls_reschain, chain_name
+    results = parser.parse_args(args)
+    pdbid = results.pdb.split('.')[0]
+    return results.pdb, pdbid, results.covar, results.fdfi, results.chain
 
 
 def _writeout_eigevalues(e_vals, eigenfile):
@@ -663,8 +629,8 @@ def calc_dfi(pdbfile, pdbid=None, covar=None, ls_reschain=[], chain_name=None,
 
 
 if __name__ == "__main__":
-    pdbfile, pdbid, covar, ls_reschain, chain_name = parseCommandLine(
-        sys.argv)
+    pdbfile, pdbid, covar, ls_reschain, chain_name = check_args(
+        sys.argv[1:])
     print("Processing %s" % pdbfile)
     df_dfi = calc_dfi(pdbfile, pdbid, covar=covar, ls_reschain=ls_reschain,
                       chain_name=chain_name,

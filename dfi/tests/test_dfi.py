@@ -1,6 +1,7 @@
 import numpy as np
 import dfi
 from dfi.datafiles import example_pdb
+from dfi.dfi_calc import check_args
 
 
 def test_pctrank_ascending():
@@ -16,8 +17,11 @@ def test_pctrank_descending():
 
 
 def test_comlineargs():
-    comline = '--fdfi A19 A10 --covar mwcovar.dat --pdb %s' % example_pdb
-    dict_parms = dfi.dfi_calc.CLdict(comline.split())
-    assert dict_parms['--pdb'] == example_pdb
-    assert dict_parms['--covar'] == 'mwcovar.dat'
-    assert np.all(dict_parms['--fdfi'] == np.array(['A19', 'A10']))
+    comline = ['--pdb', example_pdb, '--fdfi',
+               'A19', 'A10', '--covar', 'mwcovar.dat']
+
+    pdbfile, pdbid, covar, ls_reschain, chain_name = check_args(comline)
+
+    assert pdbfile == example_pdb
+    assert covar == 'mwcovar.dat'
+    assert np.all(ls_reschain == np.array(['A19', 'A10']))
