@@ -29,6 +29,10 @@ import seaborn as sns
 
 
 def plotdfi(df, quant, pdbid):
+    """
+    This is a block string.
+    """
+    # this is a comment
     sns.set_style("whitegrid")
     plt.figure(figsize=(22, 12))
     sns.set_context("poster", font_scale=1.25, rc={
@@ -41,3 +45,4 @@ def plotdfi(df, quant, pdbid):
     plt.savefig(pdbid + '-' + quant + '.png')
     return plt
     print("Printed: %s" % (pdbid + '-' + quant + '.png'))
+    # this is a comment

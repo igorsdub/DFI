@@ -93,7 +93,7 @@ def pdb_writer(ATOMS, msg="HEADER  FROM PDBIO\n", filename="out.pdb",
             alc = atom.alc
             res_name = atom.res_name
             chainID = atom.chainID
-            res_index = int(atom.res_index) + residueoffset
+            res_index = atom.res_index
             iCode = atom.insert_code
             x = atom.x
             y = atom.y
@@ -101,7 +101,7 @@ def pdb_writer(ATOMS, msg="HEADER  FROM PDBIO\n", filename="out.pdb",
             occupancy = 1.00
             temp_factor = atom.temp_factor
             atom_type = atom.atom_type
-            atom1 = "{}{:5d} {:>4s}{:<1s}{:3s} {:<1s}{:4d}{:<1s}".format(
+            atom1 = "{}{:5d} {:>4s}{:<1s}{:3s} {:<1s}{:4s}{:<1s}".format(
                 record,
                 atom_index,
                 atom_name,

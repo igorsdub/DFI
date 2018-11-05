@@ -46,12 +46,12 @@ def getuniprols(pdbid):
     """
     Insert PDB and get UNIPROTID(s) from table
 
-    Input
+    Parameters
     -----
     pdbid: str
        4 letter code PDBID
 
-    Output
+    Returns
     ------
     ls_unipro: ls
        list of uniprotID(s) associated with PDBID
@@ -70,13 +70,13 @@ def get_fastaseq(ID):
     """
     get_fasta sequence from the uniprot database
 
-    Input
-    -----
+    Parameters
+    ----------
     ID: str
        uniprotID or pdbID
 
-    Output
-    ------
+    Returns
+    -------
     fasta_seq: str
        fasta sequence
     """
@@ -91,8 +91,18 @@ def get_fastaseq(ID):
     return response.read()
 
 
-def parsefafstaurl(html, seqonly=True, Verbose=False):
-    "Parses html fafasa sequence and returns a string of the sequence"
+def parsefafstaurl(html,
+                   seqonly=True,
+                   Verbose=False):
+    """Parses html fafasa sequence and returns a string of the sequence
+    
+    Parameters
+    ----------
+    html: str 
+       html output of fasta sequence
+    seqonly: bool
+       bool of sequence
+    """
     html = html.split('\n')
     fseq = ''
     for line in html:
