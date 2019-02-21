@@ -146,8 +146,9 @@ Development of Human Ferritin. Biophysical Journal (2015). doi:10.1016/j.bpj.201
 
 # Funding and Acknowledgements
 
-The DFI library was develped by Avishek Kumar (avishek@asu.edu) at Arizona State
+The DFI library was initially developed by Avishek Kumar (avishek@asu.edu) at Arizona State
 University in the Ozkan Group under the following grants NIH-U54GM094599-05 and
-NIH-R21LM011941-02. It is licensed under the BSD 3-clause license.
+NIH-R21LM011941-02. It was later continued by Avishek Kumar at The University of Chicago
+It is licensed under the BSD 3-clause license.
 
 ---
