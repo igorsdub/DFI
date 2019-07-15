@@ -95,12 +95,12 @@ def parsefafstaurl(html,
                    seqonly=True,
                    Verbose=False):
     """Parses html fafasa sequence and returns a string of the sequence
-    
+
     Parameters
     ----------
-    html: str 
+    html:str
        html output of fasta sequence
-    seqonly: bool
+    seqonly:bool
        bool of sequence
     """
     html = html.split('\n')
@@ -159,7 +159,6 @@ def parsefafsaseq(fname, uniprols=None):
                 print("struc_match", struc_match)
                 ind_match = seq_match - 1
                 matchseq = [f for f in fseq[ind_match - struc_match:]]
-                na_ls = ['NA' for i in range(struc_match)]
                 print('fseq', fseq)
                 print("---")
                 print('smallseq', smallseq)

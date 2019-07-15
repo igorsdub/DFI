@@ -9,11 +9,6 @@ Download pdb is suite of tools for interfacing
 with the protein data bank (PDB)
 """
 from __future__ import print_function
-import numpy as np
-
-
-
-
 
 
 def fetch_pdb(id, writetofile=True, Verbose=False):
@@ -34,7 +29,6 @@ def fetch_pdb(id, writetofile=True, Verbose=False):
     try:
         from StringIO import StringIO as stream
     except ImportError:
-        from io import StringIO as stream
         from io import BytesIO as stream
     try:
         from urllib.request import urlopen
