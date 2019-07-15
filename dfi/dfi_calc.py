@@ -33,7 +33,6 @@ Example
 """
 from __future__ import print_function, division
 import sys
-import os
 import argparse
 import numpy as np
 import pandas as pd

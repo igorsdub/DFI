@@ -9,6 +9,11 @@ Download pdb is suite of tools for interfacing
 with the protein data bank (PDB)
 """
 from __future__ import print_function
+import numpy as np
+
+
+
+
 
 
 def fetch_pdb(id, writetofile=True, Verbose=False):
