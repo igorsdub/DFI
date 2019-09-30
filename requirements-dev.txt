@@ -1,3 +1,4 @@
+tox
 argparse
 numpy
 backports.shutil-get-terminal-size
