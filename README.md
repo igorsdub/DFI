@@ -5,8 +5,8 @@
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Build Status](https://travis-ci.com/avishekrk/DFI.svg?branch=master)](https://travis-ci.com/avishekrk/DFI)
 [![codecov](https://codecov.io/gh/avishekrk/DFI/branch/master/graph/badge.svg)](https://codecov.io/gh/avishekrk/DFI)
-
-
+[![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
 
