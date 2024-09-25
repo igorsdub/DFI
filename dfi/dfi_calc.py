@@ -468,7 +468,7 @@ def _writeout_eigevalues(e_vals, eigenfile):
             outfile.write("%d\t%f\n" % (i, np.real(val)))
 
 
-def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False,
+def calc_covariance(numres, x, y, z, gamma=1, invhessfile=None, Verbose=False,
                     eigenfile=None):
     """
     Calculates the covariance matrix by first
@@ -491,7 +491,6 @@ def calc_covariance(numres, x, y, z, invhessfile=None, Verbose=False,
        (3*numres,3*numres) matrix
 
     """
-    gamma = 100
     hess = calchessian(numres, x, y, z, gamma, Verbose)
     if(Verbose):
         print("Hessian")
